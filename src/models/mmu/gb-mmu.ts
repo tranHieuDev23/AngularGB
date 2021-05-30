@@ -1,10 +1,9 @@
+import { EIGHT_ONE_BITS, TWO_POW_EIGHT, TWO_POW_SIXTEEN } from "src/utils/constants";
+import { randomInteger } from "src/utils/random";
 import { Mmu } from "./mmu";
 
-const TWO_POW_EIGHT = 1 << 8;
-const EIGHT_ONE_BITS = TWO_POW_EIGHT - 1;
-
 export class GbMmu implements Mmu {
-    private readonly ram: number[] = new Array<number>(0xffff);
+    private readonly ram: number[] = new Array<number>(TWO_POW_SIXTEEN);
 
     readByte(address: number): number {
         return this.ram[address];
@@ -27,8 +26,7 @@ export class GbMmu implements Mmu {
 
     randomize(): void {
         this.ram.forEach((_, index) => {
-            const randomValue = Math.floor(Math.random() * TWO_POW_EIGHT);
-            this.writeByte(index, randomValue)
+            this.writeByte(index, randomInteger(0, TWO_POW_EIGHT))
         });
     }
 }

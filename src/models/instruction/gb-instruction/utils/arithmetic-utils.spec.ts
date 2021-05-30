@@ -1,0 +1,141 @@
+import { add16Bit, add8Bit, ArithmeticResult, subtract16Bit, subtract8Bit } from "./arithmetic-utils";
+
+describe('add8Bit()', () => {
+    it('should do add operation', () => {
+        const result = add8Bit(2, 3);
+        expect(result).toBeInstanceOf(ArithmeticResult);
+        expect(result.result).toEqual(5);
+        expect(result.zero).toBeFalse();
+        expect(result.carry).toBeFalse();
+        expect(result.halfCarry).toBeFalse();
+    });
+
+    it('should limit in 8 bit', () => {
+        const result = add8Bit(0x80, 0x81);
+        expect(result.result).toEqual(0x01);
+        expect(result.zero).toBeFalse();
+        expect(result.carry).toBeTrue();
+        expect(result.halfCarry).toBeFalse();
+    });
+
+    it('should be able to raise half-flag', () => {
+        const result = add8Bit(0x0c, 0x0d);
+        expect(result.result).toEqual(0x19);
+        expect(result.zero).toBeFalse();
+        expect(result.carry).toBeFalse();
+        expect(result.halfCarry).toBeTrue();
+    });
+
+    it('should be able to raise zero', () => {
+        const result = add8Bit(0x01, 0xff);
+        expect(result.result).toEqual(0x00);
+        expect(result.zero).toBeTrue();
+        expect(result.carry).toBeTrue();
+        expect(result.halfCarry).toBeTrue();
+    });
+});
+
+describe('subtract8Bit()', () => {
+    it('should do subtract operation', () => {
+        const result = subtract8Bit(3, 2);
+        expect(result).toBeInstanceOf(ArithmeticResult);
+        expect(result.result).toEqual(1);
+        expect(result.zero).toBeFalse();
+        expect(result.carry).toBeFalse();
+        expect(result.halfCarry).toBeFalse();
+    });
+
+    it('should limit in 8 bit', () => {
+        const result = subtract8Bit(0x80, 0x81);
+        expect(result.result).toEqual(0xff);
+        expect(result.zero).toBeFalse();
+        expect(result.carry).toBeTrue();
+        expect(result.halfCarry).toBeTrue();
+    });
+
+    it('should be able to raise half-flag', () => {
+        const result = subtract8Bit(0x19, 0x0d);
+        expect(result.result).toEqual(0x0c);
+        expect(result.zero).toBeFalse();
+        expect(result.carry).toBeFalse();
+        expect(result.halfCarry).toBeTrue();
+    });
+
+    it('should be able to raise zero', () => {
+        const result = subtract8Bit(0x01, 0x01);
+        expect(result.result).toEqual(0x00);
+        expect(result.zero).toBeTrue();
+        expect(result.carry).toBeFalse();
+        expect(result.halfCarry).toBeFalse();
+    });
+});
+
+describe('add16Bit()', () => {
+    it('should do add operation', () => {
+        const result = add16Bit(2, 3);
+        expect(result).toBeInstanceOf(ArithmeticResult);
+        expect(result.result).toEqual(5);
+        expect(result.zero).toBeFalse();
+        expect(result.carry).toBeFalse();
+        expect(result.halfCarry).toBeFalse();
+    });
+
+    it('should limit in 16 bit', () => {
+        const result = add16Bit(0x8000, 0x8100);
+        expect(result.result).toEqual(0x0100);
+        expect(result.zero).toBeFalse();
+        expect(result.carry).toBeTrue();
+        expect(result.halfCarry).toBeFalse();
+    });
+
+    it('should be able to raise half-flag', () => {
+        const result = add16Bit(0x000c, 0x000d);
+        expect(result.result).toEqual(0x0019);
+        expect(result.zero).toBeFalse();
+        expect(result.carry).toBeFalse();
+        expect(result.halfCarry).toBeTrue();
+    });
+
+    it('should be able to raise zero', () => {
+        const result = add16Bit(0x0001, 0xffff);
+        expect(result.result).toEqual(0x0000);
+        expect(result.zero).toBeTrue();
+        expect(result.carry).toBeTrue();
+        expect(result.halfCarry).toBeTrue();
+    });
+});
+
+describe('subtract16Bit()', () => {
+    it('should do subtract operation', () => {
+        const result = subtract16Bit(3, 2);
+        expect(result).toBeInstanceOf(ArithmeticResult);
+        expect(result.result).toEqual(1);
+        expect(result.zero).toBeFalse();
+        expect(result.carry).toBeFalse();
+        expect(result.halfCarry).toBeFalse();
+    });
+
+    it('should limit in 8 bit', () => {
+        const result = subtract16Bit(0x8000, 0x8100);
+        expect(result.result).toEqual(0xff00);
+        expect(result.zero).toBeFalse();
+        expect(result.carry).toBeTrue();
+        expect(result.halfCarry).toBeFalse();
+    });
+
+    it('should be able to raise half-flag', () => {
+        const result = subtract16Bit(0x0019, 0x000d);
+        expect(result.result).toEqual(0x000c);
+        expect(result.zero).toBeFalse();
+        expect(result.carry).toBeFalse();
+        expect(result.halfCarry).toBeTrue();
+    });
+
+    it('should be able to raise zero', () => {
+        const result = subtract16Bit(0x0001, 0x0001);
+        expect(result.result).toEqual(0x0000);
+        expect(result.zero).toBeTrue();
+        expect(result.carry).toBeFalse();
+        expect(result.halfCarry).toBeFalse();
+    });
+});

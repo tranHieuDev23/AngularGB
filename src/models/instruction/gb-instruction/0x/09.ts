@@ -7,7 +7,7 @@ import { add16Bit } from "../utils/arithmetic-utils";
  * ADD HL, BC. Add the contents of register pair BC to the contents
  * of register pair HL, and store the results in register pair HL.
  */
-export class Gb06Instruction implements GbInstruction {
+export class Gb09Instruction implements GbInstruction {
     getLength(): number {
         return 1;
     }

@@ -1,3 +1,4 @@
+import { EIGHT_ONE_BITS } from "src/utils/constants";
 import { Register, RegisterSet } from "./register";
 
 export class Register8Bit extends Register {
@@ -11,8 +12,6 @@ export class Register16Bit extends Register {
         return 16;
     }
 }
-
-const EIGHT_ONE_BITS = ((1 << 8) - 1);
 
 export class DualRegister extends Register16Bit {
     constructor(
@@ -68,6 +67,22 @@ export class GbRegisterSet implements RegisterSet {
             this.e, this.f, this.h, this.l,
             this.sp, this.pc
         ];
+    }
+
+    public getZeroFlag(): number {
+        return this.f.getBit(7);
+    }
+
+    public getOperationFlag(): number {
+        return this.f.getBit(6);
+    }
+
+    public getHalfCarryFlag(): number {
+        return this.f.getBit(5);
+    }
+
+    public getCarryFlag(): number {
+        return this.f.getBit(4);
     }
 
     public setZeroFlag(value: number): void {
