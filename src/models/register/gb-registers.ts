@@ -28,12 +28,12 @@ export class DualRegister extends Register16Bit {
     }
 
     getValue(): number {
-        return (this.subRegister2.getValue() << 8) | this.subRegister1.getValue();
+        return (this.subRegister1.getValue() << 8) | this.subRegister2.getValue();
     }
 
     setValue(value: number): void {
-        const subRegister2Value = (value >> 8) & EIGHT_ONE_BITS;
-        const subRegister1Value = value & EIGHT_ONE_BITS;
+        const subRegister1Value = (value >> 8) & EIGHT_ONE_BITS;
+        const subRegister2Value = value & EIGHT_ONE_BITS;
         this.subRegister1.setValue(subRegister1Value);
         this.subRegister2.setValue(subRegister2Value);
     }
@@ -68,5 +68,21 @@ export class GbRegisterSet implements RegisterSet {
             this.e, this.f, this.h, this.l,
             this.sp, this.pc
         ];
+    }
+
+    public setZeroFlag(value: number): void {
+        this.f.setBit(7, value);
+    }
+
+    public setOperationFlag(value: number): void {
+        this.f.setBit(6, value);
+    }
+
+    public setHalfCarryFlag(value: number): void {
+        this.f.setBit(5, value);
+    }
+
+    public setCarryFlag(value: number): void {
+        this.f.setBit(4, value);
     }
 }
