@@ -22,9 +22,6 @@ export class Gb08Instruction implements GbInstruction {
 
     run(rs: GbRegisterSet, mmu: GbMmu, args: number[]): void {
         const sp = rs.sp.getValue();
-        const lowerHalf = sp & ((1 << 8) - 1);
-        const upperHalf = sp >> 8;
-        mmu.writeByte(args[0], lowerHalf);
-        mmu.writeByte(args[0] + 1, upperHalf);
+        mmu.writeWord(args[0], sp);
     }
 }
