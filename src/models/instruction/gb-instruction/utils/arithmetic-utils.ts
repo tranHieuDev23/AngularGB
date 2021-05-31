@@ -27,6 +27,14 @@ function subtract(a: number, b: number, bitCount: number): ArithmeticResult {
     return new ArithmeticResult(croppedResult, zero, halfCarry, carry);
 }
 
+function toSigned(a: number, bitCount: number): number {
+    const twoPower = 1 << bitCount;
+    if (a < twoPower / 2) {
+        return a;
+    }
+    return - (((~a) + 1) & (twoPower - 1));
+}
+
 export function add8Bit(a: number, b: number): ArithmeticResult {
     return add(a, b, 8);
 }
@@ -35,10 +43,18 @@ export function subtract8Bit(a: number, b: number): ArithmeticResult {
     return subtract(a, b, 8);
 }
 
+export function toSigned8Bit(a: number): number {
+    return toSigned(a, 8);
+}
+
 export function add16Bit(a: number, b: number): ArithmeticResult {
     return add(a, b, 16);
 }
 
 export function subtract16Bit(a: number, b: number): ArithmeticResult {
     return subtract(a, b, 16);
+}
+
+export function toSigned16Bit(a: number): number {
+    return toSigned(a, 16);
 }
