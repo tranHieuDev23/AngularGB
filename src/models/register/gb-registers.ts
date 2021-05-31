@@ -101,3 +101,18 @@ export class GbRegisterSet implements RegisterSet {
         this.f.setBit(4, value);
     }
 }
+
+export enum RegisterName {
+    A, B, C, D, E, F, H, L, SP, PC, AF, BC, DE, HL
+};
+
+export const REGISTERS_8_BIT = [
+    RegisterName.A, RegisterName.B, RegisterName.C, RegisterName.D,
+    RegisterName.E, RegisterName.F, RegisterName.H, RegisterName.L
+];
+
+export const REGISTERS_16_BIT = [
+    RegisterName.SP, RegisterName.PC, RegisterName.AF, RegisterName.BC,
+    RegisterName.DE, RegisterName.HL
+
+]

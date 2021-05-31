@@ -1,4 +1,5 @@
-import { Gb16BitArg, Gb8BitArg, Gb8BitDecArg, Gb8BitIncArg, GbMemArg, GbRegisterArg, RegisterName } from "./gb-instruction";
+import { RegisterName } from "../register/gb-registers";
+import { Gb16BitArg, Gb8BitArg, Gb8BitDecArg, Gb8BitIncArg, GbMemArg, GbRegisterArg } from "./gb-instruction";
 import { AdcInstruction } from "./gb-instruction/adc";
 import { Add16BitRegisterInstruction, Add8BitInstruction, GbE8Instruction } from "./gb-instruction/add";
 import { AndInstruction } from "./gb-instruction/and";

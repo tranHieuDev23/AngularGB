@@ -1,5 +1,5 @@
 import { GbMmu } from "../mmu/gb-mmu";
-import { GbRegisterSet } from "../register/gb-registers";
+import { GbRegisterSet, RegisterName, REGISTERS_8_BIT } from "../register/gb-registers";
 import { Register } from "../register/register";
 import { add16Bit, subtract16Bit } from "./gb-instruction/utils/arithmetic-utils";
 import { Instruction, InstructionArg, InstructionWritableArg } from "./instruction";
@@ -10,44 +10,21 @@ export interface GbInstructionArg extends InstructionArg<GbRegisterSet, GbMmu> {
 
 export interface GbInstructionWritableArg extends GbInstructionArg, InstructionWritableArg<GbRegisterSet, GbMmu> { }
 
-export enum RegisterName {
-    A, B, C, D, E, F, H, L, SP, PC, AF, BC, DE, HL
-};
-
-function registerBitCount(registerName: RegisterName) {
-    switch (registerName) {
-        case RegisterName.A:
-        case RegisterName.B:
-        case RegisterName.C:
-        case RegisterName.D:
-        case RegisterName.E:
-        case RegisterName.F:
-        case RegisterName.H:
-        case RegisterName.L:
-            return 8;
-        case RegisterName.AF:
-        case RegisterName.BC:
-        case RegisterName.DE:
-        case RegisterName.HL:
-        case RegisterName.SP:
-        case RegisterName.PC:
-            return 16;
-        default:
-            throw new Error("Unknown register name");
-    }
-}
-
 export class GbRegisterArg implements GbInstructionWritableArg {
+    private readonly bitCount: number;
+
     constructor(
         private readonly registerName: RegisterName
-    ) { }
+    ) {
+        this.bitCount = REGISTERS_8_BIT.includes(registerName) ? 8 : 16;
+    }
 
     getArgsTakenCount(): number {
         return 0;
     }
 
     getValueBitCount(): number {
-        return registerBitCount(this.registerName);
+        return this.bitCount;
     }
 
     getValue(rs: GbRegisterSet, mmu: GbMmu, args: number[]): number {
