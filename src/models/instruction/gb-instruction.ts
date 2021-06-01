@@ -164,7 +164,7 @@ export class Gb16BitDecArg implements GbInstructionArg {
     }
 }
 
-export class GbNotArg implements GbInstructionArg {
+export class GbNotArg implements GbInstructionWritableArg {
     constructor(
         private readonly flagArg: GbFlagArg
     ) { }
@@ -179,5 +179,9 @@ export class GbNotArg implements GbInstructionArg {
 
     getValue(rs: GbRegisterSet, mmu: GbMmu, args: number[]): number {
         return this.flagArg.getValue(rs, mmu, args) ^ 1;
+    }
+
+    setValue(rs: GbRegisterSet, mmu: GbMmu, args: number[], value: number): void {
+        this.flagArg.setValue(rs, mmu, args, value ^ 1);
     }
 }
