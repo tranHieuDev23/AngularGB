@@ -6,7 +6,7 @@ import { GbMemArg, GbRegisterArg } from "../gb-instruction";
 import { Dec16BitInstruction, Dec8BitInstruction } from "./dec";
 import { initialize } from "./utils/test-utils";
 
-describe('dec', () => {
+describe("dec", () => {
     const rs = new GbRegisterSet();
     const mmu = new GbMmu();
 
@@ -14,7 +14,7 @@ describe('dec', () => {
         initialize(rs, mmu);
     });
 
-    it('should work with 8-bit registers', () => {
+    it("should work with 8-bit registers", () => {
         REGISTERS_8_BIT.filter(item => item !== RegisterName.F).forEach(registerName => {
             const opCode = randomInteger(0x00, 0x100);
             const registerArg = new GbRegisterArg(registerName);
@@ -38,7 +38,7 @@ describe('dec', () => {
         });
     });
 
-    it('should work with memory argument', () => {
+    it("should work with memory argument", () => {
         const opCode = randomInteger(0x00, 0x100);
         const memArg = new GbMemArg(new GbRegisterArg(RegisterName.HL));
         const memValue = randomInteger(0, TWO_POW_EIGHT);
@@ -60,7 +60,7 @@ describe('dec', () => {
         expect(rs.getCarryFlag()).toEqual(carryFlag);
     });
 
-    it('should work with 16-bit registers', () => {
+    it("should work with 16-bit registers", () => {
         REGISTERS_16_BIT.filter(item => {
             return item !== RegisterName.AF && item !== RegisterName.PC;
         }).forEach(registerName => {

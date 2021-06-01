@@ -7,7 +7,7 @@ import { GbF8Instruction, LdInstruction } from "./ld";
 import { add16Bit } from "./utils/arithmetic-utils";
 import { initialize } from "./utils/test-utils";
 
-describe('ld', () => {
+describe("ld", () => {
     const rs = new GbRegisterSet();
     const mmu = new GbMmu();
     const args = [0, 0];
@@ -19,7 +19,7 @@ describe('ld', () => {
         }
     });
 
-    it('should work between simple 8-bit data sources', () => {
+    it("should work between simple 8-bit data sources", () => {
         const SIMPLE_R1S = [
             ...REGISTERS_8_BIT.filter(item => {
                 return item !== RegisterName.F;
@@ -77,7 +77,7 @@ describe('ld', () => {
     const registerArgHlInc = new GbMemArg(new Gb16BitIncArg(registerArgHl));
     const registerArgHlDec = new GbMemArg(new Gb16BitDecArg(registerArgHl));
 
-    it('ld (HL+) A', () => {
+    it("ld (HL+) A", () => {
         const hlValue = randomInteger(0, TWO_POW_SIXTEEN);
         rs.hl.setValue(hlValue);
         const instruction = new LdInstruction(0x22, 2, registerArgHlInc, registerArgA);
@@ -101,7 +101,7 @@ describe('ld', () => {
         expect(rs.getCarryFlag()).toEqual(carryFlag);
     });
 
-    it('ld A (HL+)', () => {
+    it("ld A (HL+)", () => {
         const hlValue = randomInteger(0, TWO_POW_SIXTEEN);
         rs.hl.setValue(hlValue);
         const instruction = new LdInstruction(0x2a, 2, registerArgA, registerArgHlInc);
@@ -125,7 +125,7 @@ describe('ld', () => {
         expect(rs.getCarryFlag()).toEqual(carryFlag);
     });
 
-    it('ld (HL-) A', () => {
+    it("ld (HL-) A", () => {
         const hlValue = randomInteger(0, TWO_POW_SIXTEEN);
         rs.hl.setValue(hlValue);
         const instruction = new LdInstruction(0x32, 2, registerArgHlDec, registerArgA);
@@ -149,7 +149,7 @@ describe('ld', () => {
         expect(rs.getCarryFlag()).toEqual(carryFlag);
     });
 
-    it('ld A (HL-)', () => {
+    it("ld A (HL-)", () => {
         const hlValue = randomInteger(0, TWO_POW_SIXTEEN);
         rs.hl.setValue(hlValue);
         const instruction = new LdInstruction(0x3a, 2, registerArgA, registerArgHlDec);
@@ -173,7 +173,7 @@ describe('ld', () => {
         expect(rs.getCarryFlag()).toEqual(carryFlag);
     });
 
-    it('should work between 16-bit sources', () => {
+    it("should work between 16-bit sources", () => {
         const SIMPLE_R1S = [
             RegisterName.BC, RegisterName.DE, RegisterName.HL, RegisterName.SP
         ].map(item => {
@@ -218,7 +218,7 @@ describe('ld', () => {
         });
     });
 
-    it('0xf8', () => {
+    it("0xf8", () => {
         const sp = randomInteger(0, TWO_POW_SIXTEEN);
         rs.sp.setValue(sp);
         const instruction = new GbF8Instruction();

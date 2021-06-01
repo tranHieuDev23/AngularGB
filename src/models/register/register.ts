@@ -1,11 +1,11 @@
 export abstract class Register {
-    public abstract bitCount(): number;
-
-    private value: number = 0;
 
     constructor(
         protected readonly name: string
     ) { }
+
+    private value = 0;
+    public abstract bitCount(): number;
 
     public getName(): string {
         return this.name;

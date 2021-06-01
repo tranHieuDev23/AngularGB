@@ -7,7 +7,7 @@ import { GbInstruction } from "../gb-instruction";
  * and oscillator circuit. STOP mode is entered and the LCD
  * controller also stops. However, the status of the internal RAM
  * register ports remains unchanged.
- * 
+ *
  * TODO: Implement this. Currently acts like a NOP.
  */
 export class StopInstruction implements GbInstruction {

@@ -3,7 +3,7 @@ import { GbRegisterSet } from "src/models/register/gb-registers";
 import { TWO_POW_EIGHT } from "src/utils/constants";
 import { randomInteger } from "src/utils/random";
 
-export function initialize(rs: GbRegisterSet, mmu: GbMmu) {
+export function initialize(rs: GbRegisterSet, mmu: GbMmu): void {
     rs.getAllRegister().forEach(item => {
         item.setValue(0);
     });

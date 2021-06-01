@@ -104,7 +104,7 @@ export class GbRegisterSet implements RegisterSet {
 
 export enum RegisterName {
     A, B, C, D, E, F, H, L, SP, PC, AF, BC, DE, HL
-};
+}
 
 export const REGISTERS_8_BIT = [
     RegisterName.A, RegisterName.B, RegisterName.C, RegisterName.D,
@@ -115,4 +115,4 @@ export const REGISTERS_16_BIT = [
     RegisterName.SP, RegisterName.PC, RegisterName.AF, RegisterName.BC,
     RegisterName.DE, RegisterName.HL
 
-]
+];

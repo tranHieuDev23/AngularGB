@@ -6,7 +6,7 @@ import { Gb8BitArg, GbMemArg, GbRegisterArg } from "../gb-instruction";
 import { initialize } from "./utils/test-utils";
 import { XorInstruction } from "./xor";
 
-describe('xor', () => {
+describe("xor", () => {
     const rs = new GbRegisterSet();
     const mmu = new GbMmu();
 
@@ -14,7 +14,7 @@ describe('xor', () => {
         initialize(rs, mmu);
     });
 
-    it('should work with 8-bit registers', () => {
+    it("should work with 8-bit registers", () => {
         REGISTERS_8_BIT.forEach(registerName => {
             const opCode = randomInteger(0x00, 0x100);
             const registerArg = new GbRegisterArg(registerName);
@@ -36,7 +36,7 @@ describe('xor', () => {
         });
     });
 
-    it('should work with memory argument', () => {
+    it("should work with memory argument", () => {
         const opCode = randomInteger(0x00, 0x100);
         const memArg = new GbMemArg(new GbRegisterArg(RegisterName.HL));
         const memValue = randomInteger(0, TWO_POW_EIGHT);
@@ -56,7 +56,7 @@ describe('xor', () => {
         expect(rs.getCarryFlag()).toEqual(0);
     });
 
-    it('should work with 8-bit value', () => {
+    it("should work with 8-bit value", () => {
         const opCode = randomInteger(0x00, 0x100);
         const byteArg = new Gb8BitArg(0);
         const byteValue = randomInteger(0, TWO_POW_EIGHT);

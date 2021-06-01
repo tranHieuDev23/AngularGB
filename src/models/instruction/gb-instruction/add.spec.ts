@@ -7,7 +7,7 @@ import { Add16BitRegisterInstruction, Add8BitInstruction, GbE8Instruction } from
 import { add16Bit, add8Bit, toSigned8Bit } from "./utils/arithmetic-utils";
 import { initialize } from "./utils/test-utils";
 
-describe('add', () => {
+describe("add", () => {
     const rs = new GbRegisterSet();
     const mmu = new GbMmu();
 
@@ -18,7 +18,7 @@ describe('add', () => {
     const registerArgA = new GbRegisterArg(RegisterName.A);
     const registerArgHl = new GbRegisterArg(RegisterName.HL);
 
-    it('should work with 8-bit registers', () => {
+    it("should work with 8-bit registers", () => {
         REGISTERS_8_BIT.filter(item => item !== RegisterName.F).forEach(registerName => {
             const opCode = randomInteger(0x00, 0x100);
             const registerArg = new GbRegisterArg(registerName);
@@ -40,7 +40,7 @@ describe('add', () => {
         });
     });
 
-    it('should work with memory argument', () => {
+    it("should work with memory argument", () => {
         const opCode = randomInteger(0x00, 0x100);
         const memArg = new GbMemArg(new GbRegisterArg(RegisterName.HL));
         const memValue = randomInteger(0, TWO_POW_EIGHT);
@@ -60,7 +60,7 @@ describe('add', () => {
         expect(rs.getCarryFlag()).toEqual(expectedResult.carry ? 1 : 0);
     });
 
-    it('should work with 8-bit value', () => {
+    it("should work with 8-bit value", () => {
         const opCode = randomInteger(0x00, 0x100);
         const byteArg = new Gb8BitArg(0);
         const byteValue = randomInteger(0, TWO_POW_EIGHT);
@@ -79,9 +79,9 @@ describe('add', () => {
         expect(rs.getCarryFlag()).toEqual(expectedResult.carry ? 1 : 0);
     });
 
-    it('should work with two 16-bit registers', () => {
+    it("should work with two 16-bit registers", () => {
         REGISTERS_16_BIT.filter(item => {
-            return item !== RegisterName.AF && item !== RegisterName.PC
+            return item !== RegisterName.AF && item !== RegisterName.PC;
         }).forEach(registerName => {
             const opCode = randomInteger(0x00, 0x100);
             const registerArg = new GbRegisterArg(registerName);
@@ -104,7 +104,7 @@ describe('add', () => {
         });
     });
 
-    it('0xe8', () => {
+    it("0xe8", () => {
         const spValue = randomInteger(0, TWO_POW_SIXTEEN);
         rs.sp.setValue(spValue);
         const byteValue = randomInteger(0, TWO_POW_EIGHT);

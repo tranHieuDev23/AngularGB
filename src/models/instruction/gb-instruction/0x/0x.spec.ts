@@ -19,7 +19,7 @@ import { Gb0dInstruction } from "./0d";
 import { Gb0eInstruction } from "./0e";
 import { Gb0fInstruction } from "./0f";
 
-describe('0x', () => {
+describe("0x", () => {
     const rs = new GbRegisterSet();
     const mmu = new GbMmu();
 
@@ -30,16 +30,16 @@ describe('0x', () => {
         mmu.randomize();
     });
 
-    describe('00', () => {
+    describe("00", () => {
         const instruction00 = new Gb00Instruction();
 
-        it('should have correct properties', () => {
+        it("should have correct properties", () => {
             expect(instruction00.getOpcode()).toEqual(0x00);
             expect(instruction00.getLength()).toEqual(1);
             expect(instruction00.getCycleCount()).toEqual(1);
         });
 
-        it('should do nothing', () => {
+        it("should do nothing", () => {
             instruction00.run(rs, mmu, []);
             rs.getAllRegister().forEach(item => {
                 expect(item.getValue()).toEqual(0);
@@ -47,16 +47,16 @@ describe('0x', () => {
         });
     });
 
-    describe('01', () => {
+    describe("01", () => {
         const instruction01 = new Gb01Instruction();
 
-        it('should have correct properties', () => {
+        it("should have correct properties", () => {
             expect(instruction01.getOpcode()).toEqual(0x01);
             expect(instruction01.getLength()).toEqual(3);
             expect(instruction01.getCycleCount()).toEqual(3);
         });
 
-        it('should load args value to BC', () => {
+        it("should load args value to BC", () => {
             const lowerHalf = randomInteger(0, TWO_POW_EIGHT);
             const upperHalf = randomInteger(0, TWO_POW_EIGHT);
             instruction01.run(rs, mmu, [lowerHalf, upperHalf]);
@@ -67,16 +67,16 @@ describe('0x', () => {
         });
     });
 
-    describe('02', () => {
+    describe("02", () => {
         const instruction02 = new Gb02Instruction();
 
-        it('should have correct properties', () => {
+        it("should have correct properties", () => {
             expect(instruction02.getOpcode()).toEqual(0x02);
             expect(instruction02.getLength()).toEqual(1);
             expect(instruction02.getCycleCount()).toEqual(2);
         });
 
-        it('should load value of A to address specified by BC', () => {
+        it("should load value of A to address specified by BC", () => {
             const a = randomInteger(0, TWO_POW_EIGHT);
             const bc = randomInteger(0, TWO_POW_SIXTEEN);
             rs.a.setValue(a);
@@ -88,16 +88,16 @@ describe('0x', () => {
         });
     });
 
-    describe('03', () => {
+    describe("03", () => {
         const instruction03 = new Gb03Instruction();
 
-        it('should have correct properties', () => {
+        it("should have correct properties", () => {
             expect(instruction03.getOpcode()).toEqual(0x03);
             expect(instruction03.getLength()).toEqual(1);
             expect(instruction03.getCycleCount()).toEqual(2);
         });
 
-        it('should increase value of BC by 1', () => {
+        it("should increase value of BC by 1", () => {
             const bc = randomInteger(0, TWO_POW_SIXTEEN - 1);
             rs.bc.setValue(bc);
             instruction03.run(rs, mmu, []);
@@ -111,16 +111,16 @@ describe('0x', () => {
         });
     });
 
-    describe('04', () => {
+    describe("04", () => {
         const instruction04 = new Gb04Instruction();
 
-        it('should have correct properties', () => {
+        it("should have correct properties", () => {
             expect(instruction04.getOpcode()).toEqual(0x04);
             expect(instruction04.getLength()).toEqual(1);
             expect(instruction04.getCycleCount()).toEqual(1);
         });
 
-        it('should increase value of B by 1', () => {
+        it("should increase value of B by 1", () => {
             const b = randomInteger(0, TWO_POW_EIGHT - 1);
             rs.b.setValue(b);
             instruction04.run(rs, mmu, []);
@@ -134,16 +134,16 @@ describe('0x', () => {
         });
     });
 
-    describe('05', () => {
+    describe("05", () => {
         const instruction05 = new Gb05Instruction();
 
-        it('should have correct properties', () => {
+        it("should have correct properties", () => {
             expect(instruction05.getOpcode()).toEqual(0x05);
             expect(instruction05.getLength()).toEqual(1);
             expect(instruction05.getCycleCount()).toEqual(1);
         });
 
-        it('should decrease value of B by 1', () => {
+        it("should decrease value of B by 1", () => {
             const b = randomInteger(1, TWO_POW_EIGHT);
             rs.b.setValue(b);
             instruction05.run(rs, mmu, []);
@@ -157,32 +157,32 @@ describe('0x', () => {
         });
     });
 
-    describe('06', () => {
+    describe("06", () => {
         const instruction06 = new Gb06Instruction();
 
-        it('should have correct properties', () => {
+        it("should have correct properties", () => {
             expect(instruction06.getOpcode()).toEqual(0x06);
             expect(instruction06.getLength()).toEqual(2);
             expect(instruction06.getCycleCount()).toEqual(2);
         });
 
-        it('should load args value into B', () => {
+        it("should load args value into B", () => {
             const randomValue = randomInteger(0, TWO_POW_EIGHT);
             instruction06.run(rs, mmu, [randomValue]);
             expect(rs.b.getValue()).toEqual(randomValue);
         });
     });
 
-    describe('07', () => {
+    describe("07", () => {
         const instruction07 = new Gb07Instruction();
 
-        it('should have correct properties', () => {
+        it("should have correct properties", () => {
             expect(instruction07.getOpcode()).toEqual(0x07);
             expect(instruction07.getLength()).toEqual(1);
             expect(instruction07.getCycleCount()).toEqual(1);
         });
 
-        it('should left rotate value of A', () => {
+        it("should left rotate value of A", () => {
             const a = randomInteger(0, TWO_POW_EIGHT);
             rs.a.setValue(a);
             const bit7 = rs.a.getBit(7);
@@ -193,16 +193,16 @@ describe('0x', () => {
         });
     });
 
-    describe('08', () => {
+    describe("08", () => {
         const instruction08 = new Gb08Instruction();
 
-        it('should have correct properties', () => {
+        it("should have correct properties", () => {
             expect(instruction08.getOpcode()).toEqual(0x08);
             expect(instruction08.getLength()).toEqual(3);
             expect(instruction08.getCycleCount()).toEqual(5);
         });
 
-        it('should load value of SP to specified address', () => {
+        it("should load value of SP to specified address", () => {
             const sp = randomInteger(0, TWO_POW_SIXTEEN);
             rs.sp.setValue(sp);
             const address = randomInteger(0, TWO_POW_SIXTEEN - 1);
@@ -211,16 +211,16 @@ describe('0x', () => {
         });
     });
 
-    describe('09', () => {
+    describe("09", () => {
         const instruction09 = new Gb09Instruction();
 
-        it('should have correct properties', () => {
+        it("should have correct properties", () => {
             expect(instruction09.getOpcode()).toEqual(0x09);
             expect(instruction09.getLength()).toEqual(1);
             expect(instruction09.getCycleCount()).toEqual(2);
         });
 
-        it('should add value of BC to HL', () => {
+        it("should add value of BC to HL", () => {
             const bc = randomInteger(0, TWO_POW_SIXTEEN / 2);
             const hl = randomInteger(0, TWO_POW_SIXTEEN / 2);
             rs.bc.setValue(bc);
@@ -237,16 +237,16 @@ describe('0x', () => {
         });
     });
 
-    describe('0a', () => {
+    describe("0a", () => {
         const instruction0a = new Gb0aInstruction();
 
-        it('should have correct properties', () => {
+        it("should have correct properties", () => {
             expect(instruction0a.getOpcode()).toEqual(0x0a);
             expect(instruction0a.getLength()).toEqual(1);
             expect(instruction0a.getCycleCount()).toEqual(2);
         });
 
-        it('should load value of address specified by BC into A', () => {
+        it("should load value of address specified by BC into A", () => {
             const bc = randomInteger(0, TWO_POW_SIXTEEN);
             const randomValue = randomInteger(0, TWO_POW_EIGHT);
             rs.bc.setValue(bc);
@@ -256,16 +256,16 @@ describe('0x', () => {
         });
     });
 
-    describe('0b', () => {
+    describe("0b", () => {
         const instruction0b = new Gb0bInstruction();
 
-        it('should have correct properties', () => {
+        it("should have correct properties", () => {
             expect(instruction0b.getOpcode()).toEqual(0x0b);
             expect(instruction0b.getLength()).toEqual(1);
             expect(instruction0b.getCycleCount()).toEqual(2);
         });
 
-        it('should decrease value of BC by 1', () => {
+        it("should decrease value of BC by 1", () => {
             const bc = randomInteger(1, TWO_POW_SIXTEEN);
             rs.bc.setValue(bc);
             instruction0b.run(rs, mmu, []);
@@ -279,16 +279,16 @@ describe('0x', () => {
         });
     });
 
-    describe('0c', () => {
+    describe("0c", () => {
         const instruction0c = new Gb0cInstruction();
 
-        it('should have correct properties', () => {
+        it("should have correct properties", () => {
             expect(instruction0c.getOpcode()).toEqual(0x0c);
             expect(instruction0c.getLength()).toEqual(1);
             expect(instruction0c.getCycleCount()).toEqual(1);
         });
 
-        it('should increase value of C by 1', () => {
+        it("should increase value of C by 1", () => {
             const c = randomInteger(0, TWO_POW_EIGHT - 1);
             rs.c.setValue(c);
             instruction0c.run(rs, mmu, []);
@@ -302,16 +302,16 @@ describe('0x', () => {
         });
     });
 
-    describe('0d', () => {
+    describe("0d", () => {
         const instruction0d = new Gb0dInstruction();
 
-        it('should have correct properties', () => {
+        it("should have correct properties", () => {
             expect(instruction0d.getOpcode()).toEqual(0x0d);
             expect(instruction0d.getLength()).toEqual(1);
             expect(instruction0d.getCycleCount()).toEqual(1);
         });
 
-        it('should decrease value of C by 1', () => {
+        it("should decrease value of C by 1", () => {
             const c = randomInteger(1, TWO_POW_EIGHT);
             rs.c.setValue(c);
             instruction0d.run(rs, mmu, []);
@@ -325,32 +325,32 @@ describe('0x', () => {
         });
     });
 
-    describe('0e', () => {
+    describe("0e", () => {
         const instruction0e = new Gb0eInstruction();
 
-        it('should have correct properties', () => {
+        it("should have correct properties", () => {
             expect(instruction0e.getOpcode()).toEqual(0x0e);
             expect(instruction0e.getLength()).toEqual(2);
             expect(instruction0e.getCycleCount()).toEqual(2);
         });
 
-        it('should load args value into C', () => {
+        it("should load args value into C", () => {
             const randomValue = randomInteger(0, TWO_POW_EIGHT);
             instruction0e.run(rs, mmu, [randomValue]);
             expect(rs.c.getValue()).toEqual(randomValue);
         });
     });
 
-    describe('0f', () => {
+    describe("0f", () => {
         const instruction0f = new Gb0fInstruction();
 
-        it('should have correct properties', () => {
+        it("should have correct properties", () => {
             expect(instruction0f.getOpcode()).toEqual(0x0f);
             expect(instruction0f.getLength()).toEqual(1);
             expect(instruction0f.getCycleCount()).toEqual(1);
         });
 
-        it('should right rotate value of A', () => {
+        it("should right rotate value of A", () => {
             const a = randomInteger(0, TWO_POW_EIGHT);
             rs.a.setValue(a);
             const bit0 = rs.a.getBit(0);

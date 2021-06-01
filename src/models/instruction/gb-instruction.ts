@@ -129,7 +129,7 @@ export class GbMemArg implements GbInstructionWritableArg {
     }
 
     private getAddress(rs: GbRegisterSet, mmu: GbMmu, args: number[]): number {
-        return this.addressArg.getValueBitCount() == 8
+        return this.addressArg.getValueBitCount() === 8
             ? 0xff00 | this.addressArg.getValue(rs, mmu, args)
             : this.addressArg.getValue(rs, mmu, args);
     }

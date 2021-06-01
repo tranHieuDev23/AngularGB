@@ -1,9 +1,9 @@
 import { TWO_POW_EIGHT, TWO_POW_SIXTEEN } from "src/utils/constants";
 import { add16Bit, add8Bit, ArithmeticResult, subtract16Bit, subtract8Bit, toSigned16Bit, toSigned8Bit } from "./arithmetic-utils";
 
-describe('arithmetic-utils', () => {
-    describe('add8Bit()', () => {
-        it('should do add operation', () => {
+describe("arithmetic-utils", () => {
+    describe("add8Bit()", () => {
+        it("should do add operation", () => {
             const result = add8Bit(2, 3);
             expect(result).toBeInstanceOf(ArithmeticResult);
             expect(result.result).toEqual(5);
@@ -12,7 +12,7 @@ describe('arithmetic-utils', () => {
             expect(result.halfCarry).toBeFalse();
         });
 
-        it('should limit in 8 bit', () => {
+        it("should limit in 8 bit", () => {
             const result = add8Bit(0x80, 0x81);
             expect(result.result).toEqual(0x01);
             expect(result.zero).toBeFalse();
@@ -20,7 +20,7 @@ describe('arithmetic-utils', () => {
             expect(result.halfCarry).toBeFalse();
         });
 
-        it('should be able to raise half-flag', () => {
+        it("should be able to raise half-flag", () => {
             const result = add8Bit(0x0c, 0x0d);
             expect(result.result).toEqual(0x19);
             expect(result.zero).toBeFalse();
@@ -28,7 +28,7 @@ describe('arithmetic-utils', () => {
             expect(result.halfCarry).toBeTrue();
         });
 
-        it('should be able to raise zero', () => {
+        it("should be able to raise zero", () => {
             const result = add8Bit(0x01, 0xff);
             expect(result.result).toEqual(0x00);
             expect(result.zero).toBeTrue();
@@ -37,8 +37,8 @@ describe('arithmetic-utils', () => {
         });
     });
 
-    describe('subtract8Bit()', () => {
-        it('should do subtract operation', () => {
+    describe("subtract8Bit()", () => {
+        it("should do subtract operation", () => {
             const result = subtract8Bit(3, 2);
             expect(result).toBeInstanceOf(ArithmeticResult);
             expect(result.result).toEqual(1);
@@ -47,7 +47,7 @@ describe('arithmetic-utils', () => {
             expect(result.halfCarry).toBeFalse();
         });
 
-        it('should limit in 8 bit', () => {
+        it("should limit in 8 bit", () => {
             const result = subtract8Bit(0x80, 0x81);
             expect(result.result).toEqual(0xff);
             expect(result.zero).toBeFalse();
@@ -55,7 +55,7 @@ describe('arithmetic-utils', () => {
             expect(result.halfCarry).toBeTrue();
         });
 
-        it('should be able to raise half-flag', () => {
+        it("should be able to raise half-flag", () => {
             const result = subtract8Bit(0x19, 0x0d);
             expect(result.result).toEqual(0x0c);
             expect(result.zero).toBeFalse();
@@ -63,7 +63,7 @@ describe('arithmetic-utils', () => {
             expect(result.halfCarry).toBeTrue();
         });
 
-        it('should be able to raise zero', () => {
+        it("should be able to raise zero", () => {
             const result = subtract8Bit(0x01, 0x01);
             expect(result.result).toEqual(0x00);
             expect(result.zero).toBeTrue();
@@ -72,8 +72,8 @@ describe('arithmetic-utils', () => {
         });
     });
 
-    describe('toSigned8Bit()', () => {
-        it('should convert 8-bit representation to correct value', () => {
+    describe("toSigned8Bit()", () => {
+        it("should convert 8-bit representation to correct value", () => {
             for (let i = 0; i < TWO_POW_EIGHT / 2; i++) {
                 expect(toSigned8Bit(i)).toEqual(i);
             }
@@ -83,8 +83,8 @@ describe('arithmetic-utils', () => {
         });
     });
 
-    describe('add16Bit()', () => {
-        it('should do add operation', () => {
+    describe("add16Bit()", () => {
+        it("should do add operation", () => {
             const result = add16Bit(2, 3);
             expect(result).toBeInstanceOf(ArithmeticResult);
             expect(result.result).toEqual(5);
@@ -93,7 +93,7 @@ describe('arithmetic-utils', () => {
             expect(result.halfCarry).toBeFalse();
         });
 
-        it('should limit in 16 bit', () => {
+        it("should limit in 16 bit", () => {
             const result = add16Bit(0x8000, 0x8100);
             expect(result.result).toEqual(0x0100);
             expect(result.zero).toBeFalse();
@@ -101,7 +101,7 @@ describe('arithmetic-utils', () => {
             expect(result.halfCarry).toBeFalse();
         });
 
-        it('should be able to raise half-flag', () => {
+        it("should be able to raise half-flag", () => {
             const result = add16Bit(0x000c, 0x000d);
             expect(result.result).toEqual(0x0019);
             expect(result.zero).toBeFalse();
@@ -109,7 +109,7 @@ describe('arithmetic-utils', () => {
             expect(result.halfCarry).toBeTrue();
         });
 
-        it('should be able to raise zero', () => {
+        it("should be able to raise zero", () => {
             const result = add16Bit(0x0001, 0xffff);
             expect(result.result).toEqual(0x0000);
             expect(result.zero).toBeTrue();
@@ -118,8 +118,8 @@ describe('arithmetic-utils', () => {
         });
     });
 
-    describe('subtract16Bit()', () => {
-        it('should do subtract operation', () => {
+    describe("subtract16Bit()", () => {
+        it("should do subtract operation", () => {
             const result = subtract16Bit(3, 2);
             expect(result).toBeInstanceOf(ArithmeticResult);
             expect(result.result).toEqual(1);
@@ -128,7 +128,7 @@ describe('arithmetic-utils', () => {
             expect(result.halfCarry).toBeFalse();
         });
 
-        it('should limit in 8 bit', () => {
+        it("should limit in 8 bit", () => {
             const result = subtract16Bit(0x8000, 0x8100);
             expect(result.result).toEqual(0xff00);
             expect(result.zero).toBeFalse();
@@ -136,7 +136,7 @@ describe('arithmetic-utils', () => {
             expect(result.halfCarry).toBeFalse();
         });
 
-        it('should be able to raise half-flag', () => {
+        it("should be able to raise half-flag", () => {
             const result = subtract16Bit(0x0019, 0x000d);
             expect(result.result).toEqual(0x000c);
             expect(result.zero).toBeFalse();
@@ -144,7 +144,7 @@ describe('arithmetic-utils', () => {
             expect(result.halfCarry).toBeTrue();
         });
 
-        it('should be able to raise zero', () => {
+        it("should be able to raise zero", () => {
             const result = subtract16Bit(0x0001, 0x0001);
             expect(result.result).toEqual(0x0000);
             expect(result.zero).toBeTrue();
@@ -153,8 +153,8 @@ describe('arithmetic-utils', () => {
         });
     });
 
-    describe('toSigned16Bit()', () => {
-        it('should convert 16-bit representation to correct value', () => {
+    describe("toSigned16Bit()", () => {
+        it("should convert 16-bit representation to correct value", () => {
             for (let i = TWO_POW_SIXTEEN / 2 - 100; i < TWO_POW_SIXTEEN / 2; i++) {
                 expect(toSigned16Bit(i)).toEqual(i);
             }

@@ -7,7 +7,7 @@ import { SbcInstruction } from "./sbc";
 import { subtract8Bit } from "./utils/arithmetic-utils";
 import { initialize } from "./utils/test-utils";
 
-describe('sbc', () => {
+describe("sbc", () => {
     const rs = new GbRegisterSet();
     const mmu = new GbMmu();
 
@@ -15,7 +15,7 @@ describe('sbc', () => {
         initialize(rs, mmu);
     });
 
-    it('should work with 8-bit registers', () => {
+    it("should work with 8-bit registers", () => {
         REGISTERS_8_BIT.forEach(registerName => {
             const opCode = randomInteger(0x00, 0x100);
             const registerArg = new GbRegisterArg(registerName);
@@ -38,7 +38,7 @@ describe('sbc', () => {
         });
     });
 
-    it('should work with memory argument', () => {
+    it("should work with memory argument", () => {
         const opCode = randomInteger(0x00, 0x100);
         const memArg = new GbMemArg(new GbRegisterArg(RegisterName.HL));
         const memValue = randomInteger(0, TWO_POW_EIGHT);
@@ -59,7 +59,7 @@ describe('sbc', () => {
         expect(rs.getCarryFlag()).toEqual(expectedResult.carry ? 1 : 0);
     });
 
-    it('should work with 8-bit value', () => {
+    it("should work with 8-bit value", () => {
         const opCode = randomInteger(0x00, 0x100);
         const byteArg = new Gb8BitArg(0);
         const byteValue = randomInteger(0, TWO_POW_EIGHT);
