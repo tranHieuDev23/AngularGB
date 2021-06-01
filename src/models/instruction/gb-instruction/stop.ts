@@ -19,11 +19,7 @@ export class StopInstruction implements GbInstruction {
         return 0x10;
     }
 
-    getCycleCount(): number {
+    run(rs: GbRegisterSet, mmu: GbMmu, args: number[]): number {
         return 1;
-    }
-
-    run(rs: GbRegisterSet, mmu: GbMmu, args: number[]): void {
-        return;
     }
 }

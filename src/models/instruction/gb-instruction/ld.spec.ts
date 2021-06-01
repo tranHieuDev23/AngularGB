@@ -56,18 +56,19 @@ describe("ld", () => {
                 const instruction = new LdInstruction(opcode, cycleCount, r1, r2);
 
                 expect(instruction.getOpcode()).toEqual(opcode);
-                expect(instruction.getCycleCount()).toEqual(cycleCount);
 
                 const zeroFlag = rs.getZeroFlag();
                 const operationFlag = rs.getOperationFlag();
                 const halfCaryFlag = rs.getHalfCarryFlag();
                 const carryFlag = rs.getCarryFlag();
-                instruction.run(rs, mmu, args);
+                const cycleCountResult = instruction.run(rs, mmu, args);
+
                 expect(r1.getValue(rs, mmu, args)).toEqual(r2Value);
                 expect(rs.getZeroFlag()).toEqual(zeroFlag);
                 expect(rs.getOperationFlag()).toEqual(operationFlag);
                 expect(rs.getHalfCarryFlag()).toEqual(halfCaryFlag);
                 expect(rs.getCarryFlag()).toEqual(carryFlag);
+                expect(cycleCountResult).toEqual(cycleCount);
             });
         });
     });
@@ -84,14 +85,13 @@ describe("ld", () => {
 
         expect(instruction.getOpcode()).toEqual(0x22);
         expect(instruction.getLength()).toEqual(1);
-        expect(instruction.getCycleCount()).toEqual(2);
 
         const zeroFlag = rs.getZeroFlag();
         const operationFlag = rs.getOperationFlag();
         const halfCaryFlag = rs.getHalfCarryFlag();
         const carryFlag = rs.getCarryFlag();
         const expectedHl = (hlValue + 1) & SIXTEEN_ONE_BITS;
-        instruction.run(rs, mmu, args);
+        const cycleCount = instruction.run(rs, mmu, args);
 
         expect(mmu.readByte(hlValue)).toEqual(rs.a.getValue());
         expect(rs.hl.getValue()).toEqual(expectedHl);
@@ -99,6 +99,7 @@ describe("ld", () => {
         expect(rs.getOperationFlag()).toEqual(operationFlag);
         expect(rs.getHalfCarryFlag()).toEqual(halfCaryFlag);
         expect(rs.getCarryFlag()).toEqual(carryFlag);
+        expect(cycleCount).toEqual(2);
     });
 
     it("ld A (HL+)", () => {
@@ -108,14 +109,13 @@ describe("ld", () => {
 
         expect(instruction.getOpcode()).toEqual(0x2a);
         expect(instruction.getLength()).toEqual(1);
-        expect(instruction.getCycleCount()).toEqual(2);
 
         const zeroFlag = rs.getZeroFlag();
         const operationFlag = rs.getOperationFlag();
         const halfCaryFlag = rs.getHalfCarryFlag();
         const carryFlag = rs.getCarryFlag();
         const expectedHl = (hlValue + 1) & SIXTEEN_ONE_BITS;
-        instruction.run(rs, mmu, args);
+        const cycleCount = instruction.run(rs, mmu, args);
 
         expect(rs.a.getValue()).toEqual(mmu.readByte(hlValue));
         expect(rs.hl.getValue()).toEqual(expectedHl);
@@ -123,6 +123,7 @@ describe("ld", () => {
         expect(rs.getOperationFlag()).toEqual(operationFlag);
         expect(rs.getHalfCarryFlag()).toEqual(halfCaryFlag);
         expect(rs.getCarryFlag()).toEqual(carryFlag);
+        expect(cycleCount).toEqual(2);
     });
 
     it("ld (HL-) A", () => {
@@ -132,14 +133,13 @@ describe("ld", () => {
 
         expect(instruction.getOpcode()).toEqual(0x32);
         expect(instruction.getLength()).toEqual(1);
-        expect(instruction.getCycleCount()).toEqual(2);
 
         const zeroFlag = rs.getZeroFlag();
         const operationFlag = rs.getOperationFlag();
         const halfCaryFlag = rs.getHalfCarryFlag();
         const carryFlag = rs.getCarryFlag();
         const expectedHl = (hlValue - 1) & SIXTEEN_ONE_BITS;
-        instruction.run(rs, mmu, args);
+        const cycleCount = instruction.run(rs, mmu, args);
 
         expect(mmu.readByte(hlValue)).toEqual(rs.a.getValue());
         expect(rs.hl.getValue()).toEqual(expectedHl);
@@ -147,6 +147,7 @@ describe("ld", () => {
         expect(rs.getOperationFlag()).toEqual(operationFlag);
         expect(rs.getHalfCarryFlag()).toEqual(halfCaryFlag);
         expect(rs.getCarryFlag()).toEqual(carryFlag);
+        expect(cycleCount).toEqual(2);
     });
 
     it("ld A (HL-)", () => {
@@ -156,14 +157,13 @@ describe("ld", () => {
 
         expect(instruction.getOpcode()).toEqual(0x3a);
         expect(instruction.getLength()).toEqual(1);
-        expect(instruction.getCycleCount()).toEqual(2);
 
         const zeroFlag = rs.getZeroFlag();
         const operationFlag = rs.getOperationFlag();
         const halfCaryFlag = rs.getHalfCarryFlag();
         const carryFlag = rs.getCarryFlag();
         const expectedHl = (hlValue - 1) & SIXTEEN_ONE_BITS;
-        instruction.run(rs, mmu, args);
+        const cycleCount = instruction.run(rs, mmu, args);
 
         expect(rs.a.getValue()).toEqual(mmu.readByte(hlValue));
         expect(rs.hl.getValue()).toEqual(expectedHl);
@@ -171,6 +171,7 @@ describe("ld", () => {
         expect(rs.getOperationFlag()).toEqual(operationFlag);
         expect(rs.getHalfCarryFlag()).toEqual(halfCaryFlag);
         expect(rs.getCarryFlag()).toEqual(carryFlag);
+        expect(cycleCount).toEqual(2);
     });
 
     it("should work between 16-bit sources", () => {
@@ -202,18 +203,19 @@ describe("ld", () => {
 
                 expect(instruction.getOpcode()).toEqual(opcode);
                 expect(instruction.getLength()).toEqual(r2 instanceof Gb16BitArg ? 3 : 1);
-                expect(instruction.getCycleCount()).toEqual(cycleCount);
 
                 const zeroFlag = rs.getZeroFlag();
                 const operationFlag = rs.getOperationFlag();
                 const halfCaryFlag = rs.getHalfCarryFlag();
                 const carryFlag = rs.getCarryFlag();
-                instruction.run(rs, mmu, args);
+                const cycleCountResult = instruction.run(rs, mmu, args);
+
                 expect(r1.getValue(rs, mmu, args)).toEqual(r2Value);
                 expect(rs.getZeroFlag()).toEqual(zeroFlag);
                 expect(rs.getOperationFlag()).toEqual(operationFlag);
                 expect(rs.getHalfCarryFlag()).toEqual(halfCaryFlag);
                 expect(rs.getCarryFlag()).toEqual(carryFlag);
+                expect(cycleCountResult).toEqual(cycleCount);
             });
         });
     });
@@ -225,14 +227,15 @@ describe("ld", () => {
 
         expect(instruction.getOpcode()).toEqual(0xf8);
         expect(instruction.getLength()).toEqual(2);
-        expect(instruction.getCycleCount()).toEqual(3);
 
         const expectedResult = add16Bit(sp, toSigned8Bit(args[0]));
-        instruction.run(rs, mmu, args);
+        const cycleCount = instruction.run(rs, mmu, args);
+
         expect(rs.hl.getValue()).toEqual(expectedResult.result);
         expect(rs.getZeroFlag()).toEqual(0);
         expect(rs.getOperationFlag()).toEqual(0);
         expect(rs.getHalfCarryFlag()).toEqual(expectedResult.halfCarry ? 1 : 0);
         expect(rs.getCarryFlag()).toEqual(expectedResult.carry ? 1 : 0);
+        expect(cycleCount).toEqual(3);
     });
 });

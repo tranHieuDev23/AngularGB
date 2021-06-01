@@ -25,14 +25,15 @@ describe("cp", () => {
 
             expect(instruction.getOpcode()).toEqual(opCode);
             expect(instruction.getLength()).toEqual(1);
-            expect(instruction.getCycleCount()).toEqual(1);
 
             const expectedResult = subtract8Bit(rs.a.getValue(), registerValue);
-            instruction.run(rs, mmu, []);
+            const cycleCount = instruction.run(rs, mmu, []);
+
             expect(rs.getZeroFlag()).toEqual(expectedResult.zero ? 1 : 0);
             expect(rs.getOperationFlag()).toEqual(1);
             expect(rs.getHalfCarryFlag()).toEqual(expectedResult.halfCarry ? 1 : 0);
             expect(rs.getCarryFlag()).toEqual(expectedResult.carry ? 1 : 0);
+            expect(cycleCount).toEqual(1);
         });
     });
 
@@ -45,14 +46,15 @@ describe("cp", () => {
 
         expect(instruction.getOpcode()).toEqual(opCode);
         expect(instruction.getLength()).toEqual(1);
-        expect(instruction.getCycleCount()).toEqual(2);
 
         const expectedResult = subtract8Bit(rs.a.getValue(), memValue);
-        instruction.run(rs, mmu, []);
+        const cycleCount = instruction.run(rs, mmu, []);
+
         expect(rs.getZeroFlag()).toEqual(expectedResult.zero ? 1 : 0);
         expect(rs.getOperationFlag()).toEqual(1);
         expect(rs.getHalfCarryFlag()).toEqual(expectedResult.halfCarry ? 1 : 0);
         expect(rs.getCarryFlag()).toEqual(expectedResult.carry ? 1 : 0);
+        expect(cycleCount).toEqual(2);
     });
 
     it("should work with 8-bit value", () => {
@@ -63,13 +65,14 @@ describe("cp", () => {
 
         expect(instruction.getOpcode()).toEqual(opCode);
         expect(instruction.getLength()).toEqual(2);
-        expect(instruction.getCycleCount()).toEqual(2);
 
         const expectedResult = subtract8Bit(rs.a.getValue(), byteValue);
-        instruction.run(rs, mmu, [byteValue]);
+        const cycleCount = instruction.run(rs, mmu, [byteValue]);
+
         expect(rs.getZeroFlag()).toEqual(expectedResult.zero ? 1 : 0);
         expect(rs.getOperationFlag()).toEqual(1);
         expect(rs.getHalfCarryFlag()).toEqual(expectedResult.halfCarry ? 1 : 0);
         expect(rs.getCarryFlag()).toEqual(expectedResult.carry ? 1 : 0);
+        expect(cycleCount).toEqual(2);
     });
 });

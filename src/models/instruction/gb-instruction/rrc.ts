@@ -31,11 +31,7 @@ export class RrcInstruction implements GbInstruction {
         return this.opcode;
     }
 
-    getCycleCount(): number {
-        return this.cycleCount;
-    }
-
-    run(rs: GbRegisterSet, mmu: GbMmu, args: number[]): void {
+    run(rs: GbRegisterSet, mmu: GbMmu, args: number[]): number {
         const r1 = this.r1.getValue(rs, mmu, args);
         const r1Bit0 = r1 & 1;
         const newR1 = ((r1 >> 1) & EIGHT_ONE_BITS) | (r1Bit0 << 7);
@@ -44,6 +40,7 @@ export class RrcInstruction implements GbInstruction {
         rs.setOperationFlag(0);
         rs.setHalfCarryFlag(0);
         rs.setCarryFlag(r1Bit0);
+        return this.cycleCount;
     }
 }
 
@@ -64,11 +61,7 @@ export class Gb0fInstruction implements GbInstruction {
         return 0x0f;
     }
 
-    getCycleCount(): number {
-        return 1;
-    }
-
-    run(rs: GbRegisterSet, mmu: GbMmu, args: number[]): void {
+    run(rs: GbRegisterSet, mmu: GbMmu, args: number[]): number {
         const aBit0 = rs.a.getBit(0);
         const newA = ((rs.a.getValue() >> 1) & EIGHT_ONE_BITS) | (aBit0 << 7);
         rs.a.setValue(newA);
@@ -76,5 +69,6 @@ export class Gb0fInstruction implements GbInstruction {
         rs.setOperationFlag(0);
         rs.setHalfCarryFlag(0);
         rs.setCarryFlag(aBit0);
+        return 1;
     }
 }

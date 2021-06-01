@@ -31,11 +31,7 @@ export class Add8BitInstruction implements GbInstruction {
         return this.opCode;
     }
 
-    getCycleCount(): number {
-        return this.cycleCount;
-    }
-
-    run(rs: GbRegisterSet, mmu: GbMmu, args: number[]): void {
+    run(rs: GbRegisterSet, mmu: GbMmu, args: number[]): number {
         const result = add8Bit(
             this.r1.getValue(rs, mmu, args),
             this.r2.getValue(rs, mmu, args)
@@ -45,6 +41,7 @@ export class Add8BitInstruction implements GbInstruction {
         rs.setOperationFlag(0);
         rs.setHalfCarryFlag(result.halfCarry ? 1 : 0);
         rs.setCarryFlag(result.carry ? 1 : 0);
+        return this.cycleCount;
     }
 }
 
@@ -68,11 +65,7 @@ export class Add16BitRegisterInstruction implements GbInstruction {
         return this.opCode;
     }
 
-    getCycleCount(): number {
-        return 2;
-    }
-
-    run(rs: GbRegisterSet, mmu: GbMmu, args: number[]): void {
+    run(rs: GbRegisterSet, mmu: GbMmu, args: number[]): number {
         const result = add16Bit(
             this.r1.getValue(rs, mmu, args),
             this.r2.getValue(rs, mmu, args)
@@ -81,6 +74,7 @@ export class Add16BitRegisterInstruction implements GbInstruction {
         rs.setOperationFlag(0);
         rs.setHalfCarryFlag(result.halfCarry ? 1 : 0);
         rs.setCarryFlag(result.carry ? 1 : 0);
+        return 2;
     }
 }
 
@@ -98,11 +92,7 @@ export class GbE8Instruction implements GbInstruction {
         return 0xe8;
     }
 
-    getCycleCount(): number {
-        return 4;
-    }
-
-    run(rs: GbRegisterSet, mmu: GbMmu, args: number[]): void {
+    run(rs: GbRegisterSet, mmu: GbMmu, args: number[]): number {
         const s8 = toSigned8Bit(args[0]);
         const result = add16Bit(rs.sp.getValue(), s8);
         rs.sp.setValue(result.result);
@@ -110,5 +100,6 @@ export class GbE8Instruction implements GbInstruction {
         rs.setOperationFlag(0);
         rs.setHalfCarryFlag(result.halfCarry ? 1 : 0);
         rs.setCarryFlag(result.carry ? 1 : 0);
+        return 4;
     }
 }

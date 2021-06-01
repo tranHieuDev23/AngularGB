@@ -27,16 +27,13 @@ export class AndInstruction implements GbInstruction {
         return this.opCode;
     }
 
-    getCycleCount(): number {
-        return this.cycleCount;
-    }
-
-    run(rs: GbRegisterSet, mmu: GbMmu, args: number[]): void {
+    run(rs: GbRegisterSet, mmu: GbMmu, args: number[]): number {
         const result = rs.a.getValue() & this.r1.getValue(rs, mmu, args);
         rs.a.setValue(result);
         rs.setZeroFlag(result === 0 ? 1 : 0);
         rs.setOperationFlag(0);
         rs.setHalfCarryFlag(1);
         rs.setCarryFlag(0);
+        return this.cycleCount;
     }
 }

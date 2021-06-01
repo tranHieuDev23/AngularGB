@@ -28,15 +28,16 @@ describe("add", () => {
 
             expect(instruction.getOpcode()).toEqual(opCode);
             expect(instruction.getLength()).toEqual(1);
-            expect(instruction.getCycleCount()).toEqual(1);
 
             const expectedResult = add8Bit(rs.a.getValue(), registerValue);
-            instruction.run(rs, mmu, []);
+            const cycleCount = instruction.run(rs, mmu, []);
+
             expect(rs.a.getValue()).toEqual(expectedResult.result);
             expect(rs.getZeroFlag()).toEqual(expectedResult.zero ? 1 : 0);
             expect(rs.getOperationFlag()).toEqual(0);
             expect(rs.getHalfCarryFlag()).toEqual(expectedResult.halfCarry ? 1 : 0);
             expect(rs.getCarryFlag()).toEqual(expectedResult.carry ? 1 : 0);
+            expect(cycleCount).toEqual(1);
         });
     });
 
@@ -49,15 +50,16 @@ describe("add", () => {
 
         expect(instruction.getOpcode()).toEqual(opCode);
         expect(instruction.getLength()).toEqual(1);
-        expect(instruction.getCycleCount()).toEqual(2);
 
         const expectedResult = add8Bit(rs.a.getValue(), memValue);
-        instruction.run(rs, mmu, []);
+        const cycleCount = instruction.run(rs, mmu, []);
+
         expect(rs.a.getValue()).toEqual(expectedResult.result);
         expect(rs.getZeroFlag()).toEqual(expectedResult.zero ? 1 : 0);
         expect(rs.getOperationFlag()).toEqual(0);
         expect(rs.getHalfCarryFlag()).toEqual(expectedResult.halfCarry ? 1 : 0);
         expect(rs.getCarryFlag()).toEqual(expectedResult.carry ? 1 : 0);
+        expect(cycleCount).toEqual(2);
     });
 
     it("should work with 8-bit value", () => {
@@ -68,15 +70,16 @@ describe("add", () => {
 
         expect(instruction.getOpcode()).toEqual(opCode);
         expect(instruction.getLength()).toEqual(2);
-        expect(instruction.getCycleCount()).toEqual(2);
 
         const expectedResult = add8Bit(rs.a.getValue(), byteValue);
-        instruction.run(rs, mmu, [byteValue]);
+        const cycleCount = instruction.run(rs, mmu, [byteValue]);
+
         expect(rs.a.getValue()).toEqual(expectedResult.result);
         expect(rs.getZeroFlag()).toEqual(expectedResult.zero ? 1 : 0);
         expect(rs.getOperationFlag()).toEqual(0);
         expect(rs.getHalfCarryFlag()).toEqual(expectedResult.halfCarry ? 1 : 0);
         expect(rs.getCarryFlag()).toEqual(expectedResult.carry ? 1 : 0);
+        expect(cycleCount).toEqual(2);
     });
 
     it("should work with two 16-bit registers", () => {
@@ -91,16 +94,17 @@ describe("add", () => {
 
             expect(instruction.getOpcode()).toEqual(opCode);
             expect(instruction.getLength()).toEqual(1);
-            expect(instruction.getCycleCount()).toEqual(2);
 
             const zeroFlag = rs.getZeroFlag();
             const expectedResult = add16Bit(rs.hl.getValue(), registerValue);
-            instruction.run(rs, mmu, []);
+            const cycleCount = instruction.run(rs, mmu, []);
+
             expect(rs.hl.getValue()).toEqual(expectedResult.result);
             expect(rs.getZeroFlag()).toEqual(zeroFlag);
             expect(rs.getOperationFlag()).toEqual(0);
             expect(rs.getHalfCarryFlag()).toEqual(expectedResult.halfCarry ? 1 : 0);
             expect(rs.getCarryFlag()).toEqual(expectedResult.carry ? 1 : 0);
+            expect(cycleCount).toEqual(2);
         });
     });
 
@@ -112,15 +116,15 @@ describe("add", () => {
 
         expect(instruction.getOpcode()).toEqual(0xe8);
         expect(instruction.getLength()).toEqual(2);
-        expect(instruction.getCycleCount()).toEqual(4);
 
         const expectedResult = add16Bit(spValue, toSigned8Bit(byteValue));
-        instruction.run(rs, mmu, [byteValue]);
+        const cycleCount = instruction.run(rs, mmu, [byteValue]);
+
         expect(rs.sp.getValue()).toEqual(expectedResult.result);
         expect(rs.getZeroFlag()).toEqual(0);
         expect(rs.getOperationFlag()).toEqual(0);
         expect(rs.getHalfCarryFlag()).toEqual(expectedResult.halfCarry ? 1 : 0);
         expect(rs.getCarryFlag()).toEqual(expectedResult.carry ? 1 : 0);
-
+        expect(cycleCount).toEqual(4);
     });
 });

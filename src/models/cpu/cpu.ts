@@ -38,8 +38,8 @@ export class Cpu<RS extends RegisterSet, MMU extends Mmu> {
             pc = this.rs.getPc().getValue();
             args.push(this.mmu.readByte(pc));
         }
-        instruction.run(this.rs, this.mmu, args);
+        const cycleCount = instruction.run(this.rs, this.mmu, args);
         this.rs.getPc().setValue(pc + 1);
-        this.cycleCount += instruction.getCycleCount();
+        this.cycleCount += cycleCount;
     }
 }

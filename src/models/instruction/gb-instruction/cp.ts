@@ -30,11 +30,7 @@ export class CpInstruction implements GbInstruction {
         return this.opCode;
     }
 
-    getCycleCount(): number {
-        return this.cycleCount;
-    }
-
-    run(rs: GbRegisterSet, mmu: GbMmu, args: number[]): void {
+    run(rs: GbRegisterSet, mmu: GbMmu, args: number[]): number {
         const result = subtract8Bit(
             rs.a.getValue(),
             this.r1.getValue(rs, mmu, args)
@@ -43,5 +39,6 @@ export class CpInstruction implements GbInstruction {
         rs.setOperationFlag(1);
         rs.setHalfCarryFlag(result.halfCarry ? 1 : 0);
         rs.setCarryFlag(result.carry ? 1 : 0);
+        return this.cycleCount;
     }
 }

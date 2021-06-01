@@ -28,12 +28,9 @@ export class LdInstruction implements GbInstruction {
         return this.opCode;
     }
 
-    getCycleCount(): number {
-        return this.cycleCount;
-    }
-
-    run(rs: GbRegisterSet, mmu: GbMmu, args: number[]): void {
+    run(rs: GbRegisterSet, mmu: GbMmu, args: number[]): number {
         this.r1.setValue(rs, mmu, args, this.r2.getValue(rs, mmu, args));
+        return this.cycleCount;
     }
 }
 
@@ -50,11 +47,7 @@ export class GbF8Instruction implements GbInstruction {
         return 0xf8;
     }
 
-    getCycleCount(): number {
-        return 3;
-    }
-
-    run(rs: GbRegisterSet, mmu: GbMmu, args: number[]): void {
+    run(rs: GbRegisterSet, mmu: GbMmu, args: number[]): number {
         const sp = rs.sp.getValue();
         const s8 = toSigned8Bit(args[0]);
         const result = add16Bit(sp, s8);
@@ -63,5 +56,6 @@ export class GbF8Instruction implements GbInstruction {
         rs.setOperationFlag(0);
         rs.setHalfCarryFlag(result.halfCarry ? 1 : 0);
         rs.setCarryFlag(result.carry ? 1 : 0);
+        return 3;
     }
 }

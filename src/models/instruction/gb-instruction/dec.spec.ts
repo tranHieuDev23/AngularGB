@@ -24,17 +24,18 @@ describe("dec", () => {
 
             expect(instruction.getOpcode()).toEqual(opCode);
             expect(instruction.getLength()).toEqual(1);
-            expect(instruction.getCycleCount()).toEqual(1);
 
             const carryFlag = rs.getCarryFlag();
             const expectedResult = (registerValue - 1) & EIGHT_ONE_BITS;
             const halfCarry = (((registerValue & 0xf) - 1) & 0x10) === 0x10;
-            instruction.run(rs, mmu, []);
+            const cycleCount = instruction.run(rs, mmu, []);
+
             expect(registerArg.getValue(rs, mmu, [])).toEqual(expectedResult);
             expect(rs.getZeroFlag()).toEqual(expectedResult === 0 ? 1 : 0);
             expect(rs.getOperationFlag()).toEqual(1);
             expect(rs.getHalfCarryFlag()).toEqual(halfCarry ? 1 : 0);
             expect(rs.getCarryFlag()).toEqual(carryFlag);
+            expect(cycleCount).toEqual(1);
         });
     });
 
@@ -47,17 +48,18 @@ describe("dec", () => {
 
         expect(instruction.getOpcode()).toEqual(opCode);
         expect(instruction.getLength()).toEqual(1);
-        expect(instruction.getCycleCount()).toEqual(3);
 
         const carryFlag = rs.getCarryFlag();
         const expectedResult = (memValue - 1) & EIGHT_ONE_BITS;
         const halfCarry = (((memValue & 0xf) - 1) & 0x10) === 0x10;
-        instruction.run(rs, mmu, []);
+        const cycleCount = instruction.run(rs, mmu, []);
+
         expect(memArg.getValue(rs, mmu, [])).toEqual(expectedResult);
         expect(rs.getZeroFlag()).toEqual(expectedResult === 0 ? 1 : 0);
         expect(rs.getOperationFlag()).toEqual(1);
         expect(rs.getHalfCarryFlag()).toEqual(halfCarry ? 1 : 0);
         expect(rs.getCarryFlag()).toEqual(carryFlag);
+        expect(cycleCount).toEqual(3);
     });
 
     it("should work with 16-bit registers", () => {
@@ -72,21 +74,20 @@ describe("dec", () => {
 
             expect(instruction.getOpcode()).toEqual(opCode);
             expect(instruction.getLength()).toEqual(1);
-            expect(instruction.getCycleCount()).toEqual(2);
 
             const zeroFlag = rs.getZeroFlag();
             const operationFlag = rs.getOperationFlag();
             const halfCarryFlag = rs.getHalfCarryFlag();
             const carryFlag = rs.getCarryFlag();
-
             const expectedResult = (registerValue - 1) & SIXTEEN_ONE_BITS;
-            instruction.run(rs, mmu, []);
+            const cycleCount = instruction.run(rs, mmu, []);
 
             expect(registerArg.getValue(rs, mmu, [])).toEqual(expectedResult);
             expect(rs.getZeroFlag()).toEqual(zeroFlag);
             expect(rs.getOperationFlag()).toEqual(operationFlag);
             expect(rs.getHalfCarryFlag()).toEqual(halfCarryFlag);
             expect(rs.getCarryFlag()).toEqual(carryFlag);
+            expect(cycleCount).toEqual(2);
         });
     });
 });
