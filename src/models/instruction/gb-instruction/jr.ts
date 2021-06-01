@@ -4,6 +4,10 @@ import { SIXTEEN_ONE_BITS } from "src/utils/constants";
 import { GbInstruction } from "../gb-instruction";
 import { toSigned8Bit } from "./utils/arithmetic-utils";
 
+/**
+ * JR s8. Jump s8 steps from the current address in the program
+ * counter (PC) (Jump relative).
+ */
 export class JrInstruction implements GbInstruction {
     getLength(): number {
         return 2;
