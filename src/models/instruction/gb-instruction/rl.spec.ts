@@ -3,7 +3,7 @@ import { GbRegisterSet, RegisterName, REGISTERS_8_BIT } from "src/models/registe
 import { EIGHT_ONE_BITS, TWO_POW_EIGHT } from "src/utils/constants";
 import { randomInteger } from "src/utils/random";
 import { initialize } from "./utils/test-utils";
-import { Gb07Instruction, RlcInstruction } from "./rlc";
+import { Gb17Instruction, RlInstruction } from "./rl";
 import { GbMemArg, GbRegisterArg } from "../gb-instruction";
 
 describe("rlc", () => {
@@ -26,16 +26,18 @@ describe("rlc", () => {
 
         R1S.forEach((r1) => {
             const opcode = randomInteger(0x0, 0x100);
-            const instruction = new RlcInstruction(opcode, r1);
+            const instruction = new RlInstruction(opcode, r1);
 
             expect(instruction.getOpcode()).toEqual(opcode);
             expect(instruction.getLength()).toEqual(2);
             expect(instruction.getCycleCount()).toEqual(r1 instanceof GbRegisterArg ? 2 : 4);
 
             const r1Value = randomInteger(0, TWO_POW_EIGHT);
+            const carryFlag = randomInteger(0, 2);
             r1.setValue(rs, mmu, [], r1Value);
+            rs.setCarryFlag(carryFlag);
             const r1Bit7 = (r1Value >> 7) & 1;
-            const expectedR1 = ((r1Value << 1) & EIGHT_ONE_BITS) | r1Bit7;
+            const expectedR1 = ((r1Value << 1) & EIGHT_ONE_BITS) | carryFlag;
             instruction.run(rs, mmu, []);
 
             expect(r1.getValue(rs, mmu, [])).toEqual(expectedR1);
@@ -46,21 +48,25 @@ describe("rlc", () => {
         });
     });
 
-    it("0x07", () => {
-        const instruction = new Gb07Instruction();
-        expect(instruction.getOpcode()).toEqual(0x07);
+    it("0x17", () => {
+        const instruction = new Gb17Instruction();
+        expect(instruction.getOpcode()).toEqual(0x17);
         expect(instruction.getLength()).toEqual(1);
         expect(instruction.getCycleCount()).toEqual(1);
 
-        const a = rs.a.getValue();
-        const bit7 = rs.a.getBit(7);
-        const expectedA = ((a << 1) & EIGHT_ONE_BITS) | bit7;
+
+        const a = randomInteger(0, TWO_POW_EIGHT);
+        const carryFlag = randomInteger(0, 2);
+        rs.a.setValue(a);
+        rs.setCarryFlag(carryFlag);
+        const r1Bit7 = rs.a.getBit(7);
+        const expectedA = ((a << 1) & EIGHT_ONE_BITS) | carryFlag;
         instruction.run(rs, mmu, []);
 
         expect(rs.a.getValue()).toEqual(expectedA);
         expect(rs.getZeroFlag()).toEqual(0);
         expect(rs.getOperationFlag()).toEqual(0);
         expect(rs.getHalfCarryFlag()).toEqual(0);
-        expect(rs.getCarryFlag()).toEqual(bit7);
+        expect(rs.getCarryFlag()).toEqual(r1Bit7);
     });
 });

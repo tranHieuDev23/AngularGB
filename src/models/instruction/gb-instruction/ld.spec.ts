@@ -4,7 +4,7 @@ import { EIGHT_ONE_BITS, SIXTEEN_ONE_BITS, TWO_POW_EIGHT, TWO_POW_SIXTEEN } from
 import { randomInteger } from "src/utils/random";
 import { Gb8BitArg, Gb16BitDecArg, Gb16BitIncArg, GbMemArg, GbRegisterArg, Gb16BitArg } from "../gb-instruction";
 import { GbF8Instruction, LdInstruction } from "./ld";
-import { add16Bit } from "./utils/arithmetic-utils";
+import { add16Bit, toSigned8Bit } from "./utils/arithmetic-utils";
 import { initialize } from "./utils/test-utils";
 
 describe("ld", () => {
@@ -227,7 +227,7 @@ describe("ld", () => {
         expect(instruction.getLength()).toEqual(2);
         expect(instruction.getCycleCount()).toEqual(3);
 
-        const expectedResult = add16Bit(rs.hl.getValue(), sp + args[0]);
+        const expectedResult = add16Bit(sp, toSigned8Bit(args[0]));
         instruction.run(rs, mmu, args);
         expect(rs.hl.getValue()).toEqual(expectedResult.result);
         expect(rs.getZeroFlag()).toEqual(0);
