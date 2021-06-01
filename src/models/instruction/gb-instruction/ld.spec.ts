@@ -1,5 +1,5 @@
 import { GbMmu } from "src/models/mmu/gb-mmu";
-import { GbRegisterSet, RegisterName, REGISTERS_16_BIT, REGISTERS_8_BIT } from "src/models/register/gb-registers";
+import { GbRegisterSet, RegisterName, REGISTERS_8_BIT } from "src/models/register/gb-registers";
 import { EIGHT_ONE_BITS, SIXTEEN_ONE_BITS, TWO_POW_EIGHT, TWO_POW_SIXTEEN } from "src/utils/constants";
 import { randomInteger } from "src/utils/random";
 import { Gb8BitArg, Gb16BitDecArg, Gb16BitIncArg, GbMemArg, GbRegisterArg, Gb16BitArg } from "../gb-instruction";
@@ -227,7 +227,7 @@ describe("ld", () => {
         expect(instruction.getLength()).toEqual(2);
         expect(instruction.getCycleCount()).toEqual(3);
 
-        const expectedResult = add16Bit(sp, args[0]);
+        const expectedResult = add16Bit(rs.hl.getValue(), sp + args[0]);
         instruction.run(rs, mmu, args);
         expect(rs.hl.getValue()).toEqual(expectedResult.result);
         expect(rs.getZeroFlag()).toEqual(0);
