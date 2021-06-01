@@ -7,7 +7,7 @@ describe("stop", () => {
     const mmu = new GbMmu();
 
     beforeEach(() => {
-        rs.getAllRegister().forEach(item => {
+        rs.getAllRegisters().forEach(item => {
             item.setValue(0);
         });
         mmu.randomize();
@@ -22,7 +22,7 @@ describe("stop", () => {
 
     it("should do nothing", () => {
         const cycleCount = instruction.run(rs, mmu, []);
-        rs.getAllRegister().forEach(item => {
+        rs.getAllRegisters().forEach(item => {
             expect(item.getValue()).toEqual(0);
         });
         expect(cycleCount).toEqual(1);

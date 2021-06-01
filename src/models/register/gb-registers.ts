@@ -55,18 +55,21 @@ export class GbRegisterSet implements RegisterSet {
     public readonly de = new DualRegister("DE", this.d, this.e);
     public readonly hl = new DualRegister("HL", this.h, this.l);
 
+    private readonly allRegisters = [
+        this.a, this.b, this.c, this.d,
+        this.e, this.f, this.h, this.l,
+        this.sp, this.pc, this.af, this.bc,
+        this.de, this.hl
+    ];
+
     constructor() { }
 
     public getPc(): Register {
         return this.pc;
     }
 
-    public getAllRegister(): Register[] {
-        return [
-            this.a, this.b, this.c, this.d,
-            this.e, this.f, this.h, this.l,
-            this.sp, this.pc
-        ];
+    public getAllRegisters(): Register[] {
+        return this.allRegisters;
     }
 
     public getZeroFlag(): number {
@@ -116,3 +119,10 @@ export const REGISTERS_16_BIT = [
     RegisterName.DE, RegisterName.HL
 
 ];
+
+export enum Flag {
+    Zero = 7,
+    Operation = 6,
+    HalfCarry = 5,
+    Carry = 4
+}

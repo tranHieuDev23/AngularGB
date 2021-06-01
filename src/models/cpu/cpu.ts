@@ -12,7 +12,7 @@ export class Cpu<RS extends RegisterSet, MMU extends Mmu> {
         public readonly mmu: MMU,
         public readonly instructionList: Instruction<RS, MMU>[]
     ) {
-        rs.getAllRegister().forEach(item => {
+        rs.getAllRegisters().forEach(item => {
             item.setValue(0);
         });
         mmu.randomize();

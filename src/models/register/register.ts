@@ -38,5 +38,5 @@ export abstract class Register {
 
 export interface RegisterSet {
     getPc(): Register;
-    getAllRegister(): Register[];
+    getAllRegisters(): Register[];
 }

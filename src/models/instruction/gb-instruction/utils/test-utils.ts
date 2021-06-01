@@ -4,7 +4,7 @@ import { TWO_POW_EIGHT } from "src/utils/constants";
 import { randomInteger } from "src/utils/random";
 
 export function initialize(rs: GbRegisterSet, mmu: GbMmu): void {
-    rs.getAllRegister().forEach(item => {
+    rs.getAllRegisters().forEach(item => {
         item.setValue(0);
     });
     rs.a.setValue(randomInteger(0, TWO_POW_EIGHT));

@@ -1,6 +1,6 @@
 import { SIXTEEN_ONE_BITS } from "src/utils/constants";
 import { GbMmu } from "../mmu/gb-mmu";
-import { GbRegisterSet, RegisterName, REGISTERS_8_BIT } from "../register/gb-registers";
+import { Flag, GbRegisterSet, RegisterName, REGISTERS_8_BIT } from "../register/gb-registers";
 import { Register } from "../register/register";
 import { Instruction, InstructionArg, InstructionWritableArg } from "./instruction";
 
@@ -36,38 +36,7 @@ export class GbRegisterArg implements GbInstructionWritableArg {
     }
 
     private getRegister(rs: GbRegisterSet): Register {
-        switch (this.registerName) {
-            case RegisterName.A:
-                return rs.a;
-            case RegisterName.B:
-                return rs.b;
-            case RegisterName.C:
-                return rs.c;
-            case RegisterName.D:
-                return rs.d;
-            case RegisterName.E:
-                return rs.e;
-            case RegisterName.F:
-                return rs.f;
-            case RegisterName.H:
-                return rs.h;
-            case RegisterName.L:
-                return rs.l;
-            case RegisterName.AF:
-                return rs.af;
-            case RegisterName.BC:
-                return rs.bc;
-            case RegisterName.DE:
-                return rs.de;
-            case RegisterName.HL:
-                return rs.hl;
-            case RegisterName.SP:
-                return rs.sp;
-            case RegisterName.PC:
-                return rs.pc;
-            default:
-                throw new Error("Unknown register name");
-        }
+        return rs.getAllRegisters()[this.registerName.valueOf()];
     }
 }
 
@@ -135,6 +104,28 @@ export class GbMemArg implements GbInstructionWritableArg {
     }
 }
 
+export class GbFlagArg implements GbInstructionWritableArg {
+    constructor(
+        private readonly flag: Flag
+    ) { }
+
+    getArgsTakenCount(): number {
+        return 0;
+    }
+
+    getValueBitCount(): number {
+        return 1;
+    }
+
+    getValue(rs: GbRegisterSet, mmu: GbMmu, args: number[]): number {
+        return rs.f.getBit(this.flag.valueOf());
+    }
+
+    setValue(rs: GbRegisterSet, mmu: GbMmu, args: number[], value: number): void {
+        rs.f.setBit(this.flag.valueOf(), value);
+    }
+}
+
 export class Gb16BitIncArg implements GbInstructionArg {
     constructor(
         private readonly baseArg: GbInstructionWritableArg
@@ -170,5 +161,23 @@ export class Gb16BitDecArg implements GbInstructionArg {
         const value = this.baseArg.getValue(rs, mmu, args);
         this.baseArg.setValue(rs, mmu, args, (value - 1) & SIXTEEN_ONE_BITS);
         return value;
+    }
+}
+
+export class GbNotArg implements GbInstructionArg {
+    constructor(
+        private readonly flagArg: GbFlagArg
+    ) { }
+
+    getArgsTakenCount(): number {
+        return 0;
+    }
+
+    getValueBitCount(): number {
+        return 1;
+    }
+
+    getValue(rs: GbRegisterSet, mmu: GbMmu, args: number[]): number {
+        return this.flagArg.getValue(rs, mmu, args) ^ 1;
     }
 }
