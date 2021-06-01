@@ -25,8 +25,8 @@ export class GbMmu implements Mmu {
     }
 
     randomize(): void {
-        this.ram.forEach((_, index) => {
-            this.writeByte(index, randomInteger(0, TWO_POW_EIGHT))
-        });
+        for (let i = 0; i < this.ram.length; i++) {
+            this.ram[i] = randomInteger(0, TWO_POW_EIGHT);
+        }
     }
 }

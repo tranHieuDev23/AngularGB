@@ -1,7 +1,7 @@
+import { SIXTEEN_ONE_BITS } from "src/utils/constants";
 import { GbMmu } from "../mmu/gb-mmu";
 import { GbRegisterSet, RegisterName, REGISTERS_8_BIT } from "../register/gb-registers";
 import { Register } from "../register/register";
-import { add16Bit, subtract16Bit } from "./gb-instruction/utils/arithmetic-utils";
 import { Instruction, InstructionArg, InstructionWritableArg } from "./instruction";
 
 export interface GbInstruction extends Instruction<GbRegisterSet, GbMmu> { }
@@ -135,7 +135,7 @@ export class GbMemArg implements GbInstructionWritableArg {
     }
 }
 
-export class Gb8BitIncArg implements GbInstructionArg {
+export class Gb16BitIncArg implements GbInstructionArg {
     constructor(
         private readonly baseArg: GbInstructionWritableArg
     ) { }
@@ -144,17 +144,17 @@ export class Gb8BitIncArg implements GbInstructionArg {
         return this.baseArg.getArgsTakenCount();
     }
     getValueBitCount(): number {
-        return this.baseArg.getValueBitCount();
+        return 16;
     }
 
     getValue(rs: GbRegisterSet, mmu: GbMmu, args: number[]): number {
         const value = this.baseArg.getValue(rs, mmu, args);
-        this.baseArg.setValue(rs, mmu, args, add16Bit(value, 1).result);
+        this.baseArg.setValue(rs, mmu, args, (value + 1) & SIXTEEN_ONE_BITS);
         return value;
     }
 }
 
-export class Gb8BitDecArg implements GbInstructionArg {
+export class Gb16BitDecArg implements GbInstructionArg {
     constructor(
         private readonly baseArg: GbInstructionWritableArg
     ) { }
@@ -163,12 +163,12 @@ export class Gb8BitDecArg implements GbInstructionArg {
         return this.baseArg.getArgsTakenCount();
     }
     getValueBitCount(): number {
-        return this.baseArg.getValueBitCount();
+        return 16;
     }
 
     getValue(rs: GbRegisterSet, mmu: GbMmu, args: number[]): number {
         const value = this.baseArg.getValue(rs, mmu, args);
-        this.baseArg.setValue(rs, mmu, args, subtract16Bit(value, 1).result);
+        this.baseArg.setValue(rs, mmu, args, (value - 1) & SIXTEEN_ONE_BITS);
         return value;
     }
 }

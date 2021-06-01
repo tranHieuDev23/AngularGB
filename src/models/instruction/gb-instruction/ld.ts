@@ -1,6 +1,7 @@
 import { GbMmu } from "src/models/mmu/gb-mmu";
 import { GbRegisterSet } from "src/models/register/gb-registers";
 import { Gb16BitArg, Gb8BitArg, GbInstruction, GbMemArg, GbRegisterArg } from "../gb-instruction";
+import { add16Bit, toSigned8Bit } from "./utils/arithmetic-utils";
 
 /**
  * LD <r1> <r2>. Load the content of r2 into r1.
@@ -33,5 +34,34 @@ export class LdInstruction implements GbInstruction {
 
     run(rs: GbRegisterSet, mmu: GbMmu, args: number[]): void {
         this.r1.setValue(rs, mmu, args, this.r2.getValue(rs, mmu, args));
+    }
+}
+
+/**
+ * LD HL, SP+s8. Add the 8-bit signed operand s8 (values -128 to +127)
+ * to the stack pointer SP, and store the result in register pair HL.
+ */
+export class GbF8Instruction implements GbInstruction {
+    getLength(): number {
+        return 2;
+    }
+
+    getOpcode(): number {
+        return 0xf8;
+    }
+
+    getCycleCount(): number {
+        return 3;
+    }
+
+    run(rs: GbRegisterSet, mmu: GbMmu, args: number[]): void {
+        const sp = rs.sp.getValue();
+        const s8 = toSigned8Bit(args[0]);
+        const result = add16Bit(sp, s8);
+        rs.hl.setValue(result.result);
+        rs.setZeroFlag(0);
+        rs.setOperationFlag(0);
+        rs.setHalfCarryFlag(result.halfCarry ? 1 : 0);
+        rs.setCarryFlag(result.carry ? 1 : 0);
     }
 }

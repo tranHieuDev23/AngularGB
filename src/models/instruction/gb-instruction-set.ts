@@ -1,12 +1,12 @@
 import { RegisterName } from "../register/gb-registers";
-import { Gb16BitArg, Gb8BitArg, Gb8BitDecArg, Gb8BitIncArg, GbMemArg, GbRegisterArg } from "./gb-instruction";
+import { Gb16BitArg, Gb8BitArg, Gb16BitDecArg, Gb16BitIncArg, GbMemArg, GbRegisterArg } from "./gb-instruction";
 import { AdcInstruction } from "./gb-instruction/adc";
 import { Add16BitRegisterInstruction, Add8BitInstruction, GbE8Instruction } from "./gb-instruction/add";
 import { AndInstruction } from "./gb-instruction/and";
 import { CpInstruction } from "./gb-instruction/cp";
 import { Dec16BitInstruction, Dec8BitInstruction } from "./gb-instruction/dec";
 import { Inc16BitInstruction, Inc8BitInstruction } from "./gb-instruction/inc";
-import { LdInstruction } from "./gb-instruction/ld";
+import { GbF8Instruction, LdInstruction } from "./gb-instruction/ld";
 import { NopInstruction } from "./gb-instruction/nop";
 import { OrInstruction } from "./gb-instruction/or";
 import { SbcInstruction } from "./gb-instruction/sbc";
@@ -29,8 +29,8 @@ const REG_ARG_BC = new GbRegisterArg(RegisterName.BC);
 const REG_ARG_DE = new GbRegisterArg(RegisterName.DE);
 const REG_ARG_HL = new GbRegisterArg(RegisterName.HL);
 
-const REG_ARG_HL_INC = new Gb8BitIncArg(REG_ARG_HL);
-const REG_ARG_HL_DEC = new Gb8BitDecArg(REG_ARG_HL);
+const REG_ARG_HL_INC = new Gb16BitIncArg(REG_ARG_HL);
+const REG_ARG_HL_DEC = new Gb16BitDecArg(REG_ARG_HL);
 
 const D8_ARG = new Gb8BitArg(0);
 const D16_ARG = new Gb16BitArg(0);
@@ -201,7 +201,7 @@ export const GB_INSTRUCTION_SET = [
     new LdInstruction(0xf0, 2, REG_ARG_A, MEM_REG_ARG_C), null,
     null, null,
     new OrInstruction(0xf6, D8_ARG), null,
-    null, null,
+    new GbF8Instruction(), null,
     new LdInstruction(0xea, 4, REG_ARG_A, MEM_D16_ARG), null,
     null, null,
     new CpInstruction(0xfe, D8_ARG), null,

@@ -9,17 +9,19 @@ import { subtract8Bit } from "./utils/arithmetic-utils";
  * r1 can be register, memory address or 8-bit value.
  */
 export class SbcInstruction implements GbInstruction {
+    private readonly length: number;
     private readonly cycleCount: number;
 
     constructor(
         private readonly opCode: number,
         private readonly r1: GbRegisterArg | GbMemArg | Gb8BitArg
     ) {
+        this.length = 1 + r1.getArgsTakenCount();
         this.cycleCount = r1 instanceof GbRegisterArg ? 1 : 2;
     }
 
     getLength(): number {
-        return 1;
+        return this.length;
     }
 
     getOpcode(): number {
