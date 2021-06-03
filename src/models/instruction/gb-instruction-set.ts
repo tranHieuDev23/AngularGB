@@ -7,6 +7,7 @@ import { BitInstruction } from "./gb-instruction/bit/bit";
 import { CcfInstruction } from "./gb-instruction/ccf/ccf";
 import { CpInstruction } from "./gb-instruction/cp/cp";
 import { CplInstruction } from "./gb-instruction/cpl/cpl";
+import { DaaInstruction } from "./gb-instruction/daa/daa";
 import { Dec16BitInstruction, Dec8BitInstruction } from "./gb-instruction/dec/dec";
 import { HaltInstruction } from "./gb-instruction/halt/halt";
 import { Inc16BitInstruction, Inc8BitInstruction } from "./gb-instruction/inc/inc";
@@ -90,7 +91,7 @@ export const GB_INSTRUCTION_SET = [
     new JrFlagInstruction(0x20, FLAG_ARG_NOT_Z), new LdInstruction(0x21, 3, REG_ARG_HL, D16_ARG),
     new LdInstruction(0x22, 2, MEM_REG_ARG_HL_INC, REG_ARG_A), new Inc16BitInstruction(0x23, REG_ARG_HL),
     new Inc8BitInstruction(0x24, REG_ARG_H), new Dec8BitInstruction(0x25, REG_ARG_H),
-    new LdInstruction(0x26, 2, REG_ARG_H, D8_ARG), null,
+    new LdInstruction(0x26, 2, REG_ARG_H, D8_ARG), new DaaInstruction(),
     new JrFlagInstruction(0x28, FLAG_ARG_Z), new Add16BitRegisterInstruction(0x29, REG_ARG_HL, REG_ARG_HL),
     new LdInstruction(0x2a, 2, REG_ARG_A, MEM_REG_ARG_HL_INC), new Dec16BitInstruction(0x2b, REG_ARG_HL),
     new Inc8BitInstruction(0x2c, REG_ARG_L), new Dec8BitInstruction(0x2d, REG_ARG_L),
