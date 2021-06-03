@@ -16,6 +16,8 @@ import { JrFlagInstruction, JrInstruction } from "./gb-instruction/jr/jr";
 import { GbF8Instruction, LdInstruction } from "./gb-instruction/ld/ld";
 import { NopInstruction } from "./gb-instruction/nop/nop";
 import { OrInstruction } from "./gb-instruction/or/or";
+import { PopInstruction } from "./gb-instruction/pop/pop";
+import { PushInstruction } from "./gb-instruction/push/push";
 import { ResInstruction } from "./gb-instruction/res/res";
 import { RetFlagInstruction, RetInstruction } from "./gb-instruction/ret/ret";
 import { RlInstruction } from "./gb-instruction/rl/rl";
@@ -191,9 +193,9 @@ export const GB_INSTRUCTION_SET = [
     new CpInstruction(0xbe, MEM_REG_ARG_HL), new CpInstruction(0xbf, REG_ARG_A),
 
     // 0xcx
-    new RetFlagInstruction(0xc0, FLAG_ARG_NOT_Z), null,
+    new RetFlagInstruction(0xc0, FLAG_ARG_NOT_Z), new PopInstruction(0xc1, REG_ARG_BC),
     new JpFlagInstruction(0xc2, FLAG_ARG_NOT_Z, D16_ARG), new JpInstruction(0xc3, D16_ARG),
-    null, null,
+    null, new PushInstruction(0xc5, REG_ARG_BC),
     new Add8BitInstruction(0xc6, REG_ARG_A, D8_ARG), new RstInstruction(0xc7, 0x00),
     new RetFlagInstruction(0xc8, FLAG_ARG_Z), new RetInstruction(),
     new JpFlagInstruction(0xca, FLAG_ARG_Z, D16_ARG), null,
@@ -201,9 +203,9 @@ export const GB_INSTRUCTION_SET = [
     new AdcInstruction(0xce, D8_ARG), new RstInstruction(0xcf, 0x08),
 
     // 0xdx
-    new RetFlagInstruction(0xd0, FLAG_ARG_NOT_C), null,
+    new RetFlagInstruction(0xd0, FLAG_ARG_NOT_C), new PopInstruction(0xd1, REG_ARG_DE),
     new JpFlagInstruction(0xd2, FLAG_ARG_NOT_C, D16_ARG), null,
-    null, null,
+    null, new PushInstruction(0xd5, REG_ARG_DE),
     new SubInstruction(0xd6, D8_ARG), new RstInstruction(0xd7, 0x10),
     new RetFlagInstruction(0xd8, FLAG_ARG_C), null,
     new JpFlagInstruction(0xda, FLAG_ARG_C, D16_ARG), null,
@@ -211,9 +213,9 @@ export const GB_INSTRUCTION_SET = [
     new SbcInstruction(0xde, D8_ARG), new RstInstruction(0xdf, 0x18),
 
     // 0xex
-    new LdInstruction(0xe0, 3, MEM_D8_ARG, REG_ARG_A), null,
+    new LdInstruction(0xe0, 3, MEM_D8_ARG, REG_ARG_A), new PopInstruction(0xe1, REG_ARG_HL),
     new LdInstruction(0xe2, 2, MEM_REG_ARG_C, REG_ARG_A), null,
-    null, null,
+    null, new PushInstruction(0xe5, REG_ARG_HL),
     new AndInstruction(0xe6, D8_ARG), new RstInstruction(0xe7, 0x20),
     new GbE8Instruction(), new JpInstruction(0xe9, REG_ARG_HL),
     new LdInstruction(0xea, 4, MEM_D16_ARG, REG_ARG_A), null,
@@ -221,11 +223,11 @@ export const GB_INSTRUCTION_SET = [
     new XorInstruction(0xee, D8_ARG), new RstInstruction(0xef, 0x28),
 
     // 0xfx
-    new LdInstruction(0xf0, 3, REG_ARG_A, MEM_D8_ARG), null,
+    new LdInstruction(0xf0, 3, REG_ARG_A, MEM_D8_ARG), new PopInstruction(0xf1, REG_ARG_AF),
     new LdInstruction(0xf2, 2, REG_ARG_A, MEM_REG_ARG_C), null,
-    null, null,
+    null, new PushInstruction(0xf5, REG_ARG_AF),
     new OrInstruction(0xf6, D8_ARG), new RstInstruction(0xf7, 0x30),
-    new GbF8Instruction(), null,
+    new GbF8Instruction(), new LdInstruction(0xf9, 2, REG_ARG_SP, REG_ARG_HL),
     new LdInstruction(0xfa, 4, REG_ARG_A, MEM_D16_ARG), null,
     null, null,
     new CpInstruction(0xfe, D8_ARG), new RstInstruction(0xff, 0x38)
