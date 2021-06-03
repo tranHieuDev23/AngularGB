@@ -1,6 +1,6 @@
 import { GbMmu } from "src/models/mmu/gb-mmu";
 import { Flag, GbRegisterSet } from "src/models/register/gb-registers";
-import { EIGHT_ONE_BITS, SIXTEEN_ONE_BITS, TWO_POW_EIGHT, TWO_POW_SIXTEEN } from "src/utils/constants";
+import { SIXTEEN_ONE_BITS, TWO_POW_EIGHT, TWO_POW_SIXTEEN } from "src/utils/constants";
 import { randomInteger } from "src/utils/random";
 import { GbFlagArg, GbNotArg } from "../gb-instruction";
 import { JrFlagInstruction, JrInstruction } from "./jr";
@@ -80,7 +80,7 @@ describe("jr", () => {
             args = [s8];
             rs.pc.setValue(pc);
             r1.setValue(rs, mmu, args, 0);
-            expectedPc = pc
+            expectedPc = pc;
 
             zeroFlag = rs.getZeroFlag();
             operationFlag = rs.getOperationFlag();

@@ -28,7 +28,7 @@ export class JrInstruction implements GbInstruction {
 /**
  * JR <r1>. If flag r1 is equal to 1, jump s8 steps from the
  * current address in the program counter (PC) (Jump relative).
- * 
+ *
  * r1 can be a flag or the NOT result of a flag.
  */
 export class JrFlagInstruction implements GbInstruction {
