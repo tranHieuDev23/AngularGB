@@ -22,6 +22,7 @@ import { RlInstruction } from "./gb-instruction/rl/rl";
 import { Gb07Instruction, RlcInstruction } from "./gb-instruction/rlc/rlc";
 import { RrInstruction } from "./gb-instruction/rr/rr";
 import { Gb0fInstruction, RrcInstruction } from "./gb-instruction/rrc/rrc";
+import { RstInstruction } from "./gb-instruction/rst/rst";
 import { SbcInstruction } from "./gb-instruction/sbc/sbc";
 import { ScfInstruction } from "./gb-instruction/scf/scf";
 import { SetInstruction } from "./gb-instruction/set/set";
@@ -193,41 +194,41 @@ export const GB_INSTRUCTION_SET = [
     new RetFlagInstruction(0xc0, FLAG_ARG_NOT_Z), null,
     new JpFlagInstruction(0xc2, FLAG_ARG_NOT_Z, D16_ARG), new JpInstruction(0xc3, D16_ARG),
     null, null,
-    new Add8BitInstruction(0xc6, REG_ARG_A, D8_ARG), null,
+    new Add8BitInstruction(0xc6, REG_ARG_A, D8_ARG), new RstInstruction(0xc7, 0x00),
     new RetFlagInstruction(0xc8, FLAG_ARG_Z), new RetInstruction(),
     new JpFlagInstruction(0xca, FLAG_ARG_Z, D16_ARG), null,
     null, null,
-    new AdcInstruction(0xce, D8_ARG), null,
+    new AdcInstruction(0xce, D8_ARG), new RstInstruction(0xcf, 0x08),
 
     // 0xdx
     new RetFlagInstruction(0xd0, FLAG_ARG_NOT_C), null,
     new JpFlagInstruction(0xd2, FLAG_ARG_NOT_C, D16_ARG), null,
     null, null,
-    new SubInstruction(0xd6, D8_ARG), null,
+    new SubInstruction(0xd6, D8_ARG), new RstInstruction(0xd7, 0x10),
     new RetFlagInstruction(0xd8, FLAG_ARG_C), null,
     new JpFlagInstruction(0xda, FLAG_ARG_C, D16_ARG), null,
     null, null,
-    new SbcInstruction(0xde, D8_ARG), null,
+    new SbcInstruction(0xde, D8_ARG), new RstInstruction(0xdf, 0x18),
 
     // 0xex
     new LdInstruction(0xe0, 3, MEM_D8_ARG, REG_ARG_A), null,
     new LdInstruction(0xe2, 2, MEM_REG_ARG_C, REG_ARG_A), null,
     null, null,
-    new AndInstruction(0xe6, D8_ARG), null,
+    new AndInstruction(0xe6, D8_ARG), new RstInstruction(0xe7, 0x20),
     new GbE8Instruction(), new JpInstruction(0xe9, REG_ARG_HL),
     new LdInstruction(0xea, 4, MEM_D16_ARG, REG_ARG_A), null,
     null, null,
-    new XorInstruction(0xee, D8_ARG), null,
+    new XorInstruction(0xee, D8_ARG), new RstInstruction(0xef, 0x28),
 
     // 0xfx
     new LdInstruction(0xf0, 3, REG_ARG_A, MEM_D8_ARG), null,
     new LdInstruction(0xf2, 2, REG_ARG_A, MEM_REG_ARG_C), null,
     null, null,
-    new OrInstruction(0xf6, D8_ARG), null,
+    new OrInstruction(0xf6, D8_ARG), new RstInstruction(0xf7, 0x30),
     new GbF8Instruction(), null,
     new LdInstruction(0xfa, 4, REG_ARG_A, MEM_D16_ARG), null,
     null, null,
-    new CpInstruction(0xfe, D8_ARG), null,
+    new CpInstruction(0xfe, D8_ARG), new RstInstruction(0xff, 0x38)
 ];
 
 
