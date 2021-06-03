@@ -4,6 +4,7 @@ import { AdcInstruction } from "./gb-instruction/adc/adc";
 import { Add16BitRegisterInstruction, Add8BitInstruction, GbE8Instruction } from "./gb-instruction/add/add";
 import { AndInstruction } from "./gb-instruction/and/and";
 import { BitInstruction } from "./gb-instruction/bit/bit";
+import { CallFlagInstruction, CallInstruction } from "./gb-instruction/call/call";
 import { CcfInstruction } from "./gb-instruction/ccf/ccf";
 import { CpInstruction } from "./gb-instruction/cp/cp";
 import { CplInstruction } from "./gb-instruction/cpl/cpl";
@@ -195,21 +196,21 @@ export const GB_INSTRUCTION_SET = [
     // 0xcx
     new RetFlagInstruction(0xc0, FLAG_ARG_NOT_Z), new PopInstruction(0xc1, REG_ARG_BC),
     new JpFlagInstruction(0xc2, FLAG_ARG_NOT_Z, D16_ARG), new JpInstruction(0xc3, D16_ARG),
-    null, new PushInstruction(0xc5, REG_ARG_BC),
+    new CallFlagInstruction(0xc4, FLAG_ARG_NOT_Z, D16_ARG), new PushInstruction(0xc5, REG_ARG_BC),
     new Add8BitInstruction(0xc6, REG_ARG_A, D8_ARG), new RstInstruction(0xc7, 0x00),
     new RetFlagInstruction(0xc8, FLAG_ARG_Z), new RetInstruction(),
     new JpFlagInstruction(0xca, FLAG_ARG_Z, D16_ARG), null,
-    null, null,
+    new CallFlagInstruction(0xcc, FLAG_ARG_Z, D16_ARG), new CallInstruction(D16_ARG),
     new AdcInstruction(0xce, D8_ARG), new RstInstruction(0xcf, 0x08),
 
     // 0xdx
     new RetFlagInstruction(0xd0, FLAG_ARG_NOT_C), new PopInstruction(0xd1, REG_ARG_DE),
     new JpFlagInstruction(0xd2, FLAG_ARG_NOT_C, D16_ARG), null,
-    null, new PushInstruction(0xd5, REG_ARG_DE),
+    new CallFlagInstruction(0xd4, FLAG_ARG_NOT_C, D16_ARG), new PushInstruction(0xd5, REG_ARG_DE),
     new SubInstruction(0xd6, D8_ARG), new RstInstruction(0xd7, 0x10),
     new RetFlagInstruction(0xd8, FLAG_ARG_C), null,
     new JpFlagInstruction(0xda, FLAG_ARG_C, D16_ARG), null,
-    null, null,
+    new CallFlagInstruction(0xdc, FLAG_ARG_C, D16_ARG), null,
     new SbcInstruction(0xde, D8_ARG), new RstInstruction(0xdf, 0x18),
 
     // 0xex

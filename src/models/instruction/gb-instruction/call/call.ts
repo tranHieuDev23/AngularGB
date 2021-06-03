@@ -1,50 +1,50 @@
 import { GbMmu } from "src/models/mmu/gb-mmu";
 import { GbRegisterSet } from "src/models/register/gb-registers";
 import { SIXTEEN_ONE_BITS } from "src/utils/constants";
-import { Gb16BitArg, GbFlagArg, GbInstruction, GbNotArg, GbRegisterArg } from "../../gb-instruction";
+import { Gb16BitArg, GbFlagArg, GbInstruction, GbNotArg } from "../../gb-instruction";
 
 /**
- * JP <r1>. Load the 16-bit immediate operand r1 into the program counter (PC).
- * r1 specifies the address of the subsequently executed instruction.
- *
- * r1 can be a 16-bit register or a 16-bit argument.
+ * CALL. In memory, push the program counter PC value corresponding to the
+ * address following the CALL instruction to the 2 bytes following the byte
+ * specified by the current stack pointer SP. Then load the 16-bit immediate
+ * operand a16 into PC.
  */
-export class JpInstruction implements GbInstruction {
-    private readonly length: number;
-    private readonly cycleCount: number;
-
+export class CallInstruction implements GbInstruction {
     constructor(
-        private readonly opcode: number,
-        private readonly r1: GbRegisterArg | Gb16BitArg
-    ) {
-        this.length = 1 + r1.getArgsTakenCount();
-        this.cycleCount = r1 instanceof GbRegisterArg ? 1 : 4;
-    }
+        private readonly r1: Gb16BitArg
+    ) { }
 
     getLength(): number {
-        return this.length;
+        return 3;
     }
 
     getOpcode(): number {
-        return this.opcode;
+        return 0xcd;
     }
 
     run(rs: GbRegisterSet, mmu: GbMmu, args: number[]): number {
+        const sp = rs.sp.getValue();
+        const pc = rs.pc.getValue();
         const a16 = this.r1.getValue(rs, mmu, args);
+        rs.sp.setValue((sp - 2) & SIXTEEN_ONE_BITS);
+        mmu.writeWord(rs.sp.getValue(), pc);
         // Subtract 1 so that the next instruction will be at the address PC.
         rs.pc.setValue((a16 - 1) & SIXTEEN_ONE_BITS);
-        return this.cycleCount;
+        return 6;
     }
 }
 
 /**
- * JP <r1> <r2>. If flag r1 is equal to 1, load the 16-bit immediate operand r2
- * into the program counter (PC).
+ * CALL <r1> <r2>. If the r1 flag is 0, the program counter PC value
+ * corresponding to the memory location of the instruction following
+ * the CALL instruction is pushed to the 2 bytes following the memory
+ * byte specified by the stack pointer SP. The 16-bit immediate operand
+ * r2 is then loaded into PC.
  *
  * r1 can be a flag or the NOT result of a flag.
  * r2 can be a 16-bit argument.
  */
-export class JpFlagInstruction implements GbInstruction {
+export class CallFlagInstruction implements GbInstruction {
     constructor(
         private readonly opcode: number,
         private readonly r1: GbFlagArg | GbNotArg,
@@ -64,9 +64,13 @@ export class JpFlagInstruction implements GbInstruction {
         if (flag === 0) {
             return 3;
         }
+        const sp = rs.sp.getValue();
+        const pc = rs.pc.getValue();
         const a16 = this.r2.getValue(rs, mmu, args);
+        rs.sp.setValue((sp - 2) & SIXTEEN_ONE_BITS);
+        mmu.writeWord(rs.sp.getValue(), pc);
         // Subtract 1 so that the next instruction will be at the address PC.
         rs.pc.setValue((a16 - 1) & SIXTEEN_ONE_BITS);
-        return 4;
+        return 6;
     }
 }
