@@ -11,11 +11,13 @@ import { DaaInstruction } from "./gb-instruction/daa/daa";
 import { Dec16BitInstruction, Dec8BitInstruction } from "./gb-instruction/dec/dec";
 import { HaltInstruction } from "./gb-instruction/halt/halt";
 import { Inc16BitInstruction, Inc8BitInstruction } from "./gb-instruction/inc/inc";
+import { JpFlagInstruction, JpInstruction } from "./gb-instruction/jp/jp";
 import { JrFlagInstruction, JrInstruction } from "./gb-instruction/jr/jr";
 import { GbF8Instruction, LdInstruction } from "./gb-instruction/ld/ld";
 import { NopInstruction } from "./gb-instruction/nop/nop";
 import { OrInstruction } from "./gb-instruction/or/or";
 import { ResInstruction } from "./gb-instruction/res/res";
+import { RetFlagInstruction, RetInstruction } from "./gb-instruction/ret/ret";
 import { RlInstruction } from "./gb-instruction/rl/rl";
 import { Gb07Instruction, RlcInstruction } from "./gb-instruction/rlc/rlc";
 import { RrInstruction } from "./gb-instruction/rr/rr";
@@ -188,22 +190,22 @@ export const GB_INSTRUCTION_SET = [
     new CpInstruction(0xbe, MEM_REG_ARG_HL), new CpInstruction(0xbf, REG_ARG_A),
 
     // 0xcx
-    null, null,
-    null, null,
+    new RetFlagInstruction(0xc0, FLAG_ARG_NOT_Z), null,
+    new JpFlagInstruction(0xc2, FLAG_ARG_NOT_Z, D16_ARG), new JpInstruction(0xc3, D16_ARG),
     null, null,
     new Add8BitInstruction(0xc6, REG_ARG_A, D8_ARG), null,
-    null, null,
-    null, null,
+    new RetFlagInstruction(0xc8, FLAG_ARG_Z), new RetInstruction(),
+    new JpFlagInstruction(0xca, FLAG_ARG_Z, D16_ARG), null,
     null, null,
     new AdcInstruction(0xce, D8_ARG), null,
 
     // 0xdx
-    null, null,
-    null, null,
+    new RetFlagInstruction(0xd0, FLAG_ARG_NOT_C), null,
+    new JpFlagInstruction(0xd2, FLAG_ARG_NOT_C, D16_ARG), null,
     null, null,
     new SubInstruction(0xd6, D8_ARG), null,
-    null, null,
-    null, null,
+    new RetFlagInstruction(0xd8, FLAG_ARG_C), null,
+    new JpFlagInstruction(0xda, FLAG_ARG_C, D16_ARG), null,
     null, null,
     new SbcInstruction(0xde, D8_ARG), null,
 
@@ -212,7 +214,7 @@ export const GB_INSTRUCTION_SET = [
     new LdInstruction(0xe2, 2, MEM_REG_ARG_C, REG_ARG_A), null,
     null, null,
     new AndInstruction(0xe6, D8_ARG), null,
-    new GbE8Instruction(), null,
+    new GbE8Instruction(), new JpInstruction(0xe9, REG_ARG_HL),
     new LdInstruction(0xea, 4, MEM_D16_ARG, REG_ARG_A), null,
     null, null,
     new XorInstruction(0xee, D8_ARG), null,

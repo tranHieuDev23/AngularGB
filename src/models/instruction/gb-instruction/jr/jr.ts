@@ -47,10 +47,10 @@ export class JrFlagInstruction implements GbInstruction {
 
     run(rs: GbRegisterSet, mmu: GbMmu, args: number[]): number {
         const flag = this.r1.getValue(rs, mmu, args);
-        const pc = rs.pc.getValue();
         if (flag === 0) {
             return 2;
         }
+        const pc = rs.pc.getValue();
         const s8 = toSigned8Bit(args[0]);
         rs.pc.setValue((pc + s8) & SIXTEEN_ONE_BITS);
         return 3;
