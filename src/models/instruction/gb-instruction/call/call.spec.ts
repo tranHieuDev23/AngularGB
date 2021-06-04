@@ -21,11 +21,9 @@ describe("call", () => {
         expect(instruction.getOpcode()).toEqual(0xcd);
         expect(instruction.getLength()).toEqual(3);
 
-        const pc = randomInteger(0, TWO_POW_SIXTEEN);
-        const sp = randomInteger(0, TWO_POW_SIXTEEN);
+        const pc = rs.pc.getValue();
+        const sp = rs.sp.getValue();
         const r1Value = randomInteger(0, TWO_POW_SIXTEEN);
-        rs.pc.setValue(pc);
-        rs.sp.setValue(sp);
         const args = [r1Value >> 8, r1Value & 0xff];
 
         const zeroFlag = rs.getZeroFlag();

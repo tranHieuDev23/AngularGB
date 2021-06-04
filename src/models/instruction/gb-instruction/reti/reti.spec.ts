@@ -19,10 +19,7 @@ describe("reti", () => {
         expect(instruction.getOpcode()).toEqual(0xd9);
         expect(instruction.getLength()).toEqual(1);
 
-        const pc = randomInteger(0, TWO_POW_SIXTEEN);
-        const sp = randomInteger(0, TWO_POW_SIXTEEN);
-        rs.pc.setValue(pc);
-        rs.sp.setValue(sp);
+        const sp = rs.sp.getValue();
         const memSp = mmu.readWord(sp);
         const expectedSp = (sp + 2) & SIXTEEN_ONE_BITS;
         const expectedPc = (memSp - 1) & SIXTEEN_ONE_BITS;

@@ -28,9 +28,8 @@ describe("push", () => {
             expect(instruction.getLength()).toEqual(1);
 
             const r1Value = randomInteger(0, TWO_POW_SIXTEEN - 2);
-            const sp = randomInteger(0, TWO_POW_SIXTEEN - 2);
+            const sp = rs.sp.getValue();
             r1.setValue(rs, mmu, [], r1Value);
-            rs.sp.setValue(sp);
             const expectedSp = (sp - 2) & SIXTEEN_ONE_BITS;
 
             const zeroFlag = rs.getZeroFlag();

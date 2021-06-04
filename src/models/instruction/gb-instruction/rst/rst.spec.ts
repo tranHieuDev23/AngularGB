@@ -23,10 +23,8 @@ describe("rst", () => {
             expect(instruction.getOpcode()).toEqual(opcode);
             expect(instruction.getLength()).toEqual(1);
 
-            const pc = randomInteger(0, TWO_POW_SIXTEEN - 2);
-            const sp = randomInteger(0, TWO_POW_SIXTEEN - 2);
-            rs.pc.setValue(pc);
-            rs.sp.setValue(sp);
+            const pc = rs.pc.getValue();
+            const sp = rs.sp.getValue();
             const expectedPc = (r1 - 1) & SIXTEEN_ONE_BITS;
             const expectedSp = (sp - 2) & SIXTEEN_ONE_BITS;
 

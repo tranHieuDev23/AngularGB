@@ -28,8 +28,7 @@ describe("pop", () => {
             expect(instruction.getLength()).toEqual(1);
 
             const r1Value = randomInteger(0, TWO_POW_SIXTEEN - 2);
-            const sp = randomInteger(0, TWO_POW_SIXTEEN - 2);
-            rs.sp.setValue(sp);
+            const sp = rs.sp.getValue();
             mmu.writeWord(sp, r1Value);
             const expectedSp = (sp + 2) & SIXTEEN_ONE_BITS;
             const cycleCount = instruction.run(rs, mmu, []);

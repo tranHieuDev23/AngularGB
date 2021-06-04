@@ -32,9 +32,7 @@ describe("sra", () => {
             expect(instruction.getLength()).toEqual(2);
 
             const r1Value = randomInteger(0, TWO_POW_EIGHT);
-            const carryFlag = randomInteger(0, 2);
             r1.setValue(rs, mmu, [], r1Value);
-            rs.setCarryFlag(carryFlag);
             const r1Bit0 = r1Value & 1;
             const r1Bit7 = (r1Value >> 7) & 1;
             const expectedR1 = ((r1Value >> 1) & EIGHT_ONE_BITS) | (r1Bit7 << 7);
@@ -76,9 +74,7 @@ describe("srl", () => {
             expect(instruction.getLength()).toEqual(2);
 
             const r1Value = randomInteger(0, TWO_POW_EIGHT);
-            const carryFlag = randomInteger(0, 2);
             r1.setValue(rs, mmu, [], r1Value);
-            rs.setCarryFlag(carryFlag);
             const r1Bit0 = r1Value & 1;
             const expectedR1 = (r1Value >> 1) & EIGHT_ONE_BITS;
             const cycleCount = instruction.run(rs, mmu, []);

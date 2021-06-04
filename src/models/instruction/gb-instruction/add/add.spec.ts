@@ -109,8 +109,7 @@ describe("add", () => {
     });
 
     it("0xe8", () => {
-        const spValue = randomInteger(0, TWO_POW_SIXTEEN);
-        rs.sp.setValue(spValue);
+        const spValue = rs.sp.getValue();
         const byteValue = randomInteger(0, TWO_POW_EIGHT);
         const instruction = new GbE8Instruction();
 

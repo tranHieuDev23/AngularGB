@@ -20,10 +20,9 @@ describe("jr", () => {
         expect(instruction.getOpcode()).toEqual(0x18);
         expect(instruction.getLength()).toEqual(2);
 
-        const pc = randomInteger(0, TWO_POW_SIXTEEN);
+        const pc = rs.pc.getValue();
         const s8 = randomInteger(0, TWO_POW_EIGHT);
         const expectedPc = (s8 < (1 << 7) ? pc + s8 : pc + s8 - 256) & SIXTEEN_ONE_BITS;
-        rs.pc.setValue(pc);
 
         const zeroFlag = rs.getZeroFlag();
         const operationFlag = rs.getOperationFlag();

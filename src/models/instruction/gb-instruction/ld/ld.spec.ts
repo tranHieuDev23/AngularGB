@@ -79,8 +79,7 @@ describe("ld", () => {
     const registerArgHlDec = new GbMemArg(new Gb16BitDecArg(registerArgHl));
 
     it("ld (HL+) A", () => {
-        const hlValue = randomInteger(0, TWO_POW_SIXTEEN);
-        rs.hl.setValue(hlValue);
+        const hlValue = rs.hl.getValue();
         const instruction = new LdInstruction(0x22, 2, registerArgHlInc, registerArgA);
 
         expect(instruction.getOpcode()).toEqual(0x22);
@@ -103,8 +102,7 @@ describe("ld", () => {
     });
 
     it("ld A (HL+)", () => {
-        const hlValue = randomInteger(0, TWO_POW_SIXTEEN);
-        rs.hl.setValue(hlValue);
+        const hlValue = rs.hl.getValue();
         const instruction = new LdInstruction(0x2a, 2, registerArgA, registerArgHlInc);
 
         expect(instruction.getOpcode()).toEqual(0x2a);
@@ -127,8 +125,7 @@ describe("ld", () => {
     });
 
     it("ld (HL-) A", () => {
-        const hlValue = randomInteger(0, TWO_POW_SIXTEEN);
-        rs.hl.setValue(hlValue);
+        const hlValue = rs.hl.getValue();
         const instruction = new LdInstruction(0x32, 2, registerArgHlDec, registerArgA);
 
         expect(instruction.getOpcode()).toEqual(0x32);
@@ -151,8 +148,7 @@ describe("ld", () => {
     });
 
     it("ld A (HL-)", () => {
-        const hlValue = randomInteger(0, TWO_POW_SIXTEEN);
-        rs.hl.setValue(hlValue);
+        const hlValue = rs.hl.getValue();
         const instruction = new LdInstruction(0x3a, 2, registerArgA, registerArgHlDec);
 
         expect(instruction.getOpcode()).toEqual(0x3a);
@@ -221,8 +217,7 @@ describe("ld", () => {
     });
 
     it("0xf8", () => {
-        const sp = randomInteger(0, TWO_POW_SIXTEEN);
-        rs.sp.setValue(sp);
+        const sp = rs.sp.getValue();
         const instruction = new GbF8Instruction();
 
         expect(instruction.getOpcode()).toEqual(0xf8);

@@ -25,9 +25,8 @@ describe("jr", () => {
             expect(instruction.getOpcode()).toEqual(opCode);
             expect(instruction.getLength()).toEqual(r1 instanceof GbRegisterArg ? 1 : 3);
 
-            const pc = randomInteger(0, TWO_POW_SIXTEEN);
+            const pc = rs.pc.getValue();
             const r1Value = randomInteger(0, TWO_POW_SIXTEEN);
-            rs.pc.setValue(pc);
             const args = [0, 0];
             if (r1 instanceof Gb16BitArg) {
                 args[0] = r1Value >> 8;
