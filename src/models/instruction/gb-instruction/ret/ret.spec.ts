@@ -1,6 +1,6 @@
 import { GbMmu } from "src/models/mmu/gb-mmu";
 import { Flag, GbRegisterSet } from "src/models/register/gb-registers";
-import { SIXTEEN_ONE_BITS, TWO_POW_EIGHT, TWO_POW_SIXTEEN } from "src/utils/constants";
+import { SIXTEEN_ONE_BITS, TWO_POW_SIXTEEN } from "src/utils/constants";
 import { randomInteger } from "src/utils/random";
 import { GbFlagArg, GbNotArg } from "../../gb-instruction";
 import { initialize } from "../utils/test-utils";

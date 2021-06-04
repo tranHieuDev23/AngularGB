@@ -55,7 +55,7 @@ export class GbRegisterSet implements RegisterSet {
     public readonly de = new DualRegister("DE", this.d, this.e);
     public readonly hl = new DualRegister("HL", this.h, this.l);
 
-    private ime: boolean = false;
+    private ime = false;
 
     private readonly allRegisters = [
         this.a, this.b, this.c, this.d,

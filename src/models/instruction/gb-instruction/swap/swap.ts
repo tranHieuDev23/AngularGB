@@ -1,6 +1,5 @@
 import { GbMmu } from "src/models/mmu/gb-mmu";
 import { GbRegisterSet } from "src/models/register/gb-registers";
-import { EIGHT_ONE_BITS } from "src/utils/constants";
 import { GbInstruction, GbMemArg, GbRegisterArg } from "../../gb-instruction";
 
 /**

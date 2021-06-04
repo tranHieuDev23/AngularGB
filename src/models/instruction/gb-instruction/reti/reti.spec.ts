@@ -1,7 +1,6 @@
 import { GbMmu } from "src/models/mmu/gb-mmu";
 import { GbRegisterSet } from "src/models/register/gb-registers";
-import { SIXTEEN_ONE_BITS, TWO_POW_SIXTEEN } from "src/utils/constants";
-import { randomInteger } from "src/utils/random";
+import { SIXTEEN_ONE_BITS } from "src/utils/constants";
 import { initialize } from "../utils/test-utils";
 import { RetiInstruction } from "./reti";
 
