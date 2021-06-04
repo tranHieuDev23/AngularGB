@@ -4,4 +4,5 @@ export interface Mmu {
     writeByte(address: number, value: number): void;
     writeWord(address: number, value: number): void;
     randomize(): void;
+    reset(): void;
 }

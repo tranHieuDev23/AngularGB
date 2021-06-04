@@ -33,6 +33,12 @@ export class GbTestMmu implements Mmu {
             this.ram[i] = randomInteger(0, TWO_POW_EIGHT);
         }
     }
+
+    reset(): void {
+        for (let i = 0; i < this.ram.length; i++) {
+            this.ram[i] = 0;
+        }
+    }
 }
 
 export const ROM_BANK_START = 0x4000;
@@ -54,7 +60,7 @@ export class GbMmuImpl implements Mmu {
     private readonly highRam: number[] = new Array<number>(IE_REG - HIGH_RAM_START);
     private interruptEnable = 0;
 
-    private readonly isBootingUp: boolean = true;
+    private isBootingUp = true;
 
     constructor(
         private readonly mbc: Mbc
@@ -160,5 +166,20 @@ export class GbMmuImpl implements Mmu {
             });
         });
         this.interruptEnable = randomInteger(0, TWO_POW_EIGHT);
+    }
+
+    reset(): void {
+        [
+            this.vram, this.workRam, this.spriteRam, this.ioRam, this.highRam
+        ].forEach((array) => {
+            array.forEach((_, index) => {
+                array[index] = 0;
+            });
+        });
+        this.interruptEnable = 0;
+    }
+
+    public setIsBootingUp(isBootingUp: boolean): void {
+        this.isBootingUp = isBootingUp;
     }
 }
