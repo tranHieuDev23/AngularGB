@@ -55,6 +55,8 @@ export class GbRegisterSet implements RegisterSet {
     public readonly de = new DualRegister("DE", this.d, this.e);
     public readonly hl = new DualRegister("HL", this.h, this.l);
 
+    private ime: boolean = false;
+
     private readonly allRegisters = [
         this.a, this.b, this.c, this.d,
         this.e, this.f, this.h, this.l,
@@ -88,6 +90,10 @@ export class GbRegisterSet implements RegisterSet {
         return this.f.getBit(4);
     }
 
+    public getIme(): boolean {
+        return this.ime;
+    }
+
     public setZeroFlag(value: number): void {
         this.f.setBit(7, value);
     }
@@ -102,6 +108,10 @@ export class GbRegisterSet implements RegisterSet {
 
     public setCarryFlag(value: number): void {
         this.f.setBit(4, value);
+    }
+
+    public setIme(value: boolean): void {
+        this.ime = value;
     }
 }
 
