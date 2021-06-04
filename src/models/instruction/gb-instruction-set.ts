@@ -10,6 +10,8 @@ import { CpInstruction } from "./gb-instruction/cp/cp";
 import { CplInstruction } from "./gb-instruction/cpl/cpl";
 import { DaaInstruction } from "./gb-instruction/daa/daa";
 import { Dec16BitInstruction, Dec8BitInstruction } from "./gb-instruction/dec/dec";
+import { DiInstruction } from "./gb-instruction/di/di";
+import { EiInstruction } from "./gb-instruction/ei/ei";
 import { HaltInstruction } from "./gb-instruction/halt/halt";
 import { Inc16BitInstruction, Inc8BitInstruction } from "./gb-instruction/inc/inc";
 import { JpFlagInstruction, JpInstruction } from "./gb-instruction/jp/jp";
@@ -21,6 +23,7 @@ import { PopInstruction } from "./gb-instruction/pop/pop";
 import { PushInstruction } from "./gb-instruction/push/push";
 import { ResInstruction } from "./gb-instruction/res/res";
 import { RetFlagInstruction, RetInstruction } from "./gb-instruction/ret/ret";
+import { RetiInstruction } from "./gb-instruction/reti/reti";
 import { RlInstruction } from "./gb-instruction/rl/rl";
 import { Gb07Instruction, RlcInstruction } from "./gb-instruction/rlc/rlc";
 import { RrInstruction } from "./gb-instruction/rr/rr";
@@ -208,7 +211,7 @@ export const GB_INSTRUCTION_SET = [
     new JpFlagInstruction(0xd2, FLAG_ARG_NOT_C, D16_ARG), null,
     new CallFlagInstruction(0xd4, FLAG_ARG_NOT_C, D16_ARG), new PushInstruction(0xd5, REG_ARG_DE),
     new SubInstruction(0xd6, D8_ARG), new RstInstruction(0xd7, 0x10),
-    new RetFlagInstruction(0xd8, FLAG_ARG_C), null,
+    new RetFlagInstruction(0xd8, FLAG_ARG_C), new RetiInstruction(),
     new JpFlagInstruction(0xda, FLAG_ARG_C, D16_ARG), null,
     new CallFlagInstruction(0xdc, FLAG_ARG_C, D16_ARG), null,
     new SbcInstruction(0xde, D8_ARG), new RstInstruction(0xdf, 0x18),
@@ -225,11 +228,11 @@ export const GB_INSTRUCTION_SET = [
 
     // 0xfx
     new LdInstruction(0xf0, 3, REG_ARG_A, MEM_D8_ARG), new PopInstruction(0xf1, REG_ARG_AF),
-    new LdInstruction(0xf2, 2, REG_ARG_A, MEM_REG_ARG_C), null,
+    new LdInstruction(0xf2, 2, REG_ARG_A, MEM_REG_ARG_C), new DiInstruction(),
     null, new PushInstruction(0xf5, REG_ARG_AF),
     new OrInstruction(0xf6, D8_ARG), new RstInstruction(0xf7, 0x30),
     new GbF8Instruction(), new LdInstruction(0xf9, 2, REG_ARG_SP, REG_ARG_HL),
-    new LdInstruction(0xfa, 4, REG_ARG_A, MEM_D16_ARG), null,
+    new LdInstruction(0xfa, 4, REG_ARG_A, MEM_D16_ARG), new EiInstruction(),
     null, null,
     new CpInstruction(0xfe, D8_ARG), new RstInstruction(0xff, 0x38)
 ];
