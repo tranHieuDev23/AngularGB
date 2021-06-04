@@ -32,7 +32,7 @@ describe("call", () => {
         const carryFlag = rs.getCarryFlag();
         const cycleCount = instruction.run(rs, mmu, args);
 
-        expect(rs.pc.getValue()).toEqual((r1Value - 1) & SIXTEEN_ONE_BITS);
+        expect(rs.pc.getValue()).toEqual(r1Value);
         expect(rs.sp.getValue()).toEqual((sp - 2) & SIXTEEN_ONE_BITS);
         expect(mmu.readWord(rs.sp.getValue())).toEqual(pc);
         expect(rs.getZeroFlag()).toEqual(zeroFlag);
@@ -66,7 +66,7 @@ describe("call", () => {
             rs.sp.setValue(sp);
             let args = [r2Value >> 8, r2Value & 0xff];
             r1.setValue(rs, mmu, args, 1);
-            let expectedPc = (r2Value - 1) & SIXTEEN_ONE_BITS;
+            let expectedPc = r2Value;
             let expectedSp = (sp - 2) & SIXTEEN_ONE_BITS;
 
             let zeroFlag = rs.getZeroFlag();

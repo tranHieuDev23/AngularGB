@@ -1,6 +1,6 @@
 import { GbMmu } from "src/models/mmu/gb-mmu";
 import { Flag, GbRegisterSet, RegisterName } from "src/models/register/gb-registers";
-import { SIXTEEN_ONE_BITS, TWO_POW_SIXTEEN } from "src/utils/constants";
+import { TWO_POW_SIXTEEN } from "src/utils/constants";
 import { randomInteger } from "src/utils/random";
 import { Gb16BitArg, GbFlagArg, GbNotArg, GbRegisterArg } from "../../gb-instruction";
 import { JpFlagInstruction, JpInstruction } from "./jp";
@@ -25,7 +25,6 @@ describe("jr", () => {
             expect(instruction.getOpcode()).toEqual(opCode);
             expect(instruction.getLength()).toEqual(r1 instanceof GbRegisterArg ? 1 : 3);
 
-            const pc = rs.pc.getValue();
             const r1Value = randomInteger(0, TWO_POW_SIXTEEN);
             const args = [0, 0];
             if (r1 instanceof Gb16BitArg) {
@@ -35,7 +34,7 @@ describe("jr", () => {
                 r1.setValue(rs, mmu, args, r1Value);
             }
 
-            const expectedPc = (r1Value - 1) & SIXTEEN_ONE_BITS;
+            const expectedPc = r1Value;
             const zeroFlag = rs.getZeroFlag();
             const operationFlag = rs.getOperationFlag();
             const halfCaryFlag = rs.getHalfCarryFlag();
@@ -73,7 +72,7 @@ describe("jr", () => {
             rs.pc.setValue(pc);
             let args = [r1Value >> 8, r1Value & 0xff];
             r1.setValue(rs, mmu, args, 1);
-            let expectedPc = (r1Value - 1) & SIXTEEN_ONE_BITS;
+            let expectedPc = r1Value;
 
             let zeroFlag = rs.getZeroFlag();
             let operationFlag = rs.getOperationFlag();

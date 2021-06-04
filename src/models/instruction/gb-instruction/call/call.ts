@@ -28,8 +28,7 @@ export class CallInstruction implements GbInstruction {
         const a16 = this.r1.getValue(rs, mmu, args);
         rs.sp.setValue((sp - 2) & SIXTEEN_ONE_BITS);
         mmu.writeWord(rs.sp.getValue(), pc);
-        // Subtract 1 so that the next instruction will be at the address PC.
-        rs.pc.setValue((a16 - 1) & SIXTEEN_ONE_BITS);
+        rs.pc.setValue(a16);
         return 6;
     }
 }
@@ -69,8 +68,7 @@ export class CallFlagInstruction implements GbInstruction {
         const a16 = this.r2.getValue(rs, mmu, args);
         rs.sp.setValue((sp - 2) & SIXTEEN_ONE_BITS);
         mmu.writeWord(rs.sp.getValue(), pc);
-        // Subtract 1 so that the next instruction will be at the address PC.
-        rs.pc.setValue((a16 - 1) & SIXTEEN_ONE_BITS);
+        rs.pc.setValue(a16);
         return 6;
     }
 }

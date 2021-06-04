@@ -21,7 +21,7 @@ describe("reti", () => {
         const sp = rs.sp.getValue();
         const memSp = mmu.readWord(sp);
         const expectedSp = (sp + 2) & SIXTEEN_ONE_BITS;
-        const expectedPc = (memSp - 1) & SIXTEEN_ONE_BITS;
+        const expectedPc = memSp;
 
         const zeroFlag = rs.getZeroFlag();
         const operationFlag = rs.getOperationFlag();

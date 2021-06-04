@@ -31,8 +31,7 @@ export class JpInstruction implements GbInstruction {
 
     run(rs: GbRegisterSet, mmu: GbMmu, args: number[]): number {
         const a16 = this.r1.getValue(rs, mmu, args);
-        // Subtract 1 so that the next instruction will be at the address PC.
-        rs.pc.setValue((a16 - 1) & SIXTEEN_ONE_BITS);
+        rs.pc.setValue(a16);
         return this.cycleCount;
     }
 }
@@ -65,8 +64,7 @@ export class JpFlagInstruction implements GbInstruction {
             return 3;
         }
         const a16 = this.r2.getValue(rs, mmu, args);
-        // Subtract 1 so that the next instruction will be at the address PC.
-        rs.pc.setValue((a16 - 1) & SIXTEEN_ONE_BITS);
+        rs.pc.setValue(a16);
         return 4;
     }
 }

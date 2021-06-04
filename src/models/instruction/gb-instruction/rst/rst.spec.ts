@@ -25,7 +25,7 @@ describe("rst", () => {
 
             const pc = rs.pc.getValue();
             const sp = rs.sp.getValue();
-            const expectedPc = (r1 - 1) & SIXTEEN_ONE_BITS;
+            const expectedPc = r1;
             const expectedSp = (sp - 2) & SIXTEEN_ONE_BITS;
 
             const zeroFlag = rs.getZeroFlag();

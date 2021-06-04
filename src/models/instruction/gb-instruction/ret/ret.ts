@@ -20,8 +20,7 @@ export class RetInstruction implements GbInstruction {
         const sp = rs.sp.getValue();
         const newPc = mmu.readWord(sp);
         rs.sp.setValue((sp + 2) & SIXTEEN_ONE_BITS);
-        // Subtract 1 so that the next instruction will be at the address PC.
-        rs.pc.setValue((newPc - 1) & SIXTEEN_ONE_BITS);
+        rs.pc.setValue(newPc);
         return 4;
     }
 }
@@ -56,8 +55,7 @@ export class RetFlagInstruction implements GbInstruction {
         const sp = rs.sp.getValue();
         const newPc = mmu.readWord(sp);
         rs.sp.setValue((sp + 2) & SIXTEEN_ONE_BITS);
-        // Subtract 1 so that the next instruction will be at the address PC.
-        rs.pc.setValue((newPc - 1) & SIXTEEN_ONE_BITS);
+        rs.pc.setValue(newPc);
         return 5;
     }
 }

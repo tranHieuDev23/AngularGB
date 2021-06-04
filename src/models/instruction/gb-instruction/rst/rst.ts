@@ -15,10 +15,7 @@ export class RstInstruction implements GbInstruction {
     constructor(
         private readonly opcode: number,
         private readonly r1: number
-    ) {
-        // Subtract 1 so that the next instruction will be at the address PC.
-        this.r1 = (this.r1 - 1) & SIXTEEN_ONE_BITS;
-    }
+    ) { }
 
     getLength(): number {
         return 1;
