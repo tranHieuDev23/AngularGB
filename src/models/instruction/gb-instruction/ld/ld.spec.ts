@@ -1,4 +1,4 @@
-import { GbMmu } from "src/models/mmu/gb-mmu";
+import { GbMmu, GbTestMmu } from "src/models/mmu/gb-mmu";
 import { GbRegisterSet, RegisterName, REGISTERS_8_BIT } from "src/models/register/gb-registers";
 import { EIGHT_ONE_BITS, SIXTEEN_ONE_BITS, TWO_POW_EIGHT, TWO_POW_SIXTEEN } from "src/utils/constants";
 import { randomInteger } from "src/utils/random";
@@ -9,7 +9,7 @@ import { initialize } from "../utils/test-utils";
 
 describe("ld", () => {
     const rs = new GbRegisterSet();
-    const mmu = new GbMmu();
+    const mmu = new GbTestMmu();
     const args = [0, 0];
 
     beforeEach(() => {

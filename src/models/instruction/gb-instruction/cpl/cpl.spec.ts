@@ -1,4 +1,4 @@
-import { GbMmu } from "src/models/mmu/gb-mmu";
+import { GbMmu, GbTestMmu } from "src/models/mmu/gb-mmu";
 import { GbRegisterSet } from "src/models/register/gb-registers";
 import { EIGHT_ONE_BITS } from "src/utils/constants";
 import { CplInstruction } from "./cpl";
@@ -6,7 +6,7 @@ import { initialize } from "../utils/test-utils";
 
 describe("cpl", () => {
     const rs = new GbRegisterSet();
-    const mmu = new GbMmu();
+    const mmu = new GbTestMmu();
 
     beforeEach(() => {
         initialize(rs, mmu);

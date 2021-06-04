@@ -1,4 +1,4 @@
-import { GbMmu } from "src/models/mmu/gb-mmu";
+import { GbMmu, GbTestMmu } from "src/models/mmu/gb-mmu";
 import { GbRegisterSet } from "src/models/register/gb-registers";
 import { SIXTEEN_ONE_BITS } from "src/utils/constants";
 import { randomInteger } from "src/utils/random";
@@ -7,7 +7,7 @@ import { RstInstruction } from "./rst";
 
 describe("rst", () => {
     const rs = new GbRegisterSet();
-    const mmu = new GbMmu();
+    const mmu = new GbTestMmu();
 
     beforeEach(() => {
         initialize(rs, mmu);

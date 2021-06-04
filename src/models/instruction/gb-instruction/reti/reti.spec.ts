@@ -1,4 +1,4 @@
-import { GbMmu } from "src/models/mmu/gb-mmu";
+import { GbMmu, GbTestMmu } from "src/models/mmu/gb-mmu";
 import { GbRegisterSet } from "src/models/register/gb-registers";
 import { SIXTEEN_ONE_BITS } from "src/utils/constants";
 import { initialize } from "../utils/test-utils";
@@ -6,7 +6,7 @@ import { RetiInstruction } from "./reti";
 
 describe("reti", () => {
     const rs = new GbRegisterSet();
-    const mmu = new GbMmu();
+    const mmu = new GbTestMmu();
 
     beforeEach(() => {
         initialize(rs, mmu);

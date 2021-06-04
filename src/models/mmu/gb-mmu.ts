@@ -2,7 +2,9 @@ import { EIGHT_ONE_BITS, TWO_POW_EIGHT, TWO_POW_SIXTEEN } from "src/utils/consta
 import { randomInteger } from "src/utils/random";
 import { Mmu } from "./mmu";
 
-export class GbMmu implements Mmu {
+export interface GbMmu extends Mmu { }
+
+export class GbTestMmu implements Mmu {
     private readonly ram: number[] = new Array<number>(TWO_POW_SIXTEEN);
 
     readByte(address: number): number {
