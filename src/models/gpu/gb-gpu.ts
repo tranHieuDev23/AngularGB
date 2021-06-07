@@ -1,3 +1,4 @@
+import { Lcd } from "../lcd/lcd";
 import { GbMmu } from "../mmu/gb-mmu";
 
 export class GbGpu {
@@ -6,7 +7,8 @@ export class GbGpu {
     private currentScanline: number = 0;
 
     constructor(
-        private readonly mmu: GbMmu
+        private readonly mmu: GbMmu,
+        private readonly lcd: Lcd
     ) { }
 
     public step(deltaCycleCount: number): void {
@@ -32,6 +34,7 @@ export class GbGpu {
             this.modeCycleCount = 0;
             this.currentScanline++;
             if (this.currentScanline === 144) {
+                this.lcd.draw();
                 this.mode = 1;
             } else {
                 this.mode = 2;
