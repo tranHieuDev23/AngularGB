@@ -4,10 +4,10 @@ import { Mbc } from "./gb-mcb";
 export class GbMcb1 implements Mbc {
     private readonly extRam: number[];
 
-    private lower5Bits: number = 0x00;
-    private upper2Bits: number = 0x0;
-    private ramEnable: boolean = false;
-    private bankingMode: number = 0;
+    private lower5Bits = 0x00;
+    private upper2Bits = 0x0;
+    private ramEnable = false;
+    private bankingMode = 0;
 
     constructor(
         private readonly code: number,

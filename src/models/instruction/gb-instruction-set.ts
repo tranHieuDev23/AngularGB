@@ -24,9 +24,9 @@ import { PushInstruction } from "./gb-instruction/push/push";
 import { ResInstruction } from "./gb-instruction/res/res";
 import { RetFlagInstruction, RetInstruction } from "./gb-instruction/ret/ret";
 import { RetiInstruction } from "./gb-instruction/reti/reti";
-import { RlInstruction } from "./gb-instruction/rl/rl";
+import { Gb17Instruction, RlInstruction } from "./gb-instruction/rl/rl";
 import { Gb07Instruction, RlcInstruction } from "./gb-instruction/rlc/rlc";
-import { RrInstruction } from "./gb-instruction/rr/rr";
+import { Gb1fInstruction, RrInstruction } from "./gb-instruction/rr/rr";
 import { Gb0fInstruction, RrcInstruction } from "./gb-instruction/rrc/rrc";
 import { RstInstruction } from "./gb-instruction/rst/rst";
 import { SbcInstruction } from "./gb-instruction/sbc/sbc";
@@ -90,11 +90,11 @@ export const GB_INSTRUCTION_SET = [
     new StopInstruction(), new LdInstruction(0x11, 3, REG_ARG_DE, D16_ARG),
     new LdInstruction(0x12, 2, MEM_REG_ARG_DE, REG_ARG_A), new Inc16BitInstruction(0x13, REG_ARG_DE),
     new Inc8BitInstruction(0x14, REG_ARG_D), new Dec8BitInstruction(0x15, REG_ARG_D),
-    new LdInstruction(0x16, 2, REG_ARG_D, D8_ARG), new RlInstruction(0x17, REG_ARG_A),
+    new LdInstruction(0x16, 2, REG_ARG_D, D8_ARG), new Gb17Instruction(),
     new JrInstruction(), new Add16BitRegisterInstruction(0x19, REG_ARG_HL, REG_ARG_DE),
     new LdInstruction(0x1a, 2, REG_ARG_A, MEM_REG_ARG_DE), new Dec16BitInstruction(0x1b, REG_ARG_DE),
     new Inc8BitInstruction(0x1c, REG_ARG_E), new Dec8BitInstruction(0x1d, REG_ARG_E),
-    new LdInstruction(0x1e, 2, REG_ARG_E, D8_ARG), new RrInstruction(0x1f, REG_ARG_A),
+    new LdInstruction(0x1e, 2, REG_ARG_E, D8_ARG), new Gb1fInstruction(),
 
     // 0x2x
     new JrFlagInstruction(0x20, FLAG_ARG_NOT_Z), new LdInstruction(0x21, 3, REG_ARG_HL, D16_ARG),
@@ -113,7 +113,7 @@ export const GB_INSTRUCTION_SET = [
     new LdInstruction(0x36, 3, MEM_REG_ARG_HL, D8_ARG), new ScfInstruction(),
     new JrFlagInstruction(0x38, FLAG_ARG_C), new Add16BitRegisterInstruction(0x39, REG_ARG_HL, REG_ARG_SP),
     new LdInstruction(0x3a, 2, REG_ARG_A, MEM_REG_ARG_HL_DEC), new Dec16BitInstruction(0x3b, REG_ARG_SP),
-    new Inc8BitInstruction(0x3c, REG_ARG_A), new Inc8BitInstruction(0x3d, REG_ARG_A),
+    new Inc8BitInstruction(0x3c, REG_ARG_A), new Dec8BitInstruction(0x3d, REG_ARG_A),
     new LdInstruction(0x3e, 2, REG_ARG_A, D8_ARG), new CcfInstruction(),
 
     // 0x4x

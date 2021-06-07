@@ -72,7 +72,7 @@ export class Gb16BitArg implements GbInstructionArg {
     }
 
     getValue(rs: GbRegisterSet, mmu: GbMmu, args: number[]): number {
-        return (args[this.argIndex] << 8) | args[this.argIndex + 1];
+        return (args[this.argIndex + 1] << 8) | args[this.argIndex];
     }
 }
 

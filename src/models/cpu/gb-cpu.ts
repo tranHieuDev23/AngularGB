@@ -19,19 +19,23 @@ export class GbCpu {
         this.rs.getPc().setValue(pc + 1);
         let opCode = this.mmu.readByte(pc);
         let instruction = null;
+        let instructionArgStart = null;
         if (opCode === 0xcb) {
             pc = this.rs.getPc().getValue();
             this.rs.getPc().setValue(pc + 1);
             opCode = this.mmu.readByte(pc);
             instruction = GB_0XCB_INSTRUCTION_SET[opCode];
+            instructionArgStart = 2;
         } else {
             instruction = GB_INSTRUCTION_SET[opCode];
+            instructionArgStart = 1;
         }
+        console.log(pc.toString(16), this.rs.a.getValue().toString(16), instruction);
         if (!instruction) {
             throw new InstructionNotImplemented(opCode);
         }
         const args: number[] = [];
-        for (let i = 1; i < instruction.getLength(); i++) {
+        for (let i = instructionArgStart; i < instruction.getLength(); i++) {
             pc = this.rs.getPc().getValue();
             this.rs.getPc().setValue(pc + 1);
             args.push(this.mmu.readByte(pc));

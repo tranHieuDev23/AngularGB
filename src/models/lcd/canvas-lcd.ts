@@ -17,7 +17,7 @@ export class CanvasLcd implements Lcd {
 
     draw(): void {
         requestAnimationFrame(() => {
-            const context = this.canvas.getContext('2d');
+            const context = this.canvas.getContext("2d");
             if (!context) {
                 return;
             }

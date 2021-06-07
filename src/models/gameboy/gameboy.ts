@@ -8,7 +8,7 @@ export class Gameboy {
     private readonly cpu: GbCpu;
     private readonly gpu: GbGpu;
 
-    private cycleCount: number = 0;
+    private cycleCount = 0;
 
     constructor(
         readonly mmu: GbMmu,

@@ -4,8 +4,8 @@ import { Mbc } from "./gb-mcb";
 export class GbMcb2 implements Mbc {
     private readonly extRam: number[] = new Array<number>(512);
 
-    private romBankOffset: number = 0x4000;
-    private ramEnabled: boolean = false;
+    private romBankOffset = 0x4000;
+    private ramEnabled = false;
 
     constructor(
         private readonly code: number,

@@ -5,9 +5,9 @@ import { GbPositionControl } from "./mmu-wrappers/gb-scrolling-control";
 import { GbTileMap } from "./mmu-wrappers/gb-tile-map";
 
 export class GbGpu {
-    private mode: number = 0;
-    private modeCycleCount: number = 0;
-    private currentScanline: number = 0;
+    private mode = 0;
+    private modeCycleCount = 0;
+    private currentScanline = 0;
 
     private readonly palettes: GbPalettes;
     private readonly positionControl: GbPositionControl;
@@ -84,7 +84,7 @@ export class GbGpu {
         let tileCol = this.positionControl.getScrollX() >> 3;
         let tile = this.tileMap.getBgTile(tileRowStart + tileCol);
 
-        let tileY = (this.currentScanline + this.positionControl.getScrollY()) & 7;
+        const tileY = (this.currentScanline + this.positionControl.getScrollY()) & 7;
         let tileX = this.positionControl.getScrollX() & 7;
 
         for (let x = 0; x < 160; x++) {
