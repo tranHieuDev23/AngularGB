@@ -4,8 +4,6 @@ import { GbRegisterSet } from "../register/gb-registers";
 import { InstructionNotImplemented } from "./cpu-errors";
 
 export class GbCpu {
-    private cycleCount: number = 0;
-
     constructor(
         public readonly rs: GbRegisterSet,
         public readonly mmu: GbMmu
@@ -16,11 +14,7 @@ export class GbCpu {
         mmu.reset();
     }
 
-    public getCycleCount(): number {
-        return this.cycleCount;
-    }
-
-    public step(): void {
+    public step(): number {
         let pc = this.rs.getPc().getValue();
         this.rs.getPc().setValue(pc + 1);
         let opCode = this.mmu.readByte(pc);
@@ -43,6 +37,6 @@ export class GbCpu {
             args.push(this.mmu.readByte(pc));
         }
         const cycleCount = instruction.run(this.rs, this.mmu, args);
-        this.cycleCount += cycleCount;
+        return cycleCount;
     }
 }
