@@ -137,6 +137,14 @@ export class GbMmuImpl implements Mmu {
         }
         if (address < HIGH_RAM_START) {
             this.ioRam[address - IO_REG_START] = value;
+            if (address === 0xff46) {
+                // HACK: DMA Transfer
+                const startAddress = value << 8;
+                const endAddress = startAddress | 0xa0;
+                for (let i = startAddress; i < endAddress; i++) {
+                    this.spriteRam[i - startAddress] = this.readByte(i);
+                }
+            }
             return;
         }
         if (address < IE_REG) {
