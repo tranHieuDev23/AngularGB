@@ -1,5 +1,5 @@
 import { getBit, toSigned8Bit } from "src/utils/arithmetic-utils";
-import { GbMmu } from "../mmu/gb-mmu";
+import { GbMmu } from "../../mmu/gb-mmu";
 import { GbLcdc } from "./gb-lcdc";
 
 export interface GbTile {
@@ -67,16 +67,16 @@ export class GbTileData {
     }
 
     private getTile(address: number): Gb8x8Tile {
-        const colorIndices = [];
-        for (let i = 0; i < 8; i++) {
-            const line = [];
-            const lineLowByte = this.mmu.readByte(address | (i << 1));
-            const lineHighByte = this.mmu.readByte(address | ((i << 1) & 1));
-            for (let j = 0; j < 8; j++) {
-                const pixel = (getBit(lineHighByte, j) << 1) | getBit(lineLowByte, j);
-                line.push(pixel);
+        const colorIndices: number[][] = [
+            [], [], [], [], [], [], [], []
+        ];
+        for (let y = 0; y < 8; y++) {
+            const lineLowByte = this.mmu.readByte(address | (y << 1));
+            const lineHighByte = this.mmu.readByte(address | ((y << 1) & 1));
+            for (let x = 0; x < 8; x++) {
+                const pixel = (getBit(lineHighByte, x) << 1) | getBit(lineLowByte, x);
+                colorIndices[x].push(pixel);
             }
-            colorIndices.push(line);
         }
         return new Gb8x8Tile(colorIndices);
     }
