@@ -7,7 +7,7 @@ export class GbTileMap {
     private readonly lcdc: GbLcdc;
 
     constructor(
-        private readonly mmu: GbMmu
+        readonly mmu: GbMmu
     ) {
         this.tileData = new GbTileData(mmu);
         this.lcdc = new GbLcdc(mmu);

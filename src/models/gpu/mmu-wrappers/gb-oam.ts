@@ -32,12 +32,12 @@ export class GbOam {
 
     public getSpriteY(index: number): number {
         const yAddress = this.getSpriteStartIndex(index);
-        return this.mmu.readByte(yAddress) - 16;
+        return this.mmu.readByte(yAddress);
     }
 
     public getSpriteX(index: number): number {
         const xAddress = this.getSpriteStartIndex(index) | 1;
-        return this.mmu.readByte(xAddress) - 8;
+        return this.mmu.readByte(xAddress);
     }
 
     public getSpriteTile(index: number): GbTile {

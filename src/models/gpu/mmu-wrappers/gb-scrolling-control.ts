@@ -26,6 +26,6 @@ export class GbPositionControl {
     }
 
     public getWindowX(): number {
-        return this.mmu.readByte(0xff4b) - 7;
+        return this.mmu.readByte(0xff4b);
     }
 }
