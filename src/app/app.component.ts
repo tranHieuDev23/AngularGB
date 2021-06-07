@@ -27,16 +27,16 @@ export class AppComponent {
     reader.onload = () => {
       const rom = Array.from(new Uint8Array(reader.result as ArrayBuffer));
       const mbc = getMbc(rom);
-      const lcd = new CanvasLcd(this.canvas.nativeElement, 1, [
-        "#000000",
-        "#606060",
+      const lcd = new CanvasLcd(this.canvas.nativeElement, 2, [
+        "#ffffff",
         "#c0c0c0",
-        "#ffffff"
+        "#606060",
+        "#000000",
       ]);
       this.gameboy = new Gameboy(new GbMmuImpl(mbc), lcd);
-      while (true) {
-        this.gameboy.step();
-      }
+      setInterval(() => {
+        this.gameboy.frame();
+      }, 1.0 / 60);
     };
     reader.readAsArrayBuffer(romFile);
   }

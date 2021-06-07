@@ -1,7 +1,8 @@
 import { Lcd } from "../lcd/lcd";
 import { GbMmu } from "../mmu/gb-mmu";
 import { GbPalettes } from "./mmu-wrappers/gb-palettes";
-import { GbPositionControl } from "./mmu-wrappers/gb-scrolling-control";
+import { GbPositionControl } from "./mmu-wrappers/gb-position-control";
+import { GbStat } from "./mmu-wrappers/gb-stat";
 import { GbTileMap } from "./mmu-wrappers/gb-tile-map";
 
 export class GbGpu {
@@ -11,6 +12,7 @@ export class GbGpu {
 
     private readonly palettes: GbPalettes;
     private readonly positionControl: GbPositionControl;
+    private readonly stat: GbStat;
     private readonly tileMap: GbTileMap;
 
     constructor(
@@ -19,6 +21,7 @@ export class GbGpu {
     ) {
         this.palettes = new GbPalettes(mmu);
         this.positionControl = new GbPositionControl(mmu);
+        this.stat = new GbStat(mmu);
         this.tileMap = new GbTileMap(mmu);
     }
 
@@ -27,17 +30,23 @@ export class GbGpu {
         switch (this.mode) {
             case 0:
                 this.stepMode0();
-                return;
+                break;
             case 1:
                 this.stepMode1();
-                return;
+                break;
             case 2:
                 this.stepMode2();
-                return;
+                break;
             case 3:
                 this.stepMode3();
-                return;
+                break;
         }
+        this.positionControl.setLy(this.currentScanline);
+        this.stat.setLycEqualLy(
+            this.currentScanline === this.positionControl.getLyc()
+                ? 1 : 0
+        );
+        this.stat.setModeFlag(this.mode);
     }
 
     private stepMode0(): void {
@@ -80,9 +89,9 @@ export class GbGpu {
     }
 
     private updateBackgroundLine(): void {
-        const tileRowStart = ((this.currentScanline + this.positionControl.getScrollY()) & 255) >> 3;
+        const tileRow = ((this.currentScanline + this.positionControl.getScrollY()) & 255) >> 3;
         let tileCol = this.positionControl.getScrollX() >> 3;
-        let tile = this.tileMap.getBgTile(tileRowStart + tileCol);
+        let tile = this.tileMap.getBgTile((tileRow << 5) + tileCol);
 
         const tileY = (this.currentScanline + this.positionControl.getScrollY()) & 7;
         let tileX = this.positionControl.getScrollX() & 7;
@@ -93,7 +102,7 @@ export class GbGpu {
             tileX++;
             if (tileX === 8) {
                 tileCol = (tileCol + 1) & 31;
-                tile = this.tileMap.getBgTile(tileRowStart + tileCol);
+                tile = this.tileMap.getBgTile((tileRow << 5) + tileCol);
                 tileX = 0;
             }
         }

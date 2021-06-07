@@ -60,14 +60,12 @@ export class GbMmuImpl implements Mmu {
     private readonly highRam: number[] = new Array<number>(IE_REG - HIGH_RAM_START);
     private interruptEnable = 0;
 
-    private isBootingUp = true;
-
     constructor(
         private readonly mbc: Mbc
     ) { }
 
     readByte(address: number): number {
-        if (this.isBootingUp && address < GB_INITIALIZE_ROM.length) {
+        if (this.getIsBootingUp() === 0 && address < GB_INITIALIZE_ROM.length) {
             return GB_INITIALIZE_ROM[address];
         }
         if (address < VRAM_START) {
@@ -179,15 +177,11 @@ export class GbMmuImpl implements Mmu {
     reset(): void {
         [
             this.vram, this.workRam, this.spriteRam, this.ioRam, this.highRam
-        ].forEach((array) => {
-            array.forEach((_, index) => {
-                array[index] = 0;
-            });
-        });
+        ].forEach((array) => { array.fill(0); });
         this.interruptEnable = 0;
     }
 
-    public setIsBootingUp(isBootingUp: boolean): void {
-        this.isBootingUp = isBootingUp;
+    public getIsBootingUp(): number {
+        return this.ioRam[0xff50 - IO_REG_START];
     }
 }

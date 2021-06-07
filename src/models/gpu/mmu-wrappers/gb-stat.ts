@@ -33,4 +33,16 @@ export class GbStat {
     public getModeFlag(): number {
         return this.getValue() & 3;
     }
+
+    public setLycEqualLy(value: number) {
+        const oldValue = this.getValue();
+        const newValue = (oldValue & 0xfb) | ((value & 1) << 2);
+        this.mmu.writeByte(0xff41, newValue);
+    }
+
+    public setModeFlag(mode: number): void {
+        const oldValue = this.getValue();
+        const newValue = (oldValue & 0xfc) | (mode & 3);
+        this.mmu.writeByte(0xff41, newValue);
+    }
 }

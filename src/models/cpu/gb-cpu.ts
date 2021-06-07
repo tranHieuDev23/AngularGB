@@ -30,7 +30,6 @@ export class GbCpu {
             instruction = GB_INSTRUCTION_SET[opCode];
             instructionArgStart = 1;
         }
-        console.log(pc.toString(16), this.rs.a.getValue().toString(16), instruction);
         if (!instruction) {
             throw new InstructionNotImplemented(opCode);
         }

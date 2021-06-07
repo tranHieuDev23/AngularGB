@@ -16,9 +16,11 @@ export class Gb8x8Tile implements GbTile {
     getWidth(): number {
         return 8;
     }
+
     getHeight(): number {
         return 8;
     }
+
     getColorIndex(x: number, y: number): number {
         return this.colorIndices[x][y];
     }
@@ -60,7 +62,7 @@ export class GbTileData {
 
     public getBgAndWindowTile(index: number): Gb8x8Tile {
         if (this.lcdc.getBgAndWindowTileDataArea() === 1) {
-            return this.getTile(0x8000 + (index << 4));
+            return this.getTile(0x8000 + (index * 16));
         } else {
             return this.getTile(0x9000 + (toSigned8Bit(index) * 16));
         }
@@ -71,8 +73,10 @@ export class GbTileData {
             [], [], [], [], [], [], [], []
         ];
         for (let y = 0; y < 8; y++) {
-            const lineLowByte = this.mmu.readByte(address | (y << 1));
-            const lineHighByte = this.mmu.readByte(address | ((y << 1) & 1));
+            const lowByteAddress = address | (y << 1);
+            const highByteAddress = lowByteAddress | 1;
+            const lineLowByte = this.mmu.readByte(lowByteAddress);
+            const lineHighByte = this.mmu.readByte(highByteAddress);
             for (let x = 0; x < 8; x++) {
                 const pixel = (getBit(lineHighByte, x) << 1) | getBit(lineLowByte, x);
                 colorIndices[x].push(pixel);

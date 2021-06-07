@@ -8,7 +8,14 @@ export class CanvasLcd implements Lcd {
         private readonly pixelSize: number,
         private readonly palletes: string[]
     ) {
-        this.graphicBuffer = new Array<number[]>(160).fill(new Array<number>(144));
+        this.graphicBuffer = [];
+        for (let x = 0; x < 160; x++) {
+            const col = [];
+            for (let y = 0; y < 144; y++) {
+                col.push(0);
+            }
+            this.graphicBuffer.push(col);
+        }
     }
 
     updatePixel(x: number, y: number, colorIndex: number): void {
@@ -16,18 +23,15 @@ export class CanvasLcd implements Lcd {
     }
 
     draw(): void {
-        requestAnimationFrame(() => {
-            const context = this.canvas.getContext("2d");
-            if (!context) {
-                return;
+        const context = this.canvas.getContext("2d");
+        if (!context) {
+            return;
+        }
+        for (let x = 0; x < this.graphicBuffer.length; x++) {
+            for (let y = 0; y < this.graphicBuffer[x].length; y++) {
+                this.drawPixel(context, x, y, this.palletes[this.graphicBuffer[x][y]]);
             }
-            context.clearRect(0, 0, this.canvas.width, this.canvas.height);
-            for (let x = 0; x < this.graphicBuffer.length; x++) {
-                for (let y = 0; y < this.graphicBuffer[x].length; y++) {
-                    this.drawPixel(context, x, y, this.palletes[this.graphicBuffer[x][y]]);
-                }
-            }
-        });
+        }
     }
 
     private drawPixel(context: CanvasRenderingContext2D, x: number, y: number, color: string): void {

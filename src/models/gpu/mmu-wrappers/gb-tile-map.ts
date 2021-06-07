@@ -15,12 +15,14 @@ export class GbTileMap {
 
     public getBgTile(index: number): GbTile {
         const tileIndexAddress = this.getTileIndexAddress(index, this.lcdc.getBgTitleMap());
-        return this.tileData.getBgAndWindowTile(tileIndexAddress);
+        const tileIndex = this.mmu.readByte(tileIndexAddress);
+        return this.tileData.getBgAndWindowTile(tileIndex);
     }
 
     public getWindowTile(index: number): GbTile {
         const tileIndexAddress = this.getTileIndexAddress(index, this.lcdc.getWindowTitleMap());
-        return this.tileData.getBgAndWindowTile(tileIndexAddress);
+        const tileIndex = this.mmu.readByte(tileIndexAddress);
+        return this.tileData.getBgAndWindowTile(tileIndex);
     }
 
     private getTileIndexAddress(index: number, mapId: number): number {

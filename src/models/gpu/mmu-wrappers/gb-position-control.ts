@@ -28,4 +28,8 @@ export class GbPositionControl {
     public getWindowX(): number {
         return this.mmu.readByte(0xff4b);
     }
+
+    public setLy(ly: number): void {
+        this.mmu.writeByte(0xff44, ly);
+    }
 }

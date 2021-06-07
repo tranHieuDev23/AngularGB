@@ -10,7 +10,7 @@ export class GbPalettes {
     }
 
     public getBgPalleteColor(index: number) {
-        return (this.getBgPallete() >> index * 2) & 3;
+        return (this.getBgPallete() >> (index << 1)) & 3;
     }
 
     public getObj0Pallete() {
@@ -18,7 +18,7 @@ export class GbPalettes {
     }
 
     public getObj0PalleteColor(index: number) {
-        return (this.getObj0Pallete() >> index * 2) & 3;
+        return (this.getObj0Pallete() >> (index << 1)) & 3;
     }
 
     public getObj1Pallete() {
@@ -26,6 +26,6 @@ export class GbPalettes {
     }
 
     public getObj1PalleteColor(index: number) {
-        return (this.getObj1Pallete() >> index * 2) & 3;
+        return (this.getObj1Pallete() >> (index << 1)) & 3;
     }
 }

@@ -8,8 +8,6 @@ export class Gameboy {
     private readonly cpu: GbCpu;
     private readonly gpu: GbGpu;
 
-    private cycleCount = 0;
-
     constructor(
         readonly mmu: GbMmu,
         readonly lcd: Lcd
@@ -18,8 +16,12 @@ export class Gameboy {
         this.gpu = new GbGpu(mmu, lcd);
     }
 
-    public step(): void {
-        const deltaCycleCount = this.cpu.step();
-        this.gpu.step(deltaCycleCount);
+    public frame(): void {
+        let cycleCount = 0;
+        while (cycleCount < 70224) {
+            const deltaCycleCount = this.cpu.step();
+            this.gpu.step(deltaCycleCount);
+            cycleCount += deltaCycleCount;
+        }
     }
 }
