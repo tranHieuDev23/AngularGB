@@ -79,7 +79,7 @@ export class GbTileData {
             const lineHighByte = this.mmu.readByte(highByteAddress);
             for (let x = 0; x < 8; x++) {
                 const pixel = (getBit(lineHighByte, x) << 1) | getBit(lineLowByte, x);
-                colorIndices[x].push(pixel);
+                colorIndices[7 - x].push(pixel);
             }
         }
         return new Gb8x8Tile(colorIndices);
