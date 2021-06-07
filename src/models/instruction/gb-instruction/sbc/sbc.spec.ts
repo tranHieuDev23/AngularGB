@@ -4,7 +4,7 @@ import { TWO_POW_EIGHT } from "src/utils/constants";
 import { randomInteger } from "src/utils/random";
 import { Gb8BitArg, GbMemArg, GbRegisterArg } from "../../gb-instruction";
 import { SbcInstruction } from "./sbc";
-import { subtract8Bit } from "../utils/arithmetic-utils";
+import { subtract8Bit } from "../../../../utils/arithmetic-utils";
 import { initialize } from "../utils/test-utils";
 
 describe("sbc", () => {

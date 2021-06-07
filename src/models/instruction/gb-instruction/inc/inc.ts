@@ -1,7 +1,7 @@
 import { GbMmu } from "src/models/mmu/gb-mmu";
 import { GbRegisterSet } from "src/models/register/gb-registers";
 import { GbInstruction, GbMemArg, GbRegisterArg } from "../../gb-instruction";
-import { add16Bit, add8Bit } from "../utils/arithmetic-utils";
+import { add16Bit, add8Bit } from "../../../../utils/arithmetic-utils";
 
 /**
  * INC <r1>. Increment the contents of r1 by 1. This class supports

@@ -1,7 +1,7 @@
 import { GbMmu } from "src/models/mmu/gb-mmu";
 import { GbRegisterSet } from "src/models/register/gb-registers";
 import { Gb8BitArg, GbInstruction, GbMemArg, GbRegisterArg } from "../../gb-instruction";
-import { subtract8Bit } from "../utils/arithmetic-utils";
+import { subtract8Bit } from "../../../../utils/arithmetic-utils";
 
 /**
  * CP <r1>. Compare the contents of r1 and the contents of

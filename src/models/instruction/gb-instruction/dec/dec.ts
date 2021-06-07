@@ -1,7 +1,7 @@
 import { GbMmu } from "src/models/mmu/gb-mmu";
 import { GbRegisterSet } from "src/models/register/gb-registers";
 import { GbInstruction, GbMemArg, GbRegisterArg } from "../../gb-instruction";
-import { subtract16Bit, subtract8Bit } from "../utils/arithmetic-utils";
+import { subtract16Bit, subtract8Bit } from "../../../../utils/arithmetic-utils";
 
 /**
  * DEC <r1>. Decrement the contents of r1 by 1. This class supports

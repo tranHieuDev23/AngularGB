@@ -1,7 +1,7 @@
 import { GbMmu } from "src/models/mmu/gb-mmu";
 import { GbRegisterSet } from "src/models/register/gb-registers";
 import { Gb8BitArg, GbInstruction, GbMemArg, GbRegisterArg } from "../../gb-instruction";
-import { add16Bit, add8Bit, toSigned8Bit } from "../utils/arithmetic-utils";
+import { add16Bit, add8Bit, toSigned8Bit } from "../../../../utils/arithmetic-utils";
 
 /**
  * ADD <r1> <r2>. Adds the value of r1 and r2, and store the result

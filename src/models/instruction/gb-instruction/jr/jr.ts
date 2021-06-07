@@ -2,7 +2,7 @@ import { GbMmu } from "src/models/mmu/gb-mmu";
 import { GbRegisterSet } from "src/models/register/gb-registers";
 import { SIXTEEN_ONE_BITS } from "src/utils/constants";
 import { GbFlagArg, GbInstruction, GbNotArg } from "../../gb-instruction";
-import { toSigned8Bit } from "../utils/arithmetic-utils";
+import { toSigned8Bit } from "../../../../utils/arithmetic-utils";
 
 /**
  * JR s8. Jump s8 steps from the current address in the program

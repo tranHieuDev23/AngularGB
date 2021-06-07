@@ -4,7 +4,7 @@ import { TWO_POW_EIGHT, TWO_POW_SIXTEEN } from "src/utils/constants";
 import { randomInteger } from "src/utils/random";
 import { GbRegisterArg, GbMemArg, Gb8BitArg } from "../../gb-instruction";
 import { Add16BitRegisterInstruction, Add8BitInstruction, GbE8Instruction } from "./add";
-import { add16Bit, add8Bit, toSigned8Bit } from "../utils/arithmetic-utils";
+import { add16Bit, add8Bit, toSigned8Bit } from "../../../../utils/arithmetic-utils";
 import { initialize } from "../utils/test-utils";
 
 describe("add", () => {

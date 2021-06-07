@@ -58,3 +58,7 @@ export function subtract16Bit(a: number, b: number): ArithmeticResult {
 export function toSigned16Bit(a: number): number {
     return toSigned(a, 16);
 }
+
+export function getBit(value: number, bitId: number): number {
+    return (value >> bitId) & 1;
+}

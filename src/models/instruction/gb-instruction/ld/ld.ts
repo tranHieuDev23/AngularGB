@@ -1,7 +1,7 @@
 import { GbMmu } from "src/models/mmu/gb-mmu";
 import { GbRegisterSet } from "src/models/register/gb-registers";
 import { Gb16BitArg, Gb8BitArg, GbInstruction, GbMemArg, GbRegisterArg } from "../../gb-instruction";
-import { add16Bit, toSigned8Bit } from "../utils/arithmetic-utils";
+import { add16Bit, toSigned8Bit } from "../../../../utils/arithmetic-utils";
 
 /**
  * LD <r1> <r2>. Load the content of r2 into r1.

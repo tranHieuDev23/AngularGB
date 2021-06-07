@@ -4,7 +4,7 @@ import { EIGHT_ONE_BITS, SIXTEEN_ONE_BITS, TWO_POW_EIGHT, TWO_POW_SIXTEEN } from
 import { randomInteger } from "src/utils/random";
 import { Gb8BitArg, Gb16BitDecArg, Gb16BitIncArg, GbMemArg, GbRegisterArg, Gb16BitArg } from "../../gb-instruction";
 import { GbF8Instruction, LdInstruction } from "./ld";
-import { add16Bit, toSigned8Bit } from "../utils/arithmetic-utils";
+import { add16Bit, toSigned8Bit } from "../../../../utils/arithmetic-utils";
 import { initialize } from "../utils/test-utils";
 
 describe("ld", () => {
