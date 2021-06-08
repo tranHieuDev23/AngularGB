@@ -24,13 +24,13 @@ nz-footer {
   background: #fff;
   margin-left: auto;
   margin-right: auto;
-  padding: 24px;
+  padding: 32px;
   width: 100%;
   min-height: calc(100vh - 198px);
   text-align: center;
 
   @media (max-width: 767px) {
-    padding: 24px 12px;
+    padding: 32px 12px;
   }
 
   @media (min-width: 992px) {
