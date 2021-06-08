@@ -1,1 +1,46 @@
-<app-gameboy></app-gameboy>
+<nz-layout>
+    <nz-header>
+        <ul nz-menu nzTheme="dark" nzMode="horizontal" nzSelectable="false">
+            <li nz-menu-item class="logo">
+                <i>{{ "AngularGB" | stringOnMobile: "AGB" }}</i>
+            </li>
+            <li nz-menu-item (click)="toggleDebug()">
+                <i nz-icon nzType="bug" nzTheme="outline"></i> {{ "Debugger" | stringOnMobile }}
+            </li>
+            <li nz-menu-item>
+                <i nz-icon nzType="github" nzTheme="outline"></i> {{ "About" | stringOnMobile }}
+            </li>
+        </ul>
+    </nz-header>
+    <nz-content>
+        <div class="inner-content">
+            <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" nzJustify="space-around">
+                <div nz-col [nzSpan]="24" [nzMd]="12">
+                    <app-gameboy></app-gameboy> <br />
+                    <nz-upload class="rom-select" nzAction="https://www.mocky.io/v2/5cc8019d300000980a055e76">
+                        <button nz-button>
+                            <i nz-icon nzType="upload"></i>Select ROM
+                        </button>
+                    </nz-upload>
+                </div>
+                <div *ngIf="isDebugging" nz-col [nzSpan]="24" [nzMd]="12">
+                    <nz-tabset>
+                        <nz-tab nzTitle="CPU State">
+                            CPU State
+                        </nz-tab>
+                        <nz-tab nzTitle="Disassembler">
+                            Disassembler
+                        </nz-tab>
+                        <nz-tab nzTitle="Memory">
+                            Memory
+                        </nz-tab>
+                        <nz-tab nzTitle="Interrupts">
+                            Interrupts
+                        </nz-tab>
+                    </nz-tabset>
+                </div>
+            </div>
+        </div>
+    </nz-content>
+    <nz-footer>AngularGB</nz-footer>
+</nz-layout>
