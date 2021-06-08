@@ -16,8 +16,9 @@
         <div class="inner-content">
             <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" nzJustify="space-around">
                 <div nz-col [nzSpan]="24" [nzMd]="12">
-                    <app-gameboy></app-gameboy> <br />
-                    <nz-upload class="rom-select" nzAction="https://www.mocky.io/v2/5cc8019d300000980a055e76">
+                    <app-gameboy #gameboy></app-gameboy> <br />
+                    <nz-upload class="rom-select" nzAction="/intercepted" nzShowUploadList="false"
+                        (nzChange)="handleChange($event)">
                         <button nz-button>
                             <i nz-icon nzType="upload"></i>Select ROM
                         </button>

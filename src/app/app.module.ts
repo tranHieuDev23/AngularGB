@@ -7,7 +7,7 @@ import { en_US } from 'ng-zorro-antd/i18n';
 import { registerLocaleData } from '@angular/common';
 import en from '@angular/common/locales/en';
 import { FormsModule } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { GameboyModule } from "./components/gameboy/gameboy.module";
 import { NzLayoutModule } from 'ng-zorro-antd/layout';
@@ -19,6 +19,7 @@ import { NzGridModule } from 'ng-zorro-antd/grid';
 import { NzListModule } from 'ng-zorro-antd/list';
 import { NzTabsModule } from 'ng-zorro-antd/tabs';
 import { StringOnMobileModule } from "./pipes/string-on-mobile/string-on-mobile.module";
+import { InterceptorService } from "./services/interceptor/interceptor.service";
 
 registerLocaleData(en);
 
@@ -43,7 +44,10 @@ registerLocaleData(en);
     NzListModule,
     NzTabsModule
   ],
-  providers: [{ provide: NZ_I18N, useValue: en_US }],
+  providers: [
+    { provide: NZ_I18N, useValue: en_US },
+    { provide: HTTP_INTERCEPTORS, useClass: InterceptorService, multi: true }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
