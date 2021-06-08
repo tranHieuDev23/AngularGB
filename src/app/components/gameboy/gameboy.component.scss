@@ -1,0 +1,539 @@
+@import url("https://fonts.googleapis.com/css2?family=Gidugu&family=Merriweather+Sans:ital,wght@0,300;1,300&display=swap");
+
+$allW: #{263 * 1.12}px;
+$rotate: -27deg;
+
+$mainColor: #eee6e2;
+$mainColorLight: #f6f2ee;
+$mainColorDark: #e5ddd7;
+
+$BtnLight: #eee6e2;
+$BtnDark: #dbd5d0;
+
+$textBColor: #2039a2;
+$textPColor: #9f447e;
+$textGColor: #d8d7e1;
+
+$line: #dbd5ce;
+$lineLight: #f6f5f2;
+$lineDark: #d0c8c0;
+
+$des: #9a97a1;
+$desLight: #b9b8c3;
+$desDark: #939098;
+
+$screen: #7d7e4c;
+$screenLight: #8a9b38;
+$screenDark: #6d664b;
+
+$switch: #c8c4c5;
+$switchLight: #d9d5da;
+$switchDark: #a69999;
+
+$rightBtn: #b34c77;
+$rightBtnLight: #fad3ee;
+$rightBtnDark: #b2356b;
+
+$leftKey: #55565b;
+$leftKeyLight: #6f7075;
+$leftKeyDark: #31303a;
+$leftKeyShadow: #0a0a0a;
+
+$speaker: #b8aeaa;
+$speakerLight: #f6f0ed;
+$speakerDark: #1a0b0a;
+
+$selectStart: #a99e9e;
+$selectStartLight: #d2d0d3;
+$selectStartDark: #9e9592;
+
+.gameboy {
+  position: relative;
+  display: inline-block;
+
+  .switch {
+    width: #{14 * 1.12}px;
+    height: #{6 * 1.12}px;
+    background: $switch;
+    border-radius: #{20 * 1.12}px #{20 * 1.12}px 0 0;
+    position: absolute;
+    top: -#{5 * 1.12}px;
+    left: #{35 * 1.12}px;
+    background-image: linear-gradient(
+      0deg,
+      $switchDark,
+      $switchLight 95% 99%,
+      transparent
+    );
+  }
+
+  .base {
+    width: $allW;
+    height: #{437 * 1.12}px;
+    border-radius: #{10 * 1.12}px #{10 * 1.12}px #{60 * 1.12}px #{10 * 1.12}px;
+    background: $mainColor;
+    overflow: hidden;
+    position: relative;
+    background-image: linear-gradient(
+        90deg,
+        $lineDark,
+        transparent 6% 95%,
+        $lineLight 98% 99%,
+        transparent
+      ),
+      linear-gradient(
+        0deg,
+        $mainColor,
+        transparent 1% 97%,
+        $lineLight 99% 99%,
+        transparent,
+        $lineDark
+      );
+
+    .line__top {
+      width: $allW;
+      height: #{5 * 1.12}px;
+      top: #{22 * 1.12}px;
+      position: absolute;
+      background: $line;
+      background-image: linear-gradient(
+        90deg,
+        $lineDark,
+        transparent 8% 95%,
+        $lineLight 97% 98%,
+        transparent
+      );
+    }
+
+    .line__side__R,
+    .line__side__L {
+      width: #{5 * 1.12}px;
+      height: #{24 * 1.12}px;
+      position: absolute;
+      background: $line;
+      background-image: linear-gradient(
+        90deg,
+        $lineLight,
+        transparent 10% 40%,
+        $lineDark
+      );
+    }
+
+    .line__side__R {
+      left: #{20 * 1.12}px;
+    }
+
+    .line__side__L {
+      right: #{20 * 1.12}px;
+    }
+
+    .on__off {
+      &__btm {
+        width: #{50 * 1.12}px;
+        height: #{10 * 1.12}px;
+        background: #000;
+        position: absolute;
+        left: #{30 * 1.12}px;
+        top: #{9 * 1.12}px;
+        border-radius: #{50 * 1.12}px;
+        background: $mainColor;
+        box-shadow: #{1 * 1.12}px #{1 * 1.12}px #{1 * 1.12}px #{1 * 1.12}px
+            $lineLight inset,
+          -#{1 * 1.12}px -#{1 * 1.12}px #{1 * 1.12}px #{1 * 1.12}px $lineDark
+            inset;
+        color: $mainColorLight;
+        text-align: center;
+        font-family: "Merriweather Sans", sans-serif;
+        font-size: #{6 * 1.12}px;
+      }
+
+      &__line {
+        width: #{3 * 1.12}px;
+        height: #{12 * 1.12}px;
+        background: $mainColor;
+        position: absolute;
+        left: #{35 * 1.12}px;
+        background-image: linear-gradient(
+          0deg,
+          $mainColor,
+          transparent 35% 60%,
+          $mainColorLight 60% 80%,
+          $mainColor 90% 100%
+        );
+
+        &:nth-child(2) {
+          left: #{40 * 1.12}px;
+        }
+
+        &:nth-child(3) {
+          left: #{45 * 1.12}px;
+        }
+      }
+    }
+
+    .display {
+      width: #{224 * 1.12}px;
+      height: #{171 * 1.12}px;
+      background: $des;
+      margin: #{38 * 1.12}px auto;
+      position: relative;
+      border-radius: #{10 * 1.12}px #{10 * 1.12}px #{36 * 1.12}px #{10 * 1.12}px;
+      box-shadow: -#{1 * 1.12}px #{0 * 1.12}px #{1 * 1.12}px $desDark inset,
+        #{1 * 1.12}px 0 #{1 * 1.12}px $desDark inset,
+        0 #{1 * 1.12}px #{1 * 1.12}px $desLight inset;
+
+      .battery {
+        position: absolute;
+        top: #{62 * 1.12}px;
+        left: #{13 * 1.12}px;
+        width: #{8 * 1.12}px;
+        height: #{8 * 1.12}px;
+        border-radius: #{50 * 1.12}px;
+        background: #67534d;
+
+        &.battery-on {
+          background: #f74f2f;
+        }
+
+        &::after {
+          content: "BATTERY";
+          color: $textGColor;
+          font-size: #{5 * 1.12}px;
+          font-family: "Merriweather Sans", sans-serif;
+          font-weight: 300;
+          margin-left: -#{6 * 1.12}px;
+        }
+      }
+
+      .display__top {
+        position: absolute;
+        top: #{10 * 1.12}px;
+        left: 59%;
+        transform: translate(-50%, -50%);
+        width: #{118 * 1.12}px;
+        height: #{10 * 1.12}px;
+        background: $des;
+        color: $textGColor;
+        font-size: #{6 * 1.12}px;
+        font-family: "Merriweather Sans", sans-serif;
+        font-weight: 300;
+        text-align: center;
+      }
+
+      &__line {
+        position: absolute;
+        top: #{10 * 1.12}px;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        &__l {
+          width: #{200 * 1.12}px;
+          height: #{3 * 1.12}px;
+          background: $textPColor;
+          margin-bottom: #{2 * 1.12}px;
+          &:nth-child(2) {
+            background: $textBColor;
+          }
+        }
+      }
+
+      &__inner {
+        width: 160px;
+        height: 144px;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+      }
+    }
+
+    .left__key {
+      &__tate {
+        width: #{24 * 1.12}px;
+        height: #{67 * 1.12}px;
+        background: $leftKeyShadow;
+        position: absolute;
+        left: #{43 * 1.12}px;
+        top: #{265 * 1.12}px;
+        border-radius: #{3 * 1.12}px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      &__yoko {
+        width: #{67 * 1.12}px;
+        height: #{24 * 1.12}px;
+        background: $leftKeyShadow;
+        position: absolute;
+        left: #{21 * 1.12}px;
+        top: #{286 * 1.12}px;
+        border-radius: #{3 * 1.12}px;
+      }
+
+      &__tate__inner {
+        position: absolute;
+        left: #{45 * 1.12}px;
+        top: #{268 * 1.12}px;
+        width: #{20 * 1.12}px;
+        height: #{61 * 1.12}px;
+        border-radius: #{3 * 1.12}px;
+        background: $leftKey;
+        box-shadow: -#{1 * 1.12}px #{0 * 1.12}px #{2 * 1.12}px #{0 * 1.12}px $leftKeyLight
+            inset,
+          #{2 * 1.12}px -#{4 * 1.12}px #{2 * 1.12}px $leftKeyDark inset,
+          -#{9 * 1.12}px #{0 * 1.12}px #{3 * 1.12}px #{0 * 1.12}px rgba(0, 0, 0, 0.08),
+          -#{9 * 1.12}px #{0 * 1.12}px #{5 * 1.12}px #{0 * 1.12}px rgba(0, 0, 0, 0.05);
+        display: flex;
+        flex-direction: column;
+        justify-content: space-around;
+        align-items: center;
+
+        &__grips {
+          width: 70%;
+          height: #{5 * 1.12}px;
+          background: $leftKey;
+          box-shadow: -#{1 * 1.12}px #{0 * 1.12}px #{2 * 1.12}px #{0 * 1.12}px $leftKeyLight
+              inset,
+            #{2 * 1.12}px -#{2 * 1.12}px #{2 * 1.12}px $leftKeyDark inset;
+        }
+      }
+
+      &__yoko__inner {
+        width: #{61 * 1.12}px;
+        height: #{20 * 1.12}px;
+        position: absolute;
+        left: #{24 * 1.12}px;
+        top: #{288 * 1.12}px;
+        border-radius: #{3 * 1.12}px;
+        background: $leftKey;
+        box-shadow: -#{1 * 1.12}px #{0 * 1.12}px #{2 * 1.12}px #{0 * 1.12}px $leftKeyLight
+            inset,
+          #{2 * 1.12}px -#{4 * 1.12}px #{2 * 1.12}px $leftKeyDark inset,
+          -#{9 * 1.12}px #{0 * 1.12}px #{3 * 1.12}px #{0 * 1.12}px rgba(0, 0, 0, 0.08),
+          -#{9 * 1.12}px #{0 * 1.12}px #{5 * 1.12}px #{0 * 1.12}px rgba(0, 0, 0, 0.05);
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        &__grips {
+          width: #{5 * 1.12}px;
+          height: 65%;
+          background: $leftKey;
+          box-shadow: -#{1 * 1.12}px #{1 * 1.12}px #{1 * 1.12}px $leftKeyLight inset,
+            #{1 * 1.12}px -#{1 * 1.12}px #{1 * 1.12}px $leftKeyDark inset;
+        }
+      }
+
+      &__center {
+        width: #{20 * 1.12}px;
+        height: #{20 * 1.12}px;
+        background: $leftKey;
+        position: absolute;
+        left: #{45 * 1.12}px;
+        top: #{288 * 1.12}px;
+        border-radius: #{6 * 1.12}px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        &__cir {
+          width: #{18 * 1.12}px;
+          height: #{18 * 1.12}px;
+          border-radius: 50%;
+          box-shadow: -#{2 * 1.12}px #{2 * 1.12}px #{5 * 1.12}px $leftKeyDark inset,
+            #{2 * 1.12}px -#{4 * 1.12}px #{5 * 1.12}px $leftKeyLight inset;
+        }
+      }
+    }
+
+    .nintendo {
+      position: absolute;
+      top: #{208 * 1.12}px;
+      left: #{20 * 1.12}px;
+      color: $textBColor;
+      font-family: "Gidugu", sans-serif;
+      font-size: #{18 * 1.12}px;
+      .name {
+        font-style: italic;
+        font-weight: 300;
+        font-family: "Merriweather Sans", sans-serif;
+        margin-left: #{2 * 1.12}px;
+        .tm {
+          font-size: #{6 * 1.12}px;
+        }
+      }
+    }
+
+    .right__key {
+      position: absolute;
+      left: #{168 * 1.12}px;
+      top: #{280 * 1.12}px;
+      transform: rotate($rotate);
+
+      .right__key__btn {
+        width: #{94 * 1.12}px;
+        height: #{43 * 1.12}px;
+        border-radius: #{50 * 1.12}px;
+        background: $mainColor;
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        box-shadow: #{10 * 1.12}px #{2 * 1.12}px #{30 * 1.12}px #{3 * 1.12}px
+            $BtnLight inset,
+          -#{30 * 1.12}px -#{20 * 1.12}px #{40 * 1.12}px #{0 * 1.12}px $BtnDark
+            inset;
+        &__R,
+        &__L {
+          width: #{33 * 1.12}px;
+          height: #{33 * 1.12}px;
+          background: $rightBtn;
+          border-radius: #{50 * 1.12}px;
+          box-shadow: -#{1 * 1.12}px #{0 * 1.12}px #{3 * 1.12}px #{0 * 1.12}px $rightBtnLight
+              inset,
+            #{2 * 1.12}px -#{4 * 1.12}px #{5 * 1.12}px $rightBtnDark inset,
+            -#{9 * 1.12}px -#{2 * 1.12}px #{3 * 1.12}px -#{1 * 1.12}px rgba(0, 0, 0, 0.08),
+            -#{9 * 1.12}px -#{2 * 1.12}px #{5 * 1.12}px -#{1 * 1.12}px rgba(0, 0, 0, 0.05);
+        }
+      }
+
+      .right__key__label {
+        margin-top: #{0 * 1.12}px;
+        width: #{94 * 1.12}px;
+        display: flex;
+        justify-content: space-around;
+        color: $textBColor;
+
+        .a,
+        .b {
+          font-size: #{10 * 1.12}px;
+        }
+      }
+    }
+
+    .selectStart {
+      width: #{90 * 1.12}px;
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      position: absolute;
+      left: #{77 * 1.12}px;
+      bottom: #{50 * 1.12}px;
+
+      .selectStart__slect,
+      .selectStart__start {
+        transform: rotate($rotate);
+        text-align: center;
+
+        .start,
+        .select {
+          font-size: #{7 * 1.12}px;
+          color: $textBColor;
+        }
+      }
+      &__btn {
+        width: #{40 * 1.12}px;
+        height: #{17 * 1.12}px;
+        background: $mainColor;
+        border-radius: #{50 * 1.12}px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        overflow: hidden;
+        box-shadow: -#{3 * 1.12}px #{3 * 1.12}px #{2 * 1.12}px #{3 * 1.12}px $BtnLight
+            inset,
+          #{0 * 1.12}px -#{4 * 1.12}px #{2 * 1.12}px $BtnDark inset;
+
+        &__inner {
+          width: #{32 * 1.12}px;
+          height: #{9 * 1.12}px;
+          border-radius: #{50 * 1.12}px;
+          background: $selectStart;
+          box-shadow: -#{1 * 1.12}px #{0 * 1.12}px #{2 * 1.12}px #{2 * 1.12}px $selectStartLight
+              inset,
+            #{0 * 1.12}px #{4 * 1.12}px #{2 * 1.12}px $selectStartDark inset;
+        }
+      }
+    }
+
+    .speaker {
+      width: #{80 * 1.12}px;
+      display: flex;
+      justify-content: space-between;
+      position: absolute;
+      right: #{10 * 1.12}px;
+      bottom: #{23 * 1.12}px;
+      transform: rotate($rotate);
+
+      &__Light {
+        width: #{150 * 1.12}px;
+        height: #{50 * 1.12}px;
+        position: absolute;
+        background: $speakerLight;
+        top: #{38 * 1.12}px;
+        left: -#{30 * 1.12}px;
+        opacity: 0.7;
+      }
+
+      &__line {
+        width: #{5 * 1.12}px;
+        height: #{44 * 1.12}px;
+        border-radius: #{50 * 1.12}px;
+        background: $speaker;
+        position: relative;
+        overflow: hidden;
+
+        &::after {
+          position: absolute;
+          content: "";
+          width: #{5 * 1.12}px;
+          height: #{30 * 1.12}px;
+          background: $speakerDark;
+          border-radius: #{50 * 1.12}px;
+          top: #{0 * 1.12}px;
+          left: -#{3 * 1.12}px;
+        }
+      }
+    }
+
+    .phones {
+      width: #{40 * 1.12}px;
+      height: #{17 * 1.12}px;
+      position: absolute;
+      bottom: 0;
+      left: #{98 * 1.12}px;
+      color: $mainColorLight;
+      text-align: center;
+      font-size: #{6 * 1.12}px;
+      &__top {
+        width: #{40 * 1.12}px;
+        height: #{10 * 1.12}px;
+        border-radius: #{50 * 1.12}px;
+        background: $mainColor;
+        box-shadow: #{1 * 1.12}px #{1 * 1.12}px #{1 * 1.12}px #{1 * 1.12}px
+            $lineLight inset,
+          -#{1 * 1.12}px -#{1 * 1.12}px #{1 * 1.12}px #{1 * 1.12}px $lineDark
+            inset;
+      }
+      &__line {
+        width: #{15 * 1.12}px;
+        height: 120%;
+        background: $mainColorDark;
+        position: absolute;
+        right: #{5 * 1.12}px;
+        display: flex;
+        justify-content: space-around;
+        z-index: 10;
+        background-image: linear-gradient(
+          0deg,
+          $lineLight,
+          transparent 10% 40%
+        );
+
+        &__inner {
+          width: #{3 * 1.12}px;
+          height: 100%;
+          background: $mainColor;
+          border-radius: 0 0 #{25 * 1.12}px #{25 * 1.12}px / 0 0 #{25 * 1.12}px
+            #{25 * 1.12}px;
+        }
+      }
+    }
+  }
+}

@@ -6,7 +6,7 @@ export class CanvasLcd implements Lcd {
     constructor(
         private readonly canvas: HTMLCanvasElement,
         private readonly pixelSize: number,
-        private readonly palletes: string[]
+        private readonly palettes: string[]
     ) {
         this.graphicBuffer = [];
         for (let x = 0; x < 160; x++) {
@@ -29,7 +29,19 @@ export class CanvasLcd implements Lcd {
         }
         for (let x = 0; x < this.graphicBuffer.length; x++) {
             for (let y = 0; y < this.graphicBuffer[x].length; y++) {
-                this.drawPixel(context, x, y, this.palletes[this.graphicBuffer[x][y]]);
+                this.drawPixel(context, x, y, this.palettes[this.graphicBuffer[x][y]]);
+            }
+        }
+    }
+
+    clear(): void {
+        const context = this.canvas.getContext("2d");
+        if (!context) {
+            return;
+        }
+        for (let x = 0; x < this.graphicBuffer.length; x++) {
+            for (let y = 0; y < this.graphicBuffer[x].length; y++) {
+                this.drawPixel(context, x, y, this.palettes[0]);
             }
         }
     }
