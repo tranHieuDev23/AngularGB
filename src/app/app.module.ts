@@ -18,6 +18,8 @@ import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzGridModule } from 'ng-zorro-antd/grid';
 import { NzListModule } from 'ng-zorro-antd/list';
 import { NzTabsModule } from 'ng-zorro-antd/tabs';
+import { NzInputNumberModule } from 'ng-zorro-antd/input-number';
+import { NzInputModule } from 'ng-zorro-antd/input';
 import { StringOnMobileModule } from "./pipes/string-on-mobile/string-on-mobile.module";
 import { InterceptorService } from "./services/interceptor/interceptor.service";
 
@@ -42,7 +44,9 @@ registerLocaleData(en);
     NzGridModule,
     StringOnMobileModule,
     NzListModule,
-    NzTabsModule
+    NzTabsModule,
+    NzInputNumberModule,
+    NzInputModule
   ],
   providers: [
     { provide: NZ_I18N, useValue: en_US },

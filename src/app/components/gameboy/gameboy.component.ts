@@ -76,7 +76,7 @@ export class GameboyComponent implements OnInit {
       return;
     }
     for (let i = 0; i < frameCnt; i++) {
-      this.gameboy.step();
+      this.gameboy.frame();
     }
   }
 

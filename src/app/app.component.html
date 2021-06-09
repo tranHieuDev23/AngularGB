@@ -32,7 +32,31 @@
                         <button nz-button [disabled]="!gameboy.isPlaying()" (click)="gameboy.pause()">
                             <i nz-icon nzType="pause" nzTheme="outline"></i>
                         </button>
-                    </nz-button-group>
+                    </nz-button-group> <br />
+
+                    <nz-input-group *ngIf="isDebugging" class="gb-control" nzPrefix="Run number of steps"
+                        [nzSuffix]="stepTemplate">
+                        <nz-input-number [(ngModel)]="skipStepCnt" [nzDisabled]="!gameboy.isPaused()" [nzMin]="1"
+                            [nzStep]="1">
+                        </nz-input-number>
+                        <ng-template #stepTemplate>
+                            <button nz-button [disabled]="!gameboy.isPaused()" (click)="gameboy.step(skipStepCnt)">
+                                <i nz-icon nzType="step-forward" nzTheme="outline"></i>
+                            </button>
+                        </ng-template>
+                    </nz-input-group> <br />
+
+                    <nz-input-group *ngIf="isDebugging" class="gb-control" nzPrefix="Run number of frames"
+                        [nzSuffix]="stepTemplate">
+                        <nz-input-number [(ngModel)]="skipFrameCnt" [nzDisabled]="!gameboy.isPaused()" [nzMin]="1"
+                            [nzStep]="1">
+                        </nz-input-number>
+                        <ng-template #stepTemplate>
+                            <button nz-button [disabled]="!gameboy.isPaused()" (click)="gameboy.frame(skipFrameCnt)">
+                                <i nz-icon nzType="fast-forward" nzTheme="outline"></i>
+                            </button>
+                        </ng-template>
+                    </nz-input-group>
                 </div>
                 <div *ngIf="isDebugging" nz-col [nzSpan]="24" [nzMd]="12">
                     <nz-tabset>

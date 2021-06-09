@@ -14,6 +14,8 @@ export class AppComponent {
   public fileList: NzUploadFile[] = [];
 
   public isDebugging: boolean = false;
+  public skipStepCnt: number = 1;
+  public skipFrameCnt: number = 1;
 
   constructor(
     private readonly romLoader: RomFileLoaderService
