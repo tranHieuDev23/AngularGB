@@ -12,9 +12,18 @@
     </ng-template>
 </nz-input-group>
 
+<div *ngIf="gameboy.isRomLoaded()">
+    <div class="disassembler-control">
+        PC: {{ getPc() | toBaseString: 16 : 16 }}
+        <button nz-button class="breakpoint-control-button" (click)="scrollToPc()">
+            <i nz-icon nzType="search" nzTheme="outline"></i> Scroll to PC
+        </button>
+    </div>
+</div>
+
 <div *ngIf="gameboy.isRomLoaded() && breakpointInstruction !== null">
     <div class="disassembler-control">
-        Breakpoint address: {{ breakpointInstruction.address | toBaseString: 16 : 16 }} <br />
+        Breakpoint address: {{ breakpointInstruction.address | toBaseString: 16 : 16 }}
     </div>
     <div class="disassembler-control">
         <button nz-button class="breakpoint-control-button" (click)="scrollToBreakpoint()">
@@ -29,9 +38,9 @@
     </div>
 </div>
 
-<nz-table #disassembled *ngIf="gameboy.isRomLoaded()" [nzData]="disassembledInstructions" [nzScroll]="{ y: '540px' }"
-    nzFrontPagination="false" nzShowPagination="false" [nzVirtualItemSize]="54" [nzVirtualMaxBufferPx]="1080"
-    [nzVirtualMinBufferPx]="540">
+<nz-table #disassembled *ngIf="gameboy.isRomLoaded()" [nzData]="disassembledInstructions" [nzScroll]="{ y: '400px' }"
+    nzFrontPagination="false" nzShowPagination="false" [nzVirtualItemSize]="54" [nzVirtualMaxBufferPx]="800"
+    [nzVirtualMinBufferPx]="400">
     <thead>
         <tr>
             <th>Breakpoint</th>
@@ -43,7 +52,7 @@
     </thead>
     <tbody>
         <ng-template nz-virtual-scroll let-data let-index="index">
-            <tr>
+            <tr [ngClass]="{ 'pc-row': data.address === getPc() }">
                 <td>
                     <button *ngIf="data.address !== breakpointInstruction?.address" nz-button nzType="text"
                         (click)="setBreakpoint(index)">

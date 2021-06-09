@@ -78,6 +78,17 @@ export class DisassemblerComponent implements OnInit {
     }
   }
 
+  public getPc(): number {
+    return this.gameboy.gameboy.cpu.rs.pc.getValue();
+  }
+
+  public scrollToPc(): void {
+    const targetIndex = this.findInstructionIndex(this.getPc());
+    if (targetIndex !== null) {
+      this.scrollToIndex(targetIndex);
+    }
+  }
+
   public scrollToBreakpoint(): void {
     if (this.breakpointIndex !== null) {
       this.scrollToIndex(this.breakpointIndex);
