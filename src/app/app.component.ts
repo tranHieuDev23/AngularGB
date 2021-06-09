@@ -25,10 +25,10 @@ export class AppComponent {
 
   public handleChange(info: NzUploadChangeParam): void {
     // HACK: Disable upload file list
-    this.fileList = [];
-    if (info.file.status !== "uploading") {
+    if (info.file.status !== "done") {
       return;
     }
+    this.fileList = [];
     const file = info.file;
     this.romLoader.loadRom(file.originFileObj).then((rom) => {
       this.gameboy.runRom(rom);
