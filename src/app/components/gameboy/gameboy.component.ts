@@ -13,6 +13,7 @@ export class GameboyComponent implements OnInit {
   @ViewChild("battery", { static: true }) batter: ElementRef<HTMLElement>;
   @ViewChild("canvas", { static: true }) canvas: ElementRef<HTMLCanvasElement>;
 
+  public gameboy: Gameboy = null;
   public palettes: string[] = [
     "#ffffff",
     "#c0c0c0",
@@ -21,7 +22,6 @@ export class GameboyComponent implements OnInit {
   ];
 
   private lcd: CanvasLcd = null;
-  private gameboy: Gameboy = null;
   private gameboyIntervalId = null;
 
   ngOnInit() {

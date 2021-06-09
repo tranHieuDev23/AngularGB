@@ -7,8 +7,9 @@ import { GbRegisterSet } from "../register/gb-registers";
 const CYCLE_PER_FRAME = 70224;
 
 export class Gameboy {
-    private readonly cpu: GbCpu;
-    private readonly gpu: GbGpu;
+    public readonly cpu: GbCpu;
+    public readonly gpu: GbGpu;
+
     private currentFrameCycleCount: number;
 
     constructor(

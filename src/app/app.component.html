@@ -5,7 +5,7 @@
                 <i>{{ "AngularGB" | stringOnMobile: "AGB" }}</i>
             </li>
             <li nz-menu-item (click)="toggleDebug()">
-                <i nz-icon nzType="bug" nzTheme="outline"></i> {{ "Debugger" | stringOnMobile }}
+                <i nz-icon nzType="bug" nzTheme="outline"></i> {{ "Debug" | stringOnMobile }}
             </li>
             <li nz-menu-item>
                 <i nz-icon nzType="github" nzTheme="outline"></i> {{ "About" | stringOnMobile }}
@@ -15,7 +15,7 @@
     <nz-content>
         <div class="inner-content">
             <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" nzJustify="space-around">
-                <div nz-col [nzSpan]="24" [nzMd]="12">
+                <div nz-col [nzSpan]="24" [nzLg]="12">
                     <app-gameboy #gameboy></app-gameboy> <br />
 
                     <nz-upload class="gb-control rom-select" nzAction="/intercepted" nzShowUploadList="false"
@@ -58,10 +58,10 @@
                         </ng-template>
                     </nz-input-group>
                 </div>
-                <div *ngIf="isDebugging" nz-col [nzSpan]="24" [nzMd]="12">
+                <div *ngIf="isDebugging" nz-col [nzSpan]="24" [nzLg]="12">
                     <nz-tabset>
                         <nz-tab nzTitle="CPU State">
-                            CPU State
+                            <app-cpu-state [gameboy]="gameboy.gameboy"></app-cpu-state>
                         </nz-tab>
                         <nz-tab nzTitle="Disassembler">
                             Disassembler

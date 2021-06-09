@@ -22,6 +22,7 @@ import { NzInputNumberModule } from 'ng-zorro-antd/input-number';
 import { NzInputModule } from 'ng-zorro-antd/input';
 import { StringOnMobileModule } from "./pipes/string-on-mobile/string-on-mobile.module";
 import { InterceptorService } from "./services/interceptor/interceptor.service";
+import { CpuStateModule } from "./components/debug/cpu-state/cpu-state.module";
 
 registerLocaleData(en);
 
@@ -46,7 +47,8 @@ registerLocaleData(en);
     NzListModule,
     NzTabsModule,
     NzInputNumberModule,
-    NzInputModule
+    NzInputModule,
+    CpuStateModule
   ],
   providers: [
     { provide: NZ_I18N, useValue: en_US },

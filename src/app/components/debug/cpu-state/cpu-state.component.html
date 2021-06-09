@@ -1,0 +1,22 @@
+<span *ngIf="!gameboy">
+    Please load a ROM first
+</span>
+
+<nz-table #cpuState *ngIf="gameboy" [nzData]="gameboy.cpu.rs.getAllRegisters()">
+    <thead>
+        <tr>
+            <th>Register</th>
+            <th>Hex</th>
+            <th>Binary</th>
+            <th>Decimal</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let item of cpuState.data">
+            <td>{{ item.getName() }}</td>
+            <td>{{ item.getValue() | toBaseString: 16 : item.bitCount() }}</td>
+            <td>{{ item.getValue() | toBaseString: 2 : item.bitCount() }}</td>
+            <td>{{ item.getValue() }}</td>
+        </tr>
+    </tbody>
+</nz-table>
