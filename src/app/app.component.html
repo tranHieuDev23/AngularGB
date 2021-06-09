@@ -18,7 +18,7 @@
                 <div nz-col [nzSpan]="24" [nzMd]="12">
                     <app-gameboy #gameboy></app-gameboy> <br />
                     <nz-upload class="rom-select" nzAction="/intercepted" nzShowUploadList="false"
-                        (nzChange)="handleChange($event)">
+                        [(nzFileList)]="fileList" (nzChange)="handleChange($event)">
                         <button nz-button>
                             <i nz-icon nzType="upload"></i>Select ROM
                         </button>

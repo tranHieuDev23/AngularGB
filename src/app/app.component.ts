@@ -11,6 +11,8 @@ import { RomFileLoaderService } from "./services/rom-file-loader/rom-file-loader
 export class AppComponent {
   @ViewChild("gameboy", { static: true }) gameboy: GameboyComponent;
 
+  public fileList: NzUploadFile[] = [];
+
   public isDebugging: boolean = false;
 
   constructor(
@@ -22,6 +24,8 @@ export class AppComponent {
   }
 
   public handleChange(info: NzUploadChangeParam): void {
+    // HACK: Disable upload file list
+    this.fileList = [];
     if (info.file.status !== "uploading") {
       return;
     }

@@ -40,8 +40,8 @@ export class GameboyComponent implements OnInit {
   }
 
   public runRom(rom: number[]): void {
+    this.reset();
     if (rom === null) {
-      this.reset();
       return;
     }
     const mbc = getMbc(rom);
