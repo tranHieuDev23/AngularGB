@@ -36,4 +36,15 @@ export class Gameboy {
         }
         while (this.currentFrameCycleCount < CYCLE_PER_FRAME);
     }
+
+    public frameWithBreakpoint(breakpointAddress: number): boolean {
+        do {
+            this.step();
+            if (this.cpu.rs.pc.getValue() === breakpointAddress) {
+                return true;
+            }
+        }
+        while (this.currentFrameCycleCount < CYCLE_PER_FRAME);
+        return false;
+    }
 }

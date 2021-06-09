@@ -1,4 +1,4 @@
-import { Component, ElementRef, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { Gameboy } from 'src/models/gameboy/gameboy';
 import { CanvasLcd } from 'src/models/lcd/canvas-lcd';
 import { GbMmuImpl } from 'src/models/mmu/gb-mmu';
@@ -53,13 +53,21 @@ export class GameboyComponent implements OnInit {
     this.resume();
   }
 
-  public resume(): void {
+  public resume(breakpointAddress: number = null): void {
     if (!this.isPaused()) {
       return;
     }
-    this.gameboyIntervalId = setInterval(() => {
-      this.gameboy.frame();
-    }, 1.0 / 60);
+    if (breakpointAddress === null) {
+      this.gameboyIntervalId = setInterval(() => {
+        this.gameboy.frame();
+      }, 1.0 / 60);
+    } else {
+      this.gameboyIntervalId = setInterval(() => {
+        if (this.gameboy.frameWithBreakpoint(breakpointAddress)) {
+          this.pause();
+        }
+      }, 1.0 / 60);
+    }
     this.resumed.emit();
   }
 

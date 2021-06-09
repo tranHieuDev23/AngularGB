@@ -14,7 +14,7 @@ export class DisassemblerComponent implements OnInit {
   @Input("gameboy") gameboy: GameboyComponent;
 
   public disassembledInstructions: GbDisassembledInstruction[];
-  public breakpointIndex: number;
+  private breakpointIndex: number;
   public breakpointInstruction: GbDisassembledInstruction;
 
   constructor(
@@ -30,26 +30,14 @@ export class DisassemblerComponent implements OnInit {
     this.gameboy.stopped.subscribe(() => this.clear());
   }
 
-  public async runDisassembler(): Promise<void> {
-    if (!this.gameboy.isPaused()) {
-      return;
-    }
+  private async runDisassembler(): Promise<void> {
     this.disassembledInstructions = await this.disassembler.disassembleCurrentRomMemory(this.gameboy.gameboy);
-    this.clearBreakpoint();
-  }
-
-  public checkBreakpoint(): void {
-    if (this.breakpointIndex === null) {
-      return;
-    }
-    const { gameboy } = this.gameboy;
-    const pc = gameboy.cpu.rs.pc.getValue();
-    if (pc === this.breakpointInstruction.address) {
-      this.gameboy.pause();
+    if (this.breakpointInstruction !== null) {
+      this.breakpointIndex = this.findInstructionIndex(this.breakpointInstruction.address);
     }
   }
 
-  public clear(): void {
+  private clear(): void {
     this.disassembledInstructions = [];
     this.breakpointIndex = null;
     this.breakpointInstruction = null;
@@ -65,29 +53,28 @@ export class DisassemblerComponent implements OnInit {
   }
 
   public clearBreakpoint(): void {
+    if (this.breakpointIndex === null) {
+      return;
+    }
     this.setBreakpoint(null);
+    if (this.gameboy.isPlaying()) {
+      this.gameboy.pause();
+      this.gameboy.resume();
+    }
+  }
+
+  public runToBreakpoint(): void {
+    if (this.breakpointIndex === null || !this.gameboy.isPaused()) {
+      return;
+    }
+    this.gameboy.resume(this.breakpointInstruction.address);
   }
 
   public scrollToAddress(hexAddress: string): void {
     const address = parseInt(hexAddress, 16);
-    // Binary search to find the first instruction at address not lower than required.
-    let lastLower = -1;
-    let firstHigher = this.disassembledInstructions.length;
-    while (firstHigher - lastLower > 1) {
-      const middle = Math.floor((lastLower + firstHigher) / 2);
-      const middleAddress = this.disassembledInstructions[middle].address;
-      if (middleAddress === address) {
-        firstHigher = middle;
-        break;
-      }
-      if (middleAddress < address) {
-        lastLower = middle;
-      } else {
-        firstHigher = middle;
-      }
-    }
-    if (firstHigher < this.disassembledInstructions.length) {
-      this.scrollToIndex(firstHigher);
+    const targetIndex = this.findInstructionIndex(address);
+    if (targetIndex !== null) {
+      this.scrollToIndex(targetIndex);
     }
   }
 
@@ -95,6 +82,29 @@ export class DisassemblerComponent implements OnInit {
     if (this.breakpointIndex !== null) {
       this.scrollToIndex(this.breakpointIndex);
     }
+  }
+
+  /**
+   * Binary search to find the first instruction at address not lower than `address`.
+   * 
+   * @param address The instruction address.
+   */
+  private findInstructionIndex(address: number): number {
+    let lastLower = -1;
+    let firstHigher = this.disassembledInstructions.length;
+    while (firstHigher - lastLower > 1) {
+      const middle = Math.floor((lastLower + firstHigher) / 2);
+      const middleAddress = this.disassembledInstructions[middle].address;
+      if (middleAddress === address) {
+        return middle;
+      }
+      if (middleAddress < address) {
+        lastLower = middle;
+      } else {
+        firstHigher = middle;
+      }
+    }
+    return firstHigher === this.disassembledInstructions.length ? null : firstHigher;
   }
 
   private scrollToIndex(index: number): void {

@@ -12,7 +12,7 @@
     </ng-template>
 </nz-input-group>
 
-<div *ngIf="gameboy.isRomLoaded() && breakpointIndex !== null">
+<div *ngIf="gameboy.isRomLoaded() && breakpointInstruction !== null">
     <div class="disassembler-control">
         Breakpoint address: {{ breakpointInstruction.address | toBaseString: 16 : 16 }} <br />
     </div>
@@ -20,8 +20,11 @@
         <button nz-button class="breakpoint-control-button" (click)="scrollToBreakpoint()">
             <i nz-icon nzType="search" nzTheme="outline"></i> Scroll to breakpoint
         </button>
-        <button nz-button class="breakpoint-control-button" (click)="scrollToBreakpoint()">
-            <i nz-icon nzType="fast-forward" nzTheme="outline"></i> Skip to breakpoint
+        <button nz-button class="breakpoint-control-button" (click)="runToBreakpoint()">
+            <i nz-icon nzType="caret-right" nzTheme="outline"></i> Run to breakpoint
+        </button>
+        <button nz-button class="breakpoint-control-button" (click)="clearBreakpoint()">
+            <i nz-icon nzType="close" nzTheme="outline"></i> Clear breakpoint
         </button>
     </div>
 </div>
@@ -41,10 +44,12 @@
         <ng-template nz-virtual-scroll let-data let-index="index">
             <tr>
                 <td>
-                    <button *ngIf="index !== breakpointIndex" nz-button nzType="text" (click)="setBreakpoint(index)">
+                    <button *ngIf="data.address !== breakpointInstruction?.address" nz-button nzType="text"
+                        (click)="setBreakpoint(index)">
                         <i nz-icon nzType="pause-circle" nzTheme="outline"></i>
                     </button>
-                    <button *ngIf="index === breakpointIndex" nz-button nzType="text" (click)="clearBreakpoint()">
+                    <button *ngIf="data.address === breakpointInstruction?.address" nz-button nzType="text"
+                        (click)="clearBreakpoint()">
                         <i nz-icon nzType="close-circle" nzTheme="twotone" nzTwotoneColor="#f5222d"></i>
                     </button>
                 </td>
