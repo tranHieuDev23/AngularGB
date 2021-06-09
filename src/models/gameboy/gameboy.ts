@@ -25,7 +25,7 @@ export class Gameboy {
         if (this.currentFrameCycleCount >= CYCLE_PER_FRAME) {
             this.currentFrameCycleCount = 0;
         }
-        const deltaCycleCount = this.cpu.step();
+        const deltaCycleCount = this.cpu.step().cycleCount;
         this.gpu.step(deltaCycleCount);
         this.currentFrameCycleCount += deltaCycleCount;
     }

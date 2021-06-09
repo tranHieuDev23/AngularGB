@@ -13,6 +13,7 @@ export class GameboyComponent implements OnInit {
   @ViewChild("battery", { static: true }) batter: ElementRef<HTMLElement>;
   @ViewChild("canvas", { static: true }) canvas: ElementRef<HTMLCanvasElement>;
 
+  public rom: number[] = null;
   public gameboy: Gameboy = null;
   public palettes: string[] = [
     "#ffffff",
@@ -40,6 +41,7 @@ export class GameboyComponent implements OnInit {
     if (rom === null) {
       return;
     }
+    this.rom = rom;
     const mbc = getMbc(rom);
     this.gameboy = new Gameboy(new GbMmuImpl(mbc), this.lcd);
     this.resume();
@@ -88,6 +90,7 @@ export class GameboyComponent implements OnInit {
     if (this.isPlaying()) {
       this.pause();
     }
+    this.rom = null;
     this.gameboy = null;
   }
 }

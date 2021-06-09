@@ -1,7 +1,25 @@
+import { SIXTEEN_ONE_BITS } from "src/utils/constants";
+import { GbInstruction } from "../instruction/gb-instruction";
 import { GB_0XCB_INSTRUCTION_SET, GB_INSTRUCTION_SET } from "../instruction/gb-instruction-set";
 import { GbMmu } from "../mmu/gb-mmu";
 import { GbRegisterSet } from "../register/gb-registers";
 import { InstructionNotImplemented } from "./cpu-errors";
+
+export class GbDisassembledInstruction {
+    constructor(
+        public readonly address: number,
+        public readonly opcode: number,
+        public readonly instruction: GbInstruction,
+        public readonly args: number[]
+    ) { }
+}
+
+export class GbCpuStepInfo {
+    constructor(
+        public readonly instruction: GbDisassembledInstruction,
+        public readonly cycleCount: number
+    ) { }
+}
 
 export class GbCpu {
     constructor(
@@ -14,32 +32,42 @@ export class GbCpu {
         mmu.reset();
     }
 
-    public step(): number {
-        let pc = this.rs.getPc().getValue();
-        this.rs.getPc().setValue(pc + 1);
-        let opCode = this.mmu.readByte(pc);
+    public disassembleInstruction(address: number): GbDisassembledInstruction {
+        const startAddress = address;
+        let opcode = this.mmu.readByte(address);
+        address = (address + 1) & SIXTEEN_ONE_BITS;
         let instruction = null;
-        let instructionArgStart = null;
-        if (opCode === 0xcb) {
-            pc = this.rs.getPc().getValue();
-            this.rs.getPc().setValue(pc + 1);
-            opCode = this.mmu.readByte(pc);
-            instruction = GB_0XCB_INSTRUCTION_SET[opCode];
-            instructionArgStart = 2;
+        let argStart = null;
+        if (opcode === 0xcb) {
+            let opCodeByte2 = this.mmu.readByte(address);
+            address = (address + 1) & SIXTEEN_ONE_BITS;
+            opcode = (opcode << 8) | opCodeByte2;
+            instruction = GB_0XCB_INSTRUCTION_SET[opCodeByte2];
+            argStart = 2;
         } else {
-            instruction = GB_INSTRUCTION_SET[opCode];
-            instructionArgStart = 1;
+            instruction = GB_INSTRUCTION_SET[opcode];
+            argStart = 1;
         }
         if (!instruction) {
-            throw new InstructionNotImplemented(opCode);
+            throw new InstructionNotImplemented(opcode);
         }
         const args: number[] = [];
-        for (let i = instructionArgStart; i < instruction.getLength(); i++) {
-            pc = this.rs.getPc().getValue();
-            this.rs.getPc().setValue(pc + 1);
-            args.push(this.mmu.readByte(pc));
+        for (let i = argStart; i < instruction.getLength(); i++) {
+            args.push(this.mmu.readByte(address));
+            address = (address + 1) & SIXTEEN_ONE_BITS;
         }
-        const cycleCount = instruction.run(this.rs, this.mmu, args);
-        return cycleCount;
+        return new GbDisassembledInstruction(
+            startAddress, opcode, instruction, args
+        );
+    }
+
+    public step(): GbCpuStepInfo {
+        const pc = this.rs.pc.getValue();
+        const disassembled = this.disassembleInstruction(pc);
+        this.rs.pc.setValue(pc + disassembled.instruction.getLength());
+        const cycleCount = disassembled.instruction.run(this.rs, this.mmu, disassembled.args);
+        return new GbCpuStepInfo(
+            disassembled, cycleCount
+        );
     }
 }

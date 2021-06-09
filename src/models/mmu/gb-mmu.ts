@@ -6,7 +6,7 @@ import { Mmu } from "./mmu";
 
 export interface GbMmu extends Mmu { }
 
-export class GbTestMmu implements Mmu {
+export class GbTestMmu implements GbMmu {
     private readonly ram: number[] = new Array<number>(TWO_POW_SIXTEEN);
 
     readByte(address: number): number {
@@ -52,7 +52,7 @@ export const IO_REG_START = 0xff00;
 export const HIGH_RAM_START = 0xff80;
 export const IE_REG = 0xffff;
 
-export class GbMmuImpl implements Mmu {
+export class GbMmuImpl implements GbMmu {
     private readonly vram: number[] = new Array<number>(EXT_RAM_START - VRAM_START);
     private readonly workRam: number[] = new Array<number>(WORK_RAM_START - EXT_RAM_START);
     private readonly spriteRam: number[] = new Array<number>(FORBIDDEN_RAM_START - SPRITE_RAM_START);
@@ -183,5 +183,35 @@ export class GbMmuImpl implements Mmu {
 
     public getIsBootingUp(): number {
         return this.ioRam[0xff50 - IO_REG_START];
+    }
+}
+
+export class GbDisassemblerMmu implements GbMmu {
+    constructor(
+        private readonly ram: number[]
+    ) { }
+
+    readByte(address: number): number {
+        return this.ram[address];
+    }
+
+    readWord(address: number): number {
+        return (this.ram[address + 1] << 8) | this.ram[address];
+    }
+
+    writeByte(address: number, value: number): void {
+        // Purposefully left unimplemented
+    }
+
+    writeWord(address: number, value: number): void {
+        // Purposefully left unimplemented
+    }
+
+    randomize(): void {
+        // Purposefully left unimplemented
+    }
+
+    reset(): void {
+        // Purposefully left unimplemented
     }
 }

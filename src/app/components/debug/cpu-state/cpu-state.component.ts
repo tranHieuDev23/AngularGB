@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { Gameboy } from 'src/models/gameboy/gameboy';
+import { GameboyComponent } from '../../gameboy/gameboy.component';
 
 @Component({
   selector: 'app-cpu-state',
@@ -7,5 +7,5 @@ import { Gameboy } from 'src/models/gameboy/gameboy';
   styleUrls: ['./cpu-state.component.scss']
 })
 export class CpuStateComponent {
-  @Input("gameboy") gameboy: Gameboy;
+  @Input("gameboy") gameboy: GameboyComponent;
 }

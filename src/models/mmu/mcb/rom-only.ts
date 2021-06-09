@@ -22,6 +22,9 @@ export class RomMcb implements Mbc {
     }
 
     readRam(address: number): number {
+        if (!this.hasRam) {
+            throw new Error(`Trying to read nonexistent external RAM: ${address}`);
+        }
         return this.extRam[address - EXT_RAM_START];
     }
 

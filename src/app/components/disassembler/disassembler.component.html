@@ -1,0 +1,43 @@
+<span *ngIf="!gameboy.isRomLoaded()">
+    Please load a ROM first
+</span>
+
+<span *ngIf="gameboy.isRomLoaded() && !gameboy.isPaused()">
+    Disassembler only runs when game is paused.
+</span>
+
+<button *ngIf="gameboy.isPaused()" nz-button (click)="runDisassembler()">
+    Run disassembler
+</button>
+
+<nz-table #disassembled *ngIf="gameboy.isPaused()" [nzData]="disassembledInstructions">
+    <thead>
+        <tr>
+            <th>Breakpoint</th>
+            <th>Address</th>
+            <th>Opcode</th>
+            <th>Arguments</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let item of disassembled.data; index as i">
+            <td>
+                <button *ngIf="i !== breakpointIndex" nz-button nzType="text" (click)="setBreakpoint(i)">
+                    <i nz-icon nzType="pause-circle" nzTheme="outline"></i>
+                </button>
+                <button *ngIf="i === breakpointIndex" nz-button nzType="text" (click)="setBreakpoint(null)">
+                    <i nz-icon nzType="close-circle" nzTheme="twotone" nzTwotoneColor="#f5222d"></i>
+                </button>
+            </td>
+            <td>
+                {{ item.address | toBaseString: 16 : 16 }}
+            </td>
+            <td>
+                {{ item.opcode | toBaseString: 16 : 8 }}
+            </td>
+            <td>
+                {{ item.args | toBaseString: 16 : 16 }}
+            </td>
+        </tr>
+    </tbody>
+</nz-table>

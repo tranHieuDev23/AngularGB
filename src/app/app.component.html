@@ -58,13 +58,14 @@
                         </ng-template>
                     </nz-input-group>
                 </div>
+
                 <div *ngIf="isDebugging" nz-col [nzSpan]="24" [nzLg]="12">
                     <nz-tabset>
                         <nz-tab nzTitle="CPU State">
-                            <app-cpu-state [gameboy]="gameboy.gameboy"></app-cpu-state>
+                            <app-cpu-state [gameboy]="gameboy"></app-cpu-state>
                         </nz-tab>
                         <nz-tab nzTitle="Disassembler">
-                            Disassembler
+                            <app-disassembler [gameboy]="gameboy"></app-disassembler>
                         </nz-tab>
                         <nz-tab nzTitle="Memory">
                             Memory
