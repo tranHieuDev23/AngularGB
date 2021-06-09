@@ -142,5 +142,5 @@ export enum Flag {
 }
 
 export const FLAG_NAMES = [
-    "Z", "O", "H", "C"
+    "", "", "", "", "C", "H", "O", "Z"
 ]

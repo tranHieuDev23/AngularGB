@@ -36,6 +36,7 @@
         <tr>
             <th>Breakpoint</th>
             <th>Address</th>
+            <th>Instruction</th>
             <th>Opcode</th>
             <th>Arguments</th>
         </tr>
@@ -55,6 +56,9 @@
                 </td>
                 <td>
                     {{ data.address | toBaseString: 16 : 16 }}
+                </td>
+                <td>
+                    {{ data.instructionName }}
                 </td>
                 <td>
                     {{ data.opcode | toBaseString: 16 : 8 }}

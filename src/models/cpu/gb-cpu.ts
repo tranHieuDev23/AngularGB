@@ -6,12 +6,16 @@ import { GbRegisterSet } from "../register/gb-registers";
 import { InstructionNotImplemented } from "./cpu-errors";
 
 export class GbDisassembledInstruction {
+    public readonly instructionName: string;
+
     constructor(
         public readonly address: number,
         public readonly opcode: number,
         public readonly instruction: GbInstruction,
         public readonly args: number[]
-    ) { }
+    ) {
+        this.instructionName = instruction.getName();
+    }
 }
 
 export class GbCpuStepInfo {
