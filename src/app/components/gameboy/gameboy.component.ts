@@ -24,30 +24,70 @@ export class GameboyComponent implements OnInit {
   private gameboy: Gameboy = null;
   private gameboyIntervalId = null;
 
-  constructor() { }
-
   ngOnInit() {
     this.lcd = new CanvasLcd(this.canvas.nativeElement, 1, this.palettes);
     this.lcd.clear();
   }
 
-  public reset(): void {
-    this.lcd.clear();
-    if (this.gameboy) {
-      clearInterval(this.gameboyIntervalId);
-      this.gameboy = null;
-    }
-  }
+  public isRomLoaded(): boolean { return this.gameboy !== null; }
 
-  public runRom(rom: number[]): void {
+  public isPlaying(): boolean { return this.gameboyIntervalId !== null; }
+
+  public isPaused(): boolean { return this.isRomLoaded() && !this.isPlaying(); }
+
+  public loadRom(rom: number[]): void {
     this.reset();
     if (rom === null) {
       return;
     }
     const mbc = getMbc(rom);
     this.gameboy = new Gameboy(new GbMmuImpl(mbc), this.lcd);
+    this.resume();
+  }
+
+  public resume(): void {
+    if (!this.isPaused()) {
+      return;
+    }
     this.gameboyIntervalId = setInterval(() => {
       this.gameboy.frame();
     }, 1.0 / 60);
+  }
+
+  public pause(): void {
+    if (this.isPaused()) {
+      return;
+    }
+    clearInterval(this.gameboyIntervalId);
+    this.gameboyIntervalId = null;
+  }
+
+  public step(stepCnt: number = 1): void {
+    if (!this.isPaused()) {
+      return;
+    }
+    for (let i = 0; i < stepCnt; i++) {
+      this.gameboy.step();
+    }
+  }
+
+  public frame(frameCnt: number = 1): void {
+    if (!this.isPaused()) {
+      return;
+    }
+    for (let i = 0; i < frameCnt; i++) {
+      this.gameboy.step();
+    }
+  }
+
+  public reset(): void {
+    if (!this.isRomLoaded()) {
+      return;
+    }
+    this.lcd.clear();
+    if (this.isPlaying()) {
+      this.pause();
+    }
+    this.gameboy = null;
   }
 }

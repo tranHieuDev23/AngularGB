@@ -17,12 +17,22 @@
             <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" nzJustify="space-around">
                 <div nz-col [nzSpan]="24" [nzMd]="12">
                     <app-gameboy #gameboy></app-gameboy> <br />
-                    <nz-upload class="rom-select" nzAction="/intercepted" nzShowUploadList="false"
+
+                    <nz-upload class="gb-control rom-select" nzAction="/intercepted" nzShowUploadList="false"
                         [(nzFileList)]="fileList" (nzChange)="handleChange($event)">
                         <button nz-button>
                             <i nz-icon nzType="upload"></i>Select ROM
                         </button>
-                    </nz-upload>
+                    </nz-upload> <br />
+
+                    <nz-button-group class="gb-control">
+                        <button nz-button [disabled]="!gameboy.isPaused()" (click)="gameboy.resume()">
+                            <i nz-icon nzType="caret-right" nzTheme="outline"></i>
+                        </button>
+                        <button nz-button [disabled]="!gameboy.isPlaying()" (click)="gameboy.pause()">
+                            <i nz-icon nzType="pause" nzTheme="outline"></i>
+                        </button>
+                    </nz-button-group>
                 </div>
                 <div *ngIf="isDebugging" nz-col [nzSpan]="24" [nzMd]="12">
                     <nz-tabset>

@@ -31,7 +31,7 @@ export class AppComponent {
     this.fileList = [];
     const file = info.file;
     this.romLoader.loadRom(file.originFileObj).then((rom) => {
-      this.gameboy.runRom(rom);
+      this.gameboy.loadRom(rom);
     });
   };
 }
