@@ -34,7 +34,7 @@
                         </button>
                     </nz-button-group> <br />
 
-                    <nz-input-group *ngIf="isDebugging" class="gb-control" nzPrefix="Run number of steps"
+                    <nz-input-group *ngIf="isDebugging" class="gb-control" nzPrefix="Skip steps"
                         [nzSuffix]="stepTemplate">
                         <nz-input-number [(ngModel)]="skipStepCnt" [nzDisabled]="!gameboy.isPaused()" [nzMin]="1"
                             [nzStep]="1">
@@ -46,7 +46,7 @@
                         </ng-template>
                     </nz-input-group> <br />
 
-                    <nz-input-group *ngIf="isDebugging" class="gb-control" nzPrefix="Run number of frames"
+                    <nz-input-group *ngIf="isDebugging" class="gb-control" nzPrefix="Skip frames"
                         [nzSuffix]="stepTemplate">
                         <nz-input-number [(ngModel)]="skipFrameCnt" [nzDisabled]="!gameboy.isPaused()" [nzMin]="1"
                             [nzStep]="1">

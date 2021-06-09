@@ -1,5 +1,6 @@
 import { Component, ViewChild } from "@angular/core";
 import { NzUploadChangeParam, NzUploadFile } from "ng-zorro-antd/upload";
+import { environment } from "src/environments/environment";
 import { GameboyComponent } from "./components/gameboy/gameboy.component";
 import { RomFileLoaderService } from "./services/rom-file-loader/rom-file-loader.service";
 
@@ -13,7 +14,7 @@ export class AppComponent {
 
   public fileList: NzUploadFile[] = [];
 
-  public isDebugging: boolean = false;
+  public isDebugging: boolean = !environment.production;
   public skipStepCnt: number = 1;
   public skipFrameCnt: number = 1;
 

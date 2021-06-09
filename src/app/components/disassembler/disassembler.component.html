@@ -2,11 +2,31 @@
     Please load a ROM first
 </span>
 
-<span *ngIf="gameboy.isRomLoaded() && !gameboy.isPaused()">
-    Disassembler only runs when game is paused.
-</span>
+<nz-input-group *ngIf="gameboy.isRomLoaded()" class="disassembler-control" nzAddOnBefore="Jump to address" nzPrefix="0x"
+    [nzSuffix]="addressJumpTemplate">
+    <input #addressJumpInput type="text" nz-input (keydown.enter)="scrollToAddress(addressJumpInput.value)" />
+    <ng-template #addressJumpTemplate>
+        <button nz-button (click)="scrollToAddress(addressJumpInput.value)">
+            <i nz-icon nzType="search" nzTheme="outline"></i>
+        </button>
+    </ng-template>
+</nz-input-group>
 
-<nz-table #disassembled *ngIf="gameboy.isPaused()" [nzData]="disassembledInstructions" [nzScroll]="{ y: '540px' }"
+<div *ngIf="gameboy.isRomLoaded() && breakpointIndex !== null">
+    <div class="disassembler-control">
+        Breakpoint address: {{ breakpointInstruction.address | toBaseString: 16 : 16 }} <br />
+    </div>
+    <div class="disassembler-control">
+        <button nz-button class="breakpoint-control-button" (click)="scrollToBreakpoint()">
+            <i nz-icon nzType="search" nzTheme="outline"></i> Scroll to breakpoint
+        </button>
+        <button nz-button class="breakpoint-control-button" (click)="scrollToBreakpoint()">
+            <i nz-icon nzType="fast-forward" nzTheme="outline"></i> Skip to breakpoint
+        </button>
+    </div>
+</div>
+
+<nz-table #disassembled *ngIf="gameboy.isRomLoaded()" [nzData]="disassembledInstructions" [nzScroll]="{ y: '540px' }"
     nzFrontPagination="false" nzShowPagination="false" [nzVirtualItemSize]="54" [nzVirtualMaxBufferPx]="1080"
     [nzVirtualMinBufferPx]="540">
     <thead>
@@ -18,7 +38,7 @@
         </tr>
     </thead>
     <tbody>
-        <ng-template nz-virtual-scroll let-data let-index>
+        <ng-template nz-virtual-scroll let-data let-index="index">
             <tr>
                 <td>
                     <button *ngIf="index !== breakpointIndex" nz-button nzType="text" (click)="setBreakpoint(index)">

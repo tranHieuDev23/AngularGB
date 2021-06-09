@@ -5,6 +5,7 @@ import { NzTableModule } from 'ng-zorro-antd/table';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { ToBaseStringModule } from 'src/app/pipes/to-base-string/to-base-string.module';
+import { NzInputModule } from 'ng-zorro-antd/input';
 
 
 
@@ -17,6 +18,7 @@ import { ToBaseStringModule } from 'src/app/pipes/to-base-string/to-base-string.
     NzTableModule,
     NzButtonModule,
     NzIconModule,
+    NzInputModule,
     ToBaseStringModule
   ],
   exports: [

@@ -15,8 +15,8 @@ export class GameboyComponent implements OnInit {
 
   @Output("resumed") public resumed = new EventEmitter<void>();
   @Output("paused") public paused = new EventEmitter<void>();
-  @Output("stepped") public stepped = new EventEmitter<void>();
-  @Output("framed") public framed = new EventEmitter<void>();
+  @Output("stepSkipped") public stepSkipped = new EventEmitter<void>();
+  @Output("frameSkipped") public frameSkipped = new EventEmitter<void>();
   @Output("stopped") public stopped = new EventEmitter<void>();
 
   public rom: number[] = null;
@@ -79,7 +79,7 @@ export class GameboyComponent implements OnInit {
     for (let i = 0; i < stepCnt; i++) {
       this.gameboy.step();
     }
-    this.stepped.emit();
+    this.stepSkipped.emit();
   }
 
   public frame(frameCnt: number = 1): void {
@@ -89,7 +89,7 @@ export class GameboyComponent implements OnInit {
     for (let i = 0; i < frameCnt; i++) {
       this.gameboy.frame();
     }
-    this.framed.emit();
+    this.frameSkipped.emit();
   }
 
   public reset(): void {
