@@ -9,6 +9,10 @@ import { GbInstruction } from "../../gb-instruction";
  * instruction set the IME flag.
  */
 export class RetiInstruction implements GbInstruction {
+    getName(): string {
+        return "RETI";
+    }
+
     getLength(): number {
         return 1;
     }

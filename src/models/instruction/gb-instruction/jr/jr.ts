@@ -13,6 +13,10 @@ export class JrInstruction implements GbInstruction {
         return 2;
     }
 
+    getName(): string {
+        return "JR s8";
+    }
+
     getOpcode(): number {
         return 0x18;
     }
@@ -36,6 +40,10 @@ export class JrFlagInstruction implements GbInstruction {
         private readonly opcode: number,
         private readonly r1: GbFlagArg | GbNotArg
     ) { }
+
+    getName(): string {
+        return `JR ${this.r1.getName()} s8`;
+    }
 
     getLength(): number {
         return 2;

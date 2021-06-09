@@ -19,6 +19,10 @@ export class OrInstruction implements GbInstruction {
         this.cycleCount = r1 instanceof GbRegisterArg ? 1 : 2;
     }
 
+    getName(): string {
+        return `OR ${this.r1.getName()}`;
+    }
+
     getLength(): number {
         return this.length;
     }

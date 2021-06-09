@@ -16,6 +16,10 @@ export class DaaInstruction implements GbInstruction {
         return 0x27;
     }
 
+    getName(): string {
+        return `DAA`;
+    }
+
     run(rs: GbRegisterSet, mmu: GbMmu, args: number[]): number {
         let a = rs.a.getValue();
         if (rs.getOperationFlag() === 1) {

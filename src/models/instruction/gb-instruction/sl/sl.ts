@@ -23,6 +23,10 @@ export class SlaInstruction implements GbInstruction {
         this.cycleCount = r1 instanceof GbRegisterArg ? 2 : 4;
     }
 
+    getName(): string {
+        return `SLA ${this.r1.getName()}`;
+    }
+
     getLength(): number {
         return 2;
     }

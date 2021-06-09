@@ -23,6 +23,10 @@ export class RlcInstruction implements GbInstruction {
         this.cycleCount = r1 instanceof GbRegisterArg ? 2 : 4;
     }
 
+    getName(): string {
+        return `RLC ${this.r1.getName()}`;
+    }
+
     getLength(): number {
         return 2;
     }
@@ -53,6 +57,10 @@ export class RlcInstruction implements GbInstruction {
  * in both the CY flag and bit 0 of register A.
  */
 export class Gb07Instruction implements GbInstruction {
+    getName(): string {
+        return "RLCA";
+    }
+
     getLength(): number {
         return 1;
     }

@@ -22,6 +22,10 @@ export class CpInstruction implements GbInstruction {
         this.cycleCount = r1 instanceof GbRegisterArg ? 1 : 2;
     }
 
+    getName(): string {
+        return `CP ${this.r1.getName()}`;
+    }
+
     getLength(): number {
         return this.length;
     }

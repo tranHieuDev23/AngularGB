@@ -22,6 +22,10 @@ export class SraInstruction implements GbInstruction {
         this.cycleCount = r1 instanceof GbRegisterArg ? 2 : 4;
     }
 
+    getName(): string {
+        return `SRA ${this.r1.getName()}`;
+    }
+
     getLength(): number {
         return 2;
     }
@@ -61,6 +65,10 @@ export class SrlInstruction implements GbInstruction {
         private readonly r1: GbRegisterArg | GbMemArg
     ) {
         this.cycleCount = r1 instanceof GbRegisterArg ? 2 : 4;
+    }
+
+    getName(): string {
+        return `SRL ${this.r1.getName()}`;
     }
 
     getLength(): number {

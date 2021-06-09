@@ -23,6 +23,10 @@ export class RrInstruction implements GbInstruction {
         this.cycleCount = r1 instanceof GbRegisterArg ? 2 : 4;
     }
 
+    getName(): string {
+        return `RR ${this.r1.getName()}`;
+    }
+
     getLength(): number {
         return 2;
     }
@@ -54,6 +58,10 @@ export class RrInstruction implements GbInstruction {
  * contents of the carry flag are copied to bit 7.
  */
 export class Gb1fInstruction implements GbInstruction {
+    getName(): string {
+        return "RRA";
+    }
+
     getLength(): number {
         return 1;
     }

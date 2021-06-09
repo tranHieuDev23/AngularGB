@@ -23,6 +23,10 @@ export class Add8BitInstruction implements GbInstruction {
         this.cycleCount = r2 instanceof GbRegisterArg ? 1 : 2;
     }
 
+    getName(): string {
+        return `ADC ${this.r1.getName()} ${this.r2.getName()}`;
+    }
+
     getLength(): number {
         return this.length;
     }
@@ -57,6 +61,10 @@ export class Add16BitRegisterInstruction implements GbInstruction {
         private readonly r2: GbRegisterArg
     ) { }
 
+    getName(): string {
+        return `ADD ${this.r1.getName()} ${this.r2.getName()}`;
+    }
+
     getLength(): number {
         return 1;
     }
@@ -86,6 +94,10 @@ export class Add16BitRegisterInstruction implements GbInstruction {
 export class GbE8Instruction implements GbInstruction {
     getLength(): number {
         return 2;
+    }
+
+    getName(): string {
+        return "ADD SP s8";
     }
 
     getOpcode(): number {

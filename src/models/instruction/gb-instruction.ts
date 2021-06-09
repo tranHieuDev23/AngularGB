@@ -1,6 +1,6 @@
 import { SIXTEEN_ONE_BITS } from "src/utils/constants";
 import { GbMmu } from "../mmu/gb-mmu";
-import { Flag, GbRegisterSet, RegisterName, REGISTERS_8_BIT } from "../register/gb-registers";
+import { Flag, FLAG_NAMES, GbRegisterSet, RegisterName, REGISTERS_8_BIT, REGISTER_NAMES } from "../register/gb-registers";
 import { Register } from "../register/register";
 import { Instruction, InstructionArg, InstructionWritableArg } from "./instruction";
 
@@ -17,6 +17,10 @@ export class GbRegisterArg implements GbInstructionWritableArg {
         private readonly registerName: RegisterName
     ) {
         this.bitCount = REGISTERS_8_BIT.includes(registerName) ? 8 : 16;
+    }
+
+    getName(): string {
+        return REGISTER_NAMES[this.registerName.valueOf()];
     }
 
     getArgsTakenCount(): number {
@@ -45,6 +49,10 @@ export class Gb8BitArg implements GbInstructionArg {
         private readonly argIndex: number
     ) { }
 
+    getName(): string {
+        return "d8";
+    }
+
     getArgsTakenCount(): number {
         return 1;
     }
@@ -63,6 +71,10 @@ export class Gb16BitArg implements GbInstructionArg {
         private readonly argIndex: number
     ) { }
 
+    getName(): string {
+        return "d16";
+    }
+
     getArgsTakenCount(): number {
         return 2;
     }
@@ -80,6 +92,10 @@ export class GbMemArg implements GbInstructionWritableArg {
     constructor(
         private readonly addressArg: GbInstructionArg
     ) { }
+
+    getName(): string {
+        return `(${this.addressArg.getName()})`;
+    }
 
     getArgsTakenCount(): number {
         return this.addressArg.getArgsTakenCount();
@@ -109,6 +125,10 @@ export class GbFlagArg implements GbInstructionWritableArg {
         private readonly flag: Flag
     ) { }
 
+    getName(): string {
+        return FLAG_NAMES[this.flag.valueOf()];
+    }
+
     getArgsTakenCount(): number {
         return 0;
     }
@@ -131,6 +151,10 @@ export class Gb16BitIncArg implements GbInstructionArg {
         private readonly baseArg: GbInstructionWritableArg
     ) { }
 
+    getName(): string {
+        return `${this.baseArg.getName()}+`;
+    }
+
     getArgsTakenCount(): number {
         return this.baseArg.getArgsTakenCount();
     }
@@ -150,6 +174,10 @@ export class Gb16BitDecArg implements GbInstructionArg {
         private readonly baseArg: GbInstructionWritableArg
     ) { }
 
+    getName(): string {
+        return `${this.baseArg.getName()}-`;
+    }
+
     getArgsTakenCount(): number {
         return this.baseArg.getArgsTakenCount();
     }
@@ -168,6 +196,10 @@ export class GbNotArg implements GbInstructionWritableArg {
     constructor(
         private readonly flagArg: GbFlagArg
     ) { }
+
+    getName(): string {
+        return `N${this.flagArg.getName()}`;
+    }
 
     getArgsTakenCount(): number {
         return 0;

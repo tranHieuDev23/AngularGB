@@ -15,6 +15,10 @@ export class HaltInstruction implements GbInstruction {
         return 1;
     }
 
+    getName(): string {
+        return "HALT";
+    }
+
     getOpcode(): number {
         return 0x76;
     }

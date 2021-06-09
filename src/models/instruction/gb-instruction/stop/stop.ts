@@ -11,6 +11,10 @@ import { GbInstruction } from "../../gb-instruction";
  * TODO: Implement this. Currently acts like a NOP.
  */
 export class StopInstruction implements GbInstruction {
+    getName(): string {
+        return "STOP";
+    }
+
     getLength(): number {
         return 2;
     }

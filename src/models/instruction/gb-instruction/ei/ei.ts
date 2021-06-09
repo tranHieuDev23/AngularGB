@@ -11,6 +11,10 @@ export class EiInstruction implements GbInstruction {
         return 1;
     }
 
+    getName(): string {
+        return "EI";
+    }
+
     getOpcode(): number {
         return 0xfb;
     }

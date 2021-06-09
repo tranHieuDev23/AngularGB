@@ -18,6 +18,10 @@ export class Inc8BitInstruction implements GbInstruction {
         this.cycleCount = r1 instanceof GbRegisterArg ? 1 : 3;
     }
 
+    getName(): string {
+        return `INC ${this.r1.getName()}`;
+    }
+
     getLength(): number {
         return 1;
     }
@@ -47,6 +51,10 @@ export class Inc16BitInstruction implements GbInstruction {
         private readonly opCode: number,
         private readonly r1: GbRegisterArg
     ) { }
+
+    getName(): string {
+        return `INC ${this.r1.getName()}`;
+    }
 
     getLength(): number {
         return 1;

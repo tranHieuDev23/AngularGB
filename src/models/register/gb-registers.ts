@@ -119,6 +119,10 @@ export enum RegisterName {
     A, B, C, D, E, F, H, L, SP, PC, AF, BC, DE, HL
 }
 
+export const REGISTER_NAMES = [
+    "A", "B", "C", "D", "E", "F", "H", "L", "SP", "PC", "AF", "BC", "DE", "HL"
+]
+
 export const REGISTERS_8_BIT = [
     RegisterName.A, RegisterName.B, RegisterName.C, RegisterName.D,
     RegisterName.E, RegisterName.F, RegisterName.H, RegisterName.L
@@ -136,3 +140,7 @@ export enum Flag {
     HalfCarry = 5,
     Carry = 4
 }
+
+export const FLAG_NAMES = [
+    "Z", "O", "H", "C"
+]

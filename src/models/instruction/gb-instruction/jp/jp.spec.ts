@@ -1,4 +1,4 @@
-import { GbMmu, GbTestMmu } from "src/models/mmu/gb-mmu";
+import { GbTestMmu } from "src/models/mmu/gb-mmu";
 import { Flag, GbRegisterSet, RegisterName } from "src/models/register/gb-registers";
 import { TWO_POW_SIXTEEN } from "src/utils/constants";
 import { randomInteger } from "src/utils/random";
@@ -6,7 +6,7 @@ import { Gb16BitArg, GbFlagArg, GbNotArg, GbRegisterArg } from "../../gb-instruc
 import { JpFlagInstruction, JpInstruction } from "./jp";
 import { initialize } from "../utils/test-utils";
 
-describe("jr", () => {
+describe("jp", () => {
     const rs = new GbRegisterSet();
     const mmu = new GbTestMmu();
 
@@ -28,8 +28,8 @@ describe("jr", () => {
             const r1Value = randomInteger(0, TWO_POW_SIXTEEN);
             const args = [0, 0];
             if (r1 instanceof Gb16BitArg) {
-                args[0] = r1Value >> 8;
-                args[1] = r1Value & 0xff;
+                args[0] = r1Value & 0xff;
+                args[1] = r1Value >> 8;
             } else {
                 r1.setValue(rs, mmu, args, r1Value);
             }
@@ -66,13 +66,13 @@ describe("jr", () => {
             expect(instruction.getLength()).toEqual(3);
 
             const pc = randomInteger(0, TWO_POW_SIXTEEN);
-            const r1Value = randomInteger(0, TWO_POW_SIXTEEN);
+            const a16Value = randomInteger(0, TWO_POW_SIXTEEN);
 
             // Flag set case
             rs.pc.setValue(pc);
-            let args = [r1Value >> 8, r1Value & 0xff];
+            let args = [a16Value & 0xff, a16Value >> 8];
             r1.setValue(rs, mmu, args, 1);
-            let expectedPc = r1Value;
+            let expectedPc = a16Value;
 
             let zeroFlag = rs.getZeroFlag();
             let operationFlag = rs.getOperationFlag();
@@ -89,7 +89,7 @@ describe("jr", () => {
 
             // Flag unset case
             rs.pc.setValue(pc);
-            args = [r1Value >> 8, r1Value & 0xff];
+            args = [a16Value & 0xff, a16Value >> 8];
             r1.setValue(rs, mmu, args, 0);
             expectedPc = pc;
 

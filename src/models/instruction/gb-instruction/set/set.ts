@@ -19,6 +19,10 @@ export class SetInstruction implements GbInstruction {
         this.cycleCount = r2 instanceof GbRegisterArg ? 2 : 4;
     }
 
+    getName(): string {
+        return `SET ${this.r1} ${this.r2.getName()}`;
+    }
+
     getLength(): number {
         return 2;
     }

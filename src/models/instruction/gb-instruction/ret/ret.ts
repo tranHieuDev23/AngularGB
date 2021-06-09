@@ -8,6 +8,10 @@ import { GbFlagArg, GbInstruction, GbNotArg } from "../../gb-instruction";
  * subroutine was called, returning control to the source program.
  */
 export class RetInstruction implements GbInstruction {
+    getName(): string {
+        return "RET";
+    }
+
     getLength(): number {
         return 1;
     }
@@ -38,6 +42,10 @@ export class RetFlagInstruction implements GbInstruction {
         private readonly opcode: number,
         private readonly r1: GbFlagArg | GbNotArg
     ) { }
+
+    getName(): string {
+        return `RET ${this.r1.getName()}`;
+    }
 
     getLength(): number {
         return 1;

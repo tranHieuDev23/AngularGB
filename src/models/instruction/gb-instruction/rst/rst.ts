@@ -17,6 +17,10 @@ export class RstInstruction implements GbInstruction {
         private readonly r1: number
     ) { }
 
+    getName(): string {
+        return `RST ${this.r1}`;
+    }
+
     getLength(): number {
         return 1;
     }

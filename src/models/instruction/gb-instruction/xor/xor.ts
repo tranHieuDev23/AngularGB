@@ -19,6 +19,10 @@ export class XorInstruction implements GbInstruction {
         this.cycleCount = r1 instanceof GbRegisterArg ? 1 : 2;
     }
 
+    getName(): string {
+        return `XOR ${this.r1.getName()}`;
+    }
+
     getLength(): number {
         return this.length;
     }

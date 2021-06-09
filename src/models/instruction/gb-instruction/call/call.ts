@@ -14,6 +14,10 @@ export class CallInstruction implements GbInstruction {
         private readonly r1: Gb16BitArg
     ) { }
 
+    getName(): string {
+        return "CALL d16";
+    }
+
     getLength(): number {
         return 3;
     }
@@ -49,6 +53,10 @@ export class CallFlagInstruction implements GbInstruction {
         private readonly r1: GbFlagArg | GbNotArg,
         private readonly r2: Gb16BitArg
     ) { }
+
+    getName(): string {
+        return `CALL ${this.r1.getName()} ${this.r2.getName()}`;
+    }
 
     getLength(): number {
         return 3;

@@ -14,9 +14,14 @@ export class PushInstruction implements GbInstruction {
         private readonly r1: GbRegisterArg
     ) { }
 
+    getName(): string {
+        return `PUSH ${this.r1.getName()}`;
+    }
+
     getLength(): number {
         return 1;
     }
+
     getOpcode(): number {
         return this.opcode;
     }

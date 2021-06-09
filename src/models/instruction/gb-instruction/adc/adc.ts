@@ -18,6 +18,10 @@ export class AdcInstruction implements GbInstruction {
         this.length = 1 + r1.getArgsTakenCount();
     }
 
+    getName(): string {
+        return `ADC ${this.r1.getName()}`;
+    }
+
     getLength(): number {
         return this.length;
     }

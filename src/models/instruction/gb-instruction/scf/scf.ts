@@ -10,6 +10,10 @@ export class ScfInstruction implements GbInstruction {
         return 1;
     }
 
+    getName(): string {
+        return "SCF";
+    }
+
     getOpcode(): number {
         return 0x37;
     }

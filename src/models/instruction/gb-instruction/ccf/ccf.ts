@@ -10,6 +10,10 @@ export class CcfInstruction implements GbInstruction {
         return 1;
     }
 
+    getName(): string {
+        return "CCF";
+    }
+
     getOpcode(): number {
         return 0x3f;
     }

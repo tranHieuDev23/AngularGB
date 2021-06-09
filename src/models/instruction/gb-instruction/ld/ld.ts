@@ -20,6 +20,10 @@ export class LdInstruction implements GbInstruction {
         this.length = 1 + r1.getArgsTakenCount() + r2.getArgsTakenCount();
     }
 
+    getName(): string {
+        return `LD ${this.r1.getName()} ${this.r2.getName()}`;
+    }
+
     getLength(): number {
         return this.length;
     }
@@ -41,6 +45,10 @@ export class LdInstruction implements GbInstruction {
 export class GbF8Instruction implements GbInstruction {
     getLength(): number {
         return 2;
+    }
+
+    getName(): string {
+        return "LD HL SP+8";
     }
 
     getOpcode(): number {

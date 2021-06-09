@@ -11,6 +11,10 @@ export class DiInstruction implements GbInstruction {
         return 1;
     }
 
+    getName(): string {
+        return "DI";
+    }
+
     getOpcode(): number {
         return 0xf3;
     }

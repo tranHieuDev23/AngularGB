@@ -1,6 +1,5 @@
 import { GbMmu } from "src/models/mmu/gb-mmu";
 import { GbRegisterSet } from "src/models/register/gb-registers";
-import { SIXTEEN_ONE_BITS } from "src/utils/constants";
 import { Gb16BitArg, GbFlagArg, GbInstruction, GbNotArg, GbRegisterArg } from "../../gb-instruction";
 
 /**
@@ -19,6 +18,10 @@ export class JpInstruction implements GbInstruction {
     ) {
         this.length = 1 + r1.getArgsTakenCount();
         this.cycleCount = r1 instanceof GbRegisterArg ? 1 : 4;
+    }
+
+    getName(): string {
+        return `JP ${this.r1.getName()}`;
     }
 
     getLength(): number {
@@ -49,6 +52,10 @@ export class JpFlagInstruction implements GbInstruction {
         private readonly r1: GbFlagArg | GbNotArg,
         private readonly r2: Gb16BitArg
     ) { }
+
+    getName(): string {
+        return `JP ${this.r1.getName()} ${this.r2.getName()}`;
+    }
 
     getLength(): number {
         return 3;

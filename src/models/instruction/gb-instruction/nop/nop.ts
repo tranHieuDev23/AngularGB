@@ -11,6 +11,10 @@ export class NopInstruction implements GbInstruction {
         return 1;
     }
 
+    getName(): string {
+        return "NOP";
+    }
+
     getOpcode(): number {
         return 0x00;
     }

@@ -23,6 +23,10 @@ export class RlInstruction implements GbInstruction {
         this.cycleCount = r1 instanceof GbRegisterArg ? 2 : 4;
     }
 
+    getName(): string {
+        return `RL ${this.r1.getName()}`;
+    }
+
     getLength(): number {
         return 2;
     }
@@ -55,6 +59,10 @@ export class RlInstruction implements GbInstruction {
 export class Gb17Instruction implements GbInstruction {
     getLength(): number {
         return 1;
+    }
+
+    getName(): string {
+        return "RLA";
     }
 
     getOpcode(): number {

@@ -190,8 +190,8 @@ describe("ld", () => {
                 const cycleCount = randomInteger(0, 5);
                 const r2Value = randomInteger(0, TWO_POW_SIXTEEN);
                 if (r2 instanceof Gb16BitArg) {
-                    args[0] = r2Value >> 8;
-                    args[1] = r2Value & EIGHT_ONE_BITS;
+                    args[0] = r2Value & EIGHT_ONE_BITS;
+                    args[1] = r2Value >> 8;
                 } else {
                     r2.setValue(rs, mmu, args, r2Value);
                 }

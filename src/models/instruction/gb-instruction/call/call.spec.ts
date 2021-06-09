@@ -24,7 +24,7 @@ describe("call", () => {
         const pc = rs.pc.getValue();
         const sp = rs.sp.getValue();
         const r1Value = randomInteger(0, TWO_POW_SIXTEEN);
-        const args = [r1Value >> 8, r1Value & 0xff];
+        const args = [r1Value & 0xff, r1Value >> 8];
 
         const zeroFlag = rs.getZeroFlag();
         const operationFlag = rs.getOperationFlag();
@@ -64,7 +64,7 @@ describe("call", () => {
             // Flag set case
             rs.pc.setValue(pc);
             rs.sp.setValue(sp);
-            let args = [r2Value >> 8, r2Value & 0xff];
+            let args = [r2Value & 0xff, r2Value >> 8];
             r1.setValue(rs, mmu, args, 1);
             let expectedPc = r2Value;
             let expectedSp = (sp - 2) & SIXTEEN_ONE_BITS;
@@ -87,7 +87,7 @@ describe("call", () => {
             // Flag unset case
             rs.pc.setValue(pc);
             rs.sp.setValue(sp);
-            args = [r2Value >> 8, r2Value & 0xff];
+            args = [r2Value & 0xff, r2Value >> 8];
             r1.setValue(rs, mmu, args, 0);
             expectedPc = pc;
             expectedSp = sp;

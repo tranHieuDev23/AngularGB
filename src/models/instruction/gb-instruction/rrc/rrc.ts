@@ -23,6 +23,10 @@ export class RrcInstruction implements GbInstruction {
         this.cycleCount = r1 instanceof GbRegisterArg ? 2 : 4;
     }
 
+    getName(): string {
+        return `RRC ${this.r1.getName()}`;
+    }
+
     getLength(): number {
         return 2;
     }
@@ -53,6 +57,10 @@ export class RrcInstruction implements GbInstruction {
  * and bit 7 of register A.
  */
 export class Gb0fInstruction implements GbInstruction {
+    getName(): string {
+        return "RRCA";
+    }
+
     getLength(): number {
         return 1;
     }

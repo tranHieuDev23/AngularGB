@@ -12,6 +12,10 @@ export class CplInstruction implements GbInstruction {
         return 1;
     }
 
+    getName(): string {
+        return "CPL";
+    }
+
     getOpcode(): number {
         return 0x2f;
     }
