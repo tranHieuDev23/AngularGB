@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
 import { Gameboy } from 'src/models/gameboy/gameboy';
 import { CanvasLcd } from 'src/models/lcd/canvas-lcd';
 import { GbMmuImpl } from 'src/models/mmu/gb-mmu';
@@ -12,6 +12,12 @@ import { getMbc } from 'src/models/mmu/mcb/mbc-factory';
 export class GameboyComponent implements OnInit {
   @ViewChild("battery", { static: true }) batter: ElementRef<HTMLElement>;
   @ViewChild("canvas", { static: true }) canvas: ElementRef<HTMLCanvasElement>;
+
+  @Output("resumed") public resumed = new EventEmitter<void>();
+  @Output("paused") public paused = new EventEmitter<void>();
+  @Output("stepped") public stepped = new EventEmitter<void>();
+  @Output("framed") public framed = new EventEmitter<void>();
+  @Output("stopped") public stopped = new EventEmitter<void>();
 
   public rom: number[] = null;
   public gameboy: Gameboy = null;
@@ -54,6 +60,7 @@ export class GameboyComponent implements OnInit {
     this.gameboyIntervalId = setInterval(() => {
       this.gameboy.frame();
     }, 1.0 / 60);
+    this.resumed.emit();
   }
 
   public pause(): void {
@@ -62,6 +69,7 @@ export class GameboyComponent implements OnInit {
     }
     clearInterval(this.gameboyIntervalId);
     this.gameboyIntervalId = null;
+    this.paused.emit();
   }
 
   public step(stepCnt: number = 1): void {
@@ -71,6 +79,7 @@ export class GameboyComponent implements OnInit {
     for (let i = 0; i < stepCnt; i++) {
       this.gameboy.step();
     }
+    this.stepped.emit();
   }
 
   public frame(frameCnt: number = 1): void {
@@ -80,6 +89,7 @@ export class GameboyComponent implements OnInit {
     for (let i = 0; i < frameCnt; i++) {
       this.gameboy.frame();
     }
+    this.framed.emit();
   }
 
   public reset(): void {
@@ -92,5 +102,6 @@ export class GameboyComponent implements OnInit {
     }
     this.rom = null;
     this.gameboy = null;
+    this.stopped.emit();
   }
 }

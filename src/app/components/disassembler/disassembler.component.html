@@ -6,11 +6,9 @@
     Disassembler only runs when game is paused.
 </span>
 
-<button *ngIf="gameboy.isPaused()" nz-button (click)="runDisassembler()">
-    Run disassembler
-</button>
-
-<nz-table #disassembled *ngIf="gameboy.isPaused()" [nzData]="disassembledInstructions">
+<nz-table #disassembled *ngIf="gameboy.isPaused()" [nzData]="disassembledInstructions" [nzScroll]="{ y: '540px' }"
+    nzFrontPagination="false" nzShowPagination="false" [nzVirtualItemSize]="54" [nzVirtualMaxBufferPx]="1080"
+    [nzVirtualMinBufferPx]="540">
     <thead>
         <tr>
             <th>Breakpoint</th>
@@ -20,24 +18,26 @@
         </tr>
     </thead>
     <tbody>
-        <tr *ngFor="let item of disassembled.data; index as i">
-            <td>
-                <button *ngIf="i !== breakpointIndex" nz-button nzType="text" (click)="setBreakpoint(i)">
-                    <i nz-icon nzType="pause-circle" nzTheme="outline"></i>
-                </button>
-                <button *ngIf="i === breakpointIndex" nz-button nzType="text" (click)="setBreakpoint(null)">
-                    <i nz-icon nzType="close-circle" nzTheme="twotone" nzTwotoneColor="#f5222d"></i>
-                </button>
-            </td>
-            <td>
-                {{ item.address | toBaseString: 16 : 16 }}
-            </td>
-            <td>
-                {{ item.opcode | toBaseString: 16 : 8 }}
-            </td>
-            <td>
-                {{ item.args | toBaseString: 16 : 16 }}
-            </td>
-        </tr>
+        <ng-template nz-virtual-scroll let-data let-index>
+            <tr>
+                <td>
+                    <button *ngIf="index !== breakpointIndex" nz-button nzType="text" (click)="setBreakpoint(index)">
+                        <i nz-icon nzType="pause-circle" nzTheme="outline"></i>
+                    </button>
+                    <button *ngIf="index === breakpointIndex" nz-button nzType="text" (click)="clearBreakpoint()">
+                        <i nz-icon nzType="close-circle" nzTheme="twotone" nzTwotoneColor="#f5222d"></i>
+                    </button>
+                </td>
+                <td>
+                    {{ data.address | toBaseString: 16 : 16 }}
+                </td>
+                <td>
+                    {{ data.opcode | toBaseString: 16 : 8 }}
+                </td>
+                <td>
+                    {{ data.args | toBaseString: 16 : 16 }}
+                </td>
+            </tr>
+        </ng-template>
     </tbody>
 </nz-table>
