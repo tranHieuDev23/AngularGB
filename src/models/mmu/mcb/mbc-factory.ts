@@ -51,8 +51,7 @@ export function getRamSize(rom: number[]): number {
 }
 
 export function getMbc(rom: number[]): Mbc {
-    const romSize = getRomSize(rom);
-    const ramSize = getRomSize(rom);
+    const ramSize = getRamSize(rom);
     const mbcCode = rom[0x147];
     switch (mbcCode) {
         case 0x00:
