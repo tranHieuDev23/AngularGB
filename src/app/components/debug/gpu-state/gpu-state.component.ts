@@ -1,5 +1,5 @@
-import { Component, Input } from '@angular/core';
-import { GameboyComponent } from '../../gameboy/gameboy.component';
+import { Component, Input } from "@angular/core";
+import { GameboyComponent } from "../../gameboy/gameboy.component";
 
 export class GpuStateRow {
   constructor(
@@ -9,9 +9,9 @@ export class GpuStateRow {
 }
 
 @Component({
-  selector: 'app-gpu-state',
-  templateUrl: './gpu-state.component.html',
-  styleUrls: ['./gpu-state.component.scss']
+  selector: "app-gpu-state",
+  templateUrl: "./gpu-state.component.html",
+  styleUrls: ["./gpu-state.component.scss"]
 })
 export class GpuStateComponent {
   @Input("gameboy") gameboy: GameboyComponent;
