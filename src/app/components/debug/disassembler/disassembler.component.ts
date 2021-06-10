@@ -2,7 +2,7 @@ import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { NzTableComponent } from 'ng-zorro-antd/table';
 import { RomDisassemblerService } from 'src/app/services/rom-disassembler/rom-disassembler.service';
 import { GbDisassembledInstruction } from 'src/models/cpu/gb-cpu';
-import { GameboyComponent } from '../gameboy/gameboy.component';
+import { GameboyComponent } from '../../gameboy/gameboy.component';
 
 @Component({
   selector: 'app-disassembler',
