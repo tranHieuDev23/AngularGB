@@ -16,7 +16,7 @@
         <div class="inner-content">
             <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" nzJustify="space-around">
                 <div nz-col [nzSpan]="24" [nzLg]="12">
-                    <app-gameboy #gameboy></app-gameboy> <br />
+                    <app-gameboy #gameboy [isDebugging]="isDebugging"></app-gameboy> <br />
 
                     <nz-upload class="gb-control rom-select" nzAction="/intercepted" nzShowUploadList="false"
                         [(nzFileList)]="fileList" (nzChange)="handleChange($event)">

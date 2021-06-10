@@ -11,6 +11,7 @@ import { GameboyComponent } from '../../gameboy/gameboy.component';
 })
 export class DisassemblerComponent implements OnInit {
   @ViewChild("disassembled") disassembledTable: NzTableComponent;
+
   @Input("gameboy") gameboy: GameboyComponent;
 
   public disassembledInstructions: GbDisassembledInstruction[];
@@ -31,6 +32,9 @@ export class DisassemblerComponent implements OnInit {
   }
 
   private async runDisassembler(): Promise<void> {
+    if (!this.gameboy.isDebugging) {
+      return;
+    }
     this.disassembledInstructions = await this.disassembler.disassembleCurrentRomMemory(this.gameboy.gameboy);
     if (this.breakpointInstruction !== null) {
       this.breakpointIndex = this.findInstructionIndex(this.breakpointInstruction.address);
@@ -44,6 +48,9 @@ export class DisassemblerComponent implements OnInit {
   }
 
   public setBreakpoint(index: number): void {
+    if (!this.gameboy.isPaused()) {
+      return;
+    }
     this.breakpointIndex = index;
     if (index === null) {
       this.breakpointInstruction = null
