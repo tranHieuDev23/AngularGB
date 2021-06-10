@@ -11,7 +11,7 @@
             <th>Decimal</th>
         </tr>
     </thead>
-    <tbody>
+    <tbody class="monospace">
         <tr *ngFor="let item of cpuState.data">
             <td>{{ item.getName() }}</td>
             <td>{{ item.getValue() | toBaseString: 16 : item.bitCount() }}</td>

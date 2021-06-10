@@ -15,7 +15,7 @@
 
 <div *ngIf="gameboy.isRomLoaded()">
     <div class="disassembler-control">
-        PC: {{ getPc() | toBaseString: 16 : 16 }}
+        <span class="monospace">PC</span>: <span class="monospace">{{ getPc() | toBaseString: 16 : 16 }}</span>
         <button nz-button class="breakpoint-control-button" (click)="scrollToPc()">
             <i nz-icon nzType="search" nzTheme="outline"></i> Scroll to PC
         </button>
@@ -24,7 +24,7 @@
 
 <div *ngIf="gameboy.isRomLoaded() && breakpointInstruction !== null">
     <div class="disassembler-control">
-        Breakpoint address: {{ breakpointInstruction.address | toBaseString: 16 : 16 }}
+        Breakpoint address: <span class="monospace">{{ breakpointInstruction.address | toBaseString: 16 : 16 }}</span>
     </div>
     <div class="disassembler-control">
         <button nz-button class="breakpoint-control-button" (click)="scrollToBreakpoint()">
@@ -54,7 +54,7 @@
     </thead>
     <tbody>
         <ng-template nz-virtual-scroll let-data let-index="index">
-            <tr [ngClass]="{ 'pc-row': data.address === getPc() }">
+            <tr [ngClass]="{ 'pc-row': data.address === getPc(), 'monospace': true }">
                 <td>
                     <button *ngIf="data.address !== breakpointInstruction?.address" nz-button nzType="text"
                         (click)="setBreakpoint(index)">

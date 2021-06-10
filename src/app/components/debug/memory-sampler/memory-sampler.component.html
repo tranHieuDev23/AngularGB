@@ -21,7 +21,7 @@
             <th *ngFor="let digit of hexDigits">{{ digit }}</th>
         </tr>
     </thead>
-    <tbody>
+    <tbody class="monospace">
         <tr *ngFor="let row of memoryTable.data; index as i">
             <td class="prefix-col">{{ getRowLabel(i) }}</td>
             <td *ngFor="let col of row">
