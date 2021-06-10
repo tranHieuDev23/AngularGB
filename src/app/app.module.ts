@@ -24,6 +24,7 @@ import { StringOnMobileModule } from "./pipes/string-on-mobile/string-on-mobile.
 import { InterceptorService } from "./services/interceptor/interceptor.service";
 import { CpuStateModule } from "./components/debug/cpu-state/cpu-state.module";
 import { DisassemblerModule } from "./components/debug/disassembler/disassembler.module";
+import { MemorySamplerModule } from "./components/debug/memory-sampler/memory-sampler.module";
 
 registerLocaleData(en);
 
@@ -50,7 +51,8 @@ registerLocaleData(en);
     NzInputNumberModule,
     NzInputModule,
     CpuStateModule,
-    DisassemblerModule
+    DisassemblerModule,
+    MemorySamplerModule
   ],
   providers: [
     { provide: NZ_I18N, useValue: en_US },

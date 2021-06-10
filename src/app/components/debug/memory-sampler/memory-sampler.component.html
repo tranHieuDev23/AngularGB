@@ -1,0 +1,32 @@
+<span *ngIf="!gameboy.isRomLoaded()">
+    Please load a ROM first
+</span>
+
+<nz-input-group *ngIf="gameboy.isRomLoaded()" class="memory-sampler-control" nzAddOnBefore="Jump to prefix"
+    nzPrefix="0x" [nzSuffix]="addressJumpTemplate" nzSize="small">
+    <input #addressJumpInput type="text" maxlength="2" nz-input
+        (keydown.enter)="jumpToAddress(addressJumpInput.value)" />
+    <ng-template #addressJumpTemplate>
+        xx <button class="memory-jump-button" nz-button (click)="jumpToAddress(addressJumpInput.value)">
+            <i nz-icon nzType="search" nzTheme="outline"></i>
+        </button>
+    </ng-template>
+</nz-input-group>
+
+<nz-table #memoryTable *ngIf="gameboy.isRomLoaded()" [nzData]="memoryData" nzFrontPagination="false"
+    nzShowPagination="false" nzSize="small" [nzScroll]="{ x: '1100px' }">
+    <thead>
+        <tr>
+            <th>Prefix</th>
+            <th *ngFor="let digit of hexDigits">{{ digit }}</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let row of memoryTable.data; index as i">
+            <td class="prefix-col">{{ getRowLabel(i) }}</td>
+            <td *ngFor="let col of row">
+                {{ col | toBaseString: 16 : 8 }}
+            </td>
+        </tr>
+    </tbody>
+</nz-table>

@@ -3,8 +3,9 @@
 </span>
 
 <nz-input-group *ngIf="gameboy.isRomLoaded()" class="disassembler-control" nzAddOnBefore="Jump to address" nzPrefix="0x"
-    [nzSuffix]="addressJumpTemplate">
-    <input #addressJumpInput type="text" nz-input (keydown.enter)="scrollToAddress(addressJumpInput.value)" />
+    [nzSuffix]="addressJumpTemplate" nzSize="small">
+    <input #addressJumpInput type="text" maxlength="4" nz-input
+        (keydown.enter)="scrollToAddress(addressJumpInput.value)" />
     <ng-template #addressJumpTemplate>
         <button nz-button (click)="scrollToAddress(addressJumpInput.value)">
             <i nz-icon nzType="search" nzTheme="outline"></i>
