@@ -34,7 +34,7 @@ export class GameboyComponent implements OnInit {
   private gameboyIntervalId = null;
 
   ngOnInit() {
-    this.lcd = new CanvasLcd(this.canvas.nativeElement, 1, this.palettes);
+    this.lcd = new CanvasLcd(this.canvas.nativeElement, 160, 144, 1, this.palettes);
     this.lcd.clear();
   }
 

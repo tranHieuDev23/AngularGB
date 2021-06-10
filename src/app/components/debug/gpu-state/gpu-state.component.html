@@ -1,8 +1,4 @@
-<span *ngIf="!gameboy.isRomLoaded()">
-    Please load a ROM first
-</span>
-
-<nz-table #gpuState *ngIf="gameboy.isRomLoaded()" [nzData]="rows" nzFrontPagination="false" nzShowPagination="false">
+<nz-table #gpuState [nzData]="rows" nzFrontPagination="false" nzShowPagination="false">
     <thead>
         <tr>
             <th>Value</th>

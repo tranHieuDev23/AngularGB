@@ -1,8 +1,4 @@
-<span *ngIf="!gameboy.isRomLoaded()">
-    Please load a ROM first
-</span>
-
-<nz-input-group *ngIf="gameboy.isRomLoaded()" class="disassembler-control" nzAddOnBefore="Jump to address" nzPrefix="0x"
+<nz-input-group class="disassembler-control" nzAddOnBefore="Jump to address" nzPrefix="0x"
     [nzSuffix]="addressJumpTemplate" nzSize="small">
     <input #addressJumpInput type="text" maxlength="4" nz-input
         (keydown.enter)="scrollToAddress(addressJumpInput.value)" />
@@ -13,16 +9,14 @@
     </ng-template>
 </nz-input-group>
 
-<div *ngIf="gameboy.isRomLoaded()">
-    <div class="disassembler-control">
-        <span class="monospace">PC</span>: <span class="monospace">{{ getPc() | toBaseString: 16 : 16 }}</span>
-        <button nz-button class="breakpoint-control-button" (click)="scrollToPc()">
-            <i nz-icon nzType="search" nzTheme="outline"></i> Scroll to PC
-        </button>
-    </div>
+<div class="disassembler-control">
+    <span class="monospace">PC</span>: <span class="monospace">{{ getPc() | toBaseString: 16 : 16 }}</span>
+    <button nz-button class="breakpoint-control-button" (click)="scrollToPc()">
+        <i nz-icon nzType="search" nzTheme="outline"></i> Scroll to PC
+    </button>
 </div>
 
-<div *ngIf="gameboy.isRomLoaded() && breakpointInstruction !== null">
+<div *ngIf="breakpointInstruction !== null">
     <div class="disassembler-control">
         Breakpoint address: <span class="monospace">{{ breakpointInstruction.address | toBaseString: 16 : 16 }}</span>
     </div>
@@ -40,9 +34,8 @@
     </div>
 </div>
 
-<nz-table #disassembled *ngIf="gameboy.isRomLoaded()" [nzData]="disassembledInstructions" [nzScroll]="{ y: '400px' }"
-    nzFrontPagination="false" nzShowPagination="false" [nzVirtualItemSize]="54" [nzVirtualMaxBufferPx]="800"
-    [nzVirtualMinBufferPx]="400">
+<nz-table #disassembled [nzData]="disassembledInstructions" [nzScroll]="{ y: '400px' }" nzFrontPagination="false"
+    nzShowPagination="false" [nzVirtualItemSize]="54" [nzVirtualMaxBufferPx]="800" [nzVirtualMinBufferPx]="400">
     <thead>
         <tr>
             <th>Breakpoint</th>

@@ -1,8 +1,4 @@
-<span *ngIf="!gameboy.isRomLoaded()">
-    Please load a ROM first
-</span>
-
-<nz-table #cpuState *ngIf="gameboy.isRomLoaded()" [nzData]="gameboy.gameboy.cpu.rs.getAllRegisters()">
+<nz-table #cpuState [nzData]="gameboy.gameboy.cpu.rs.getAllRegisters()">
     <thead>
         <tr>
             <th>Register</th>

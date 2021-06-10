@@ -1,9 +1,5 @@
-<span *ngIf="!gameboy.isRomLoaded()">
-    Please load a ROM first
-</span>
-
-<nz-input-group *ngIf="gameboy.isRomLoaded()" class="memory-sampler-control" nzAddOnBefore="Jump to prefix"
-    nzPrefix="0x" [nzSuffix]="addressJumpTemplate" nzSize="small">
+<nz-input-group class="memory-sampler-control" nzAddOnBefore="Jump to prefix" nzPrefix="0x"
+    [nzSuffix]="addressJumpTemplate" nzSize="small">
     <input #addressJumpInput type="text" maxlength="2" nz-input
         (keydown.enter)="jumpToAddress(addressJumpInput.value)" />
     <ng-template #addressJumpTemplate>
@@ -13,8 +9,8 @@
     </ng-template>
 </nz-input-group>
 
-<nz-table #memoryTable *ngIf="gameboy.isRomLoaded()" [nzData]="memoryData" nzFrontPagination="false"
-    nzShowPagination="false" nzSize="small" [nzScroll]="{ x: '1100px' }">
+<nz-table #memoryTable [nzData]="memoryData" nzFrontPagination="false" nzShowPagination="false" nzSize="small"
+    [nzScroll]="{ x: '1100px' }">
     <thead>
         <tr>
             <th>Prefix</th>

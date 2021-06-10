@@ -60,7 +60,10 @@
                 </div>
 
                 <div *ngIf="isDebugging" nz-col [nzSpan]="24" [nzLg]="12">
-                    <nz-tabset>
+                    <span *ngIf="!gameboy.isRomLoaded()">
+                        Please load a ROM first
+                    </span>
+                    <nz-tabset *ngIf="gameboy.isRomLoaded()">
                         <nz-tab nzTitle="CPU State">
                             <app-cpu-state [gameboy]="gameboy"></app-cpu-state>
                         </nz-tab>
@@ -72,6 +75,9 @@
                         </nz-tab>
                         <nz-tab nzTitle="GPU State">
                             <app-gpu-state [gameboy]="gameboy"></app-gpu-state>
+                        </nz-tab>
+                        <nz-tab nzTitle="BG Map Viewer">
+                            <app-bg-map-viewer [gameboy]="gameboy"></app-bg-map-viewer>
                         </nz-tab>
                     </nz-tabset>
                 </div>

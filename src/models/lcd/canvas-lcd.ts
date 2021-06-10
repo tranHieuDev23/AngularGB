@@ -5,13 +5,15 @@ export class CanvasLcd implements Lcd {
 
     constructor(
         private readonly canvas: HTMLCanvasElement,
+        private readonly width: number,
+        private readonly height: number,
         private readonly pixelSize: number,
         private readonly palettes: string[]
     ) {
         this.graphicBuffer = [];
-        for (let x = 0; x < 160; x++) {
+        for (let x = 0; x < width; x++) {
             const col = [];
-            for (let y = 0; y < 144; y++) {
+            for (let y = 0; y < height; y++) {
                 col.push(0);
             }
             this.graphicBuffer.push(col);
@@ -27,8 +29,8 @@ export class CanvasLcd implements Lcd {
         if (!context) {
             return;
         }
-        for (let x = 0; x < this.graphicBuffer.length; x++) {
-            for (let y = 0; y < this.graphicBuffer[x].length; y++) {
+        for (let x = 0; x < this.width; x++) {
+            for (let y = 0; y < this.height; y++) {
                 this.drawPixel(context, x, y, this.palettes[this.graphicBuffer[x][y]]);
             }
         }
@@ -39,8 +41,8 @@ export class CanvasLcd implements Lcd {
         if (!context) {
             return;
         }
-        for (let x = 0; x < this.graphicBuffer.length; x++) {
-            for (let y = 0; y < this.graphicBuffer[x].length; y++) {
+        for (let x = 0; x < this.width; x++) {
+            for (let y = 0; y < this.height; y++) {
                 this.drawPixel(context, x, y, this.palettes[0]);
             }
         }
