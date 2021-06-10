@@ -29,7 +29,8 @@
         <button nz-button class="breakpoint-control-button" (click)="scrollToBreakpoint()">
             <i nz-icon nzType="search" nzTheme="outline"></i> Scroll to breakpoint
         </button>
-        <button nz-button class="breakpoint-control-button" (click)="runToBreakpoint()">
+        <button nz-button class="breakpoint-control-button" [disabled]="gameboy.isPlaying()"
+            (click)="runToBreakpoint()">
             <i nz-icon nzType="caret-right" nzTheme="outline"></i> Run to breakpoint
         </button>
         <button nz-button class="breakpoint-control-button" (click)="clearBreakpoint()">
