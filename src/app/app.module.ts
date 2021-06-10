@@ -27,6 +27,7 @@ import { DisassemblerModule } from "./components/debug/disassembler/disassembler
 import { MemorySamplerModule } from "./components/debug/memory-sampler/memory-sampler.module";
 import { GpuStateModule } from "./components/debug/gpu-state/gpu-state.module";
 import { BgMapViewerModule } from "./components/debug/bg-map-viewer/bg-map-viewer.module";
+import { TileDataViewModule } from "./components/debug/tile-data-viewer/tile-data-viewer.module";
 
 registerLocaleData(en);
 
@@ -56,7 +57,8 @@ registerLocaleData(en);
     DisassemblerModule,
     MemorySamplerModule,
     GpuStateModule,
-    BgMapViewerModule
+    BgMapViewerModule,
+    TileDataViewModule
   ],
   providers: [
     { provide: NZ_I18N, useValue: en_US },

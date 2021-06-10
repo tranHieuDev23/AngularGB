@@ -4,6 +4,7 @@ import { GbLcdc } from "./mmu-wrappers/gb-lcdc";
 import { GbPalettes } from "./mmu-wrappers/gb-palettes";
 import { GbPositionControl } from "./mmu-wrappers/gb-position-control";
 import { GbStat } from "./mmu-wrappers/gb-stat";
+import { GbTileData } from "./mmu-wrappers/gb-tile-data";
 import { GbTileMap } from "./mmu-wrappers/gb-tile-map";
 
 export class GbGpu {
@@ -13,6 +14,7 @@ export class GbGpu {
     public readonly palettes: GbPalettes;
     public readonly positionControl: GbPositionControl;
     public readonly stat: GbStat;
+    public readonly tileData: GbTileData;
     public readonly tileMap: GbTileMap;
 
     constructor(
@@ -23,6 +25,7 @@ export class GbGpu {
         this.palettes = new GbPalettes(mmu);
         this.positionControl = new GbPositionControl(mmu);
         this.stat = new GbStat(mmu);
+        this.tileData = new GbTileData(mmu);
         this.tileMap = new GbTileMap(mmu);
     }
 

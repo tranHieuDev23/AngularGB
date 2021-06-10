@@ -68,7 +68,7 @@ export class GbTileData {
         }
     }
 
-    private getTile(address: number): Gb8x8Tile {
+    public getTile(address: number): Gb8x8Tile {
         const colorIndices: number[][] = [
             [], [], [], [], [], [], [], []
         ];
