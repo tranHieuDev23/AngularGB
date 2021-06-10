@@ -1,0 +1,22 @@
+<span *ngIf="!gameboy.isRomLoaded()">
+    Please load a ROM first
+</span>
+
+<nz-table #gpuState *ngIf="gameboy.isRomLoaded()" [nzData]="rows" nzFrontPagination="false" nzShowPagination="false">
+    <thead>
+        <tr>
+            <th>Value</th>
+            <th>Hex</th>
+            <th>Binary</th>
+            <th>Decimal</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let item of gpuState.data">
+            <td>{{ item.title }}</td>
+            <td>{{ item.value() | toBaseString: 16 : 8 }}</td>
+            <td>{{ item.value() | toBaseString: 2 : 8 }}</td>
+            <td>{{ item.value() }}</td>
+        </tr>
+    </tbody>
+</nz-table>

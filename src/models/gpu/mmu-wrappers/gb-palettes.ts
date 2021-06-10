@@ -5,27 +5,27 @@ export class GbPalettes {
         private readonly mmu: GbMmu
     ) { }
 
-    public getBgPallete() {
+    public getBgPalette() {
         return this.mmu.readByte(0xff47);
     }
 
-    public getBgPalleteColor(index: number) {
-        return (this.getBgPallete() >> (index << 1)) & 3;
+    public getBgPaletteColor(index: number) {
+        return (this.getBgPalette() >> (index << 1)) & 3;
     }
 
-    public getObj0Pallete() {
+    public getObj0Palette() {
         return this.mmu.readByte(0xff48);
     }
 
-    public getObj0PalleteColor(index: number) {
-        return (this.getObj0Pallete() >> (index << 1)) & 3;
+    public getObj0PaletteColor(index: number) {
+        return (this.getObj0Palette() >> (index << 1)) & 3;
     }
 
-    public getObj1Pallete() {
+    public getObj1Palette() {
         return this.mmu.readByte(0xff49);
     }
 
-    public getObj1PalleteColor(index: number) {
-        return (this.getObj1Pallete() >> (index << 1)) & 3;
+    public getObj1PaletteColor(index: number) {
+        return (this.getObj1Palette() >> (index << 1)) & 3;
     }
 }
