@@ -1,11 +1,11 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { MemorySamplerService } from 'src/app/services/memory-sampler/memory-sampler.service';
-import { GameboyComponent } from '../../gameboy/gameboy.component';
+import { Component, Input, OnInit } from "@angular/core";
+import { MemorySamplerService } from "src/app/services/memory-sampler/memory-sampler.service";
+import { GameboyComponent } from "../../gameboy/gameboy.component";
 
 @Component({
-  selector: 'app-memory-sampler',
-  templateUrl: './memory-sampler.component.html',
-  styleUrls: ['./memory-sampler.component.scss']
+  selector: "app-memory-sampler",
+  templateUrl: "./memory-sampler.component.html",
+  styleUrls: ["./memory-sampler.component.scss"]
 })
 export class MemorySamplerComponent implements OnInit {
   @Input("gameboy") gameboy: GameboyComponent;

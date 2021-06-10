@@ -43,7 +43,7 @@ export class GbCpu {
         let instruction = null;
         let argStart = null;
         if (opcode === 0xcb) {
-            let opCodeByte2 = this.mmu.readByte(address);
+            const opCodeByte2 = this.mmu.readByte(address);
             address = (address + 1) & SIXTEEN_ONE_BITS;
             opcode = (opcode << 8) | opCodeByte2;
             instruction = GB_0XCB_INSTRUCTION_SET[opCodeByte2];

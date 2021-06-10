@@ -1,6 +1,6 @@
-import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { StringOnMobilePipe } from './string-on-mobile.pipe';
+import { NgModule } from "@angular/core";
+import { CommonModule } from "@angular/common";
+import { StringOnMobilePipe } from "./string-on-mobile.pipe";
 
 
 

@@ -121,7 +121,7 @@ export enum RegisterName {
 
 export const REGISTER_NAMES = [
     "A", "B", "C", "D", "E", "F", "H", "L", "SP", "PC", "AF", "BC", "DE", "HL"
-]
+];
 
 export const REGISTERS_8_BIT = [
     RegisterName.A, RegisterName.B, RegisterName.C, RegisterName.D,
@@ -143,4 +143,4 @@ export enum Flag {
 
 export const FLAG_NAMES = [
     "", "", "", "", "C", "H", "O", "Z"
-]
+];

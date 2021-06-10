@@ -1,7 +1,7 @@
-import { Pipe, PipeTransform } from '@angular/core';
+import { Pipe, PipeTransform } from "@angular/core";
 
 @Pipe({
-  name: 'toBaseString'
+  name: "toBaseString"
 })
 export class ToBaseStringPipe implements PipeTransform {
 

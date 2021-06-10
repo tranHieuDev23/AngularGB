@@ -1,7 +1,7 @@
-import { Pipe, PipeTransform } from '@angular/core';
+import { Pipe, PipeTransform } from "@angular/core";
 
 @Pipe({
-    name: 'stringOnMobile',
+    name: "stringOnMobile",
     pure: false
 })
 export class StringOnMobilePipe implements PipeTransform {
@@ -9,12 +9,12 @@ export class StringOnMobilePipe implements PipeTransform {
 
     constructor() {
         this.viewportWidth = window.innerWidth;
-        window.addEventListener('resize', () => {
+        window.addEventListener("resize", () => {
             this.viewportWidth = window.innerWidth;
         });
     }
 
-    transform(text: string, mobileString: string = ''): string {
+    transform(text: string, mobileString: string = ""): string {
         return this.viewportWidth < 768 ? mobileString : text;
     }
 

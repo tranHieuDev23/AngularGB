@@ -1,6 +1,6 @@
-import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { GameboyComponent } from './gameboy.component';
+import { NgModule } from "@angular/core";
+import { CommonModule } from "@angular/common";
+import { GameboyComponent } from "./gameboy.component";
 
 
 

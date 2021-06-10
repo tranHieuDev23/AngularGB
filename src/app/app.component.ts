@@ -15,8 +15,8 @@ export class AppComponent {
   public fileList: NzUploadFile[] = [];
 
   public isDebugging: boolean = !environment.production;
-  public skipStepCnt: number = 1;
-  public skipFrameCnt: number = 1;
+  public skipStepCnt = 1;
+  public skipFrameCnt = 1;
 
   constructor(
     private readonly romLoader: RomFileLoaderService
@@ -36,5 +36,5 @@ export class AppComponent {
     this.romLoader.loadRom(file.originFileObj).then((rom) => {
       this.gameboy.loadRom(rom);
     });
-  };
+  }
 }

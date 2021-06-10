@@ -1,10 +1,10 @@
-import { Injectable } from '@angular/core';
-import { Gameboy } from 'src/models/gameboy/gameboy';
-import { GbMmu } from 'src/models/mmu/gb-mmu';
-import { TWO_POW_SIXTEEN } from 'src/utils/constants';
+import { Injectable } from "@angular/core";
+import { Gameboy } from "src/models/gameboy/gameboy";
+import { GbMmu } from "src/models/mmu/gb-mmu";
+import { TWO_POW_SIXTEEN } from "src/utils/constants";
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: "root"
 })
 export class MemorySamplerService {
   public sampleMemory(gameboy: Gameboy, fromAddress: number = 0, toAddress: number = TWO_POW_SIXTEEN): number[] {

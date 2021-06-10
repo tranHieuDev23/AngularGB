@@ -1,13 +1,13 @@
-import { HttpEvent, HttpHandler, HttpInterceptor, HttpRequest, HttpResponse } from '@angular/common/http';
-import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { HttpEvent, HttpHandler, HttpInterceptor, HttpRequest, HttpResponse } from "@angular/common/http";
+import { Injectable } from "@angular/core";
+import { Observable } from "rxjs";
 
 @Injectable({
-    providedIn: 'root'
+    providedIn: "root"
 })
 export class InterceptorService implements HttpInterceptor {
     intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-        if (!req.url.endsWith('/intercepted')) {
+        if (!req.url.endsWith("/intercepted")) {
             return next.handle(req);
         }
         return new Observable<HttpEvent<any>>((subscriber) => {

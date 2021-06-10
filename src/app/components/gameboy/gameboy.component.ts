@@ -1,19 +1,19 @@
-import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
-import { Gameboy } from 'src/models/gameboy/gameboy';
-import { CanvasLcd } from 'src/models/lcd/canvas-lcd';
-import { GbMmuImpl } from 'src/models/mmu/gb-mmu';
-import { getMbc } from 'src/models/mmu/mcb/mbc-factory';
+import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from "@angular/core";
+import { Gameboy } from "src/models/gameboy/gameboy";
+import { CanvasLcd } from "src/models/lcd/canvas-lcd";
+import { GbMmuImpl } from "src/models/mmu/gb-mmu";
+import { getMbc } from "src/models/mmu/mcb/mbc-factory";
 
 @Component({
-  selector: 'app-gameboy',
-  templateUrl: './gameboy.component.html',
-  styleUrls: ['./gameboy.component.scss']
+  selector: "app-gameboy",
+  templateUrl: "./gameboy.component.html",
+  styleUrls: ["./gameboy.component.scss"]
 })
 export class GameboyComponent implements OnInit {
   @ViewChild("battery", { static: true }) batter: ElementRef<HTMLElement>;
   @ViewChild("canvas", { static: true }) canvas: ElementRef<HTMLCanvasElement>;
 
-  @Input("isDebugging") public isDebugging: boolean = false;
+  @Input("isDebugging") public isDebugging = false;
 
   @Output("resumed") public resumed = new EventEmitter<void>();
   @Output("paused") public paused = new EventEmitter<void>();
