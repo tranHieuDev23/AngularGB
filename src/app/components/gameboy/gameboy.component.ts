@@ -24,10 +24,10 @@ export class GameboyComponent implements OnInit {
   public rom: number[] = null;
   public gameboy: Gameboy = null;
   public palettes: string[] = [
-    "#ffffff",
-    "#c0c0c0",
-    "#606060",
-    "#000000"
+    "#9bbc0f",
+    "#8bac0f",
+    "#306230",
+    "#0f380f"
   ];
 
   private lcd: CanvasLcd = null;

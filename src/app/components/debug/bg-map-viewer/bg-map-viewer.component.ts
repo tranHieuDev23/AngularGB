@@ -12,10 +12,11 @@ export class BgMapViewerComponent implements AfterViewInit {
 
   @Input("gameboy") gameboy: GameboyComponent;
   @Input("palettes") palettes: string[] = [
-    "#ffffff",
-    "#c0c0c0",
-    "#606060",
-    "#000000"
+    "#9bbc0f",
+    "#8bac0f",
+    "#306230",
+    "#0f380f",
+    "#1890ff"
   ];
 
   private lcd: CanvasLcd;
@@ -34,7 +35,7 @@ export class BgMapViewerComponent implements AfterViewInit {
     if (!this.gameboy.isDebugging) {
       return;
     }
-    const { tileMap, palettes } = this.gameboy.gameboy.gpu;
+    const { tileMap, palettes, positionControl } = this.gameboy.gameboy.gpu;
     let tileX = 0;
     let tileY = 0;
     for (let i = 0; i < 1024; i++) {
@@ -53,6 +54,16 @@ export class BgMapViewerComponent implements AfterViewInit {
         tileX = 0;
         tileY += 8;
       }
+    }
+    const scrollX = positionControl.getScrollX();
+    const scrollY = positionControl.getScrollY();
+    for (let x = scrollX; x < scrollX + 160; x++) {
+      this.lcd.updatePixel(x, scrollY, 4);
+      this.lcd.updatePixel(x, scrollY + 143, 4);
+    }
+    for (let y = scrollY; y < scrollY + 144; y++) {
+      this.lcd.updatePixel(scrollX, y, 4);
+      this.lcd.updatePixel(scrollX + 159, y, 4);
     }
     this.lcd.draw();
   }
