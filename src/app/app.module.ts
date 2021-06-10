@@ -16,8 +16,6 @@ import { NzUploadModule } from "ng-zorro-antd/upload";
 import { NzButtonModule } from "ng-zorro-antd/button";
 import { NzIconModule } from "ng-zorro-antd/icon";
 import { NzGridModule } from "ng-zorro-antd/grid";
-import { NzListModule } from "ng-zorro-antd/list";
-import { NzTabsModule } from "ng-zorro-antd/tabs";
 import { NzInputNumberModule } from "ng-zorro-antd/input-number";
 import { NzInputModule } from "ng-zorro-antd/input";
 import { StringOnMobileModule } from "./pipes/string-on-mobile/string-on-mobile.module";
@@ -49,8 +47,6 @@ registerLocaleData(en);
     NzIconModule,
     NzGridModule,
     StringOnMobileModule,
-    NzListModule,
-    NzTabsModule,
     NzInputNumberModule,
     NzInputModule,
     CpuStateModule,

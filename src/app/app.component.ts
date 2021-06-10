@@ -10,11 +10,18 @@ import { RomFileLoaderService } from "./services/rom-file-loader/rom-file-loader
   styleUrls: ["./app.component.scss"]
 })
 export class AppComponent {
+  public readonly CPU_STATE_WIDGET = 0;
+  public readonly DISASSEMBLER_WIDGET = 1;
+  public readonly MEMORY_STATE_WIDGET = 2;
+  public readonly GPU_STATE_WIDGET = 3;
+  public readonly BG_MAP_WIDGET = 4;
+  public readonly TILE_DATA_WIDGET = 5;
+
   @ViewChild("gameboy", { static: true }) gameboy: GameboyComponent;
 
   public fileList: NzUploadFile[] = [];
 
-  public isDebugging: boolean = !environment.production;
+  public currentDebugWidget: number = environment.production ? null : this.CPU_STATE_WIDGET;
   public skipStepCnt = 1;
   public skipFrameCnt = 1;
 
@@ -22,8 +29,12 @@ export class AppComponent {
     private readonly romLoader: RomFileLoaderService
   ) { }
 
-  public toggleDebug(): void {
-    this.isDebugging = !this.isDebugging;
+  public openDebugWidget(widgetId: number): void {
+    this.currentDebugWidget = widgetId;
+  }
+
+  public isDebugging(): boolean {
+    return this.currentDebugWidget !== null;
   }
 
   public handleChange(info: NzUploadChangeParam): void {

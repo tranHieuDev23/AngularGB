@@ -25,6 +25,7 @@ export class TileDataViewerComponent implements AfterViewInit {
 
   ngAfterViewInit(): void {
     this.lcd = new CanvasLcd(this.canvas.nativeElement, 192, 128, 1, this.palettes);
+    this.lcd.clear();
     this.gameboy.paused.subscribe(() => this.updateCanvas());
     this.gameboy.stepSkipped.subscribe(() => this.updateCanvas());
     this.gameboy.frameSkipped.subscribe(() => this.updateCanvas());
