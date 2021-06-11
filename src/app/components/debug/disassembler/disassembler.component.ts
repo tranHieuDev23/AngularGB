@@ -70,7 +70,8 @@ export class DisassemblerComponent implements OnInit, OnDestroy {
     if (this.breakpointIndex === null) {
       return;
     }
-    this.setBreakpoint(null);
+    this.breakpointIndex = null;
+    this.breakpointInstruction = null;
     if (this.gameboy.isPlaying()) {
       this.gameboy.pause();
       this.gameboy.resume();
