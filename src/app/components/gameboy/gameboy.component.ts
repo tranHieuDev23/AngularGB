@@ -13,8 +13,6 @@ export class GameboyComponent implements OnInit {
   @ViewChild("battery", { static: true }) batter: ElementRef<HTMLElement>;
   @ViewChild("canvas", { static: true }) canvas: ElementRef<HTMLCanvasElement>;
 
-  @Input("isDebugging") public isDebugging = false;
-
   @Output("resumed") public resumed = new EventEmitter<void>();
   @Output("paused") public paused = new EventEmitter<void>();
   @Output("stepSkipped") public stepSkipped = new EventEmitter<void>();

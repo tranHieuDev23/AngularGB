@@ -54,9 +54,6 @@ export class MemorySamplerComponent implements OnInit {
   }
 
   private sampleMemory(): void {
-    if (!this.gameboy.isDebugging) {
-      return;
-    }
     const memory = this.memorySampler.sampleMemory(
       this.gameboy.gameboy, this.fromAddress, this.toAddress);
     this.memoryData = [];

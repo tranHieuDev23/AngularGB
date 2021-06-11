@@ -6,22 +6,11 @@
             </li>
             <li nz-submenu [nzTitle]="'Debug' | stringOnMobile" nzIcon="bug">
                 <ul>
-                    <li nz-submenu nzTitle="CPU">
+                    <li *ngFor="let subMenu of DEBUG_MENU_ITEMS" nz-submenu [nzTitle]="subMenu.subMenu">
                         <ul>
-                            <li nz-menu-item (click)="openDebugWidget(CPU_STATE_WIDGET)">State</li>
-                            <li nz-menu-item (click)="openDebugWidget(DISASSEMBLER_WIDGET)">Disassembler</li>
-                        </ul>
-                    </li>
-                    <li nz-submenu nzTitle="Memory">
-                        <ul>
-                            <li nz-menu-item (click)="openDebugWidget(MEMORY_STATE_WIDGET)">State</li>
-                        </ul>
-                    </li>
-                    <li nz-submenu nzTitle="Graphic">
-                        <ul>
-                            <li nz-menu-item (click)="openDebugWidget(GPU_STATE_WIDGET)">GPU State</li>
-                            <li nz-menu-item (click)="openDebugWidget(BG_MAP_WIDGET)">Background Map</li>
-                            <li nz-menu-item (click)="openDebugWidget(TILE_DATA_WIDGET)">Tile Data</li>
+                            <li *ngFor="let item of subMenu.items" nz-menu-item (click)="openDebugWidget(item)">
+                                {{ item.title }}
+                            </li>
                         </ul>
                     </li>
                 </ul>
@@ -36,7 +25,7 @@
         <div class="inner-content">
             <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" nzJustify="space-around">
                 <div nz-col [nzSpan]="24" [nzLg]="12">
-                    <app-gameboy #gameboy [isDebugging]="isDebugging()"></app-gameboy> <br />
+                    <app-gameboy #gameboy></app-gameboy> <br />
 
                     <nz-upload class="gb-control rom-select" nzAction="/intercepted" nzShowUploadList="false"
                         [(nzFileList)]="fileList" (nzChange)="handleChange($event)">
@@ -80,21 +69,22 @@
                 </div>
 
                 <div *ngIf="isDebugging()" nz-col [nzSpan]="24" [nzLg]="12">
+                    <h2>{{ currentDebugWidget.title }}</h2>
                     <span *ngIf="!gameboy.isRomLoaded()">
                         Please load a ROM first
                     </span>
                     <div *ngIf="gameboy.isRomLoaded()">
-                        <app-cpu-state *ngIf="currentDebugWidget === CPU_STATE_WIDGET" [gameboy]="gameboy">
+                        <app-cpu-state *ngIf="currentDebugWidget.id === CPU_STATE_WIDGET" [gameboy]="gameboy">
                         </app-cpu-state>
-                        <app-disassembler *ngIf="currentDebugWidget === DISASSEMBLER_WIDGET" [gameboy]="gameboy">
+                        <app-disassembler *ngIf="currentDebugWidget.id === DISASSEMBLER_WIDGET" [gameboy]="gameboy">
                         </app-disassembler>
-                        <app-memory-sampler *ngIf="currentDebugWidget === MEMORY_STATE_WIDGET" [gameboy]="gameboy">
+                        <app-memory-sampler *ngIf="currentDebugWidget.id === MEMORY_STATE_WIDGET" [gameboy]="gameboy">
                         </app-memory-sampler>
-                        <app-gpu-state *ngIf="currentDebugWidget === GPU_STATE_WIDGET" [gameboy]="gameboy">
+                        <app-gpu-state *ngIf="currentDebugWidget.id === GPU_STATE_WIDGET" [gameboy]="gameboy">
                         </app-gpu-state>
-                        <app-bg-map-viewer *ngIf="currentDebugWidget === BG_MAP_WIDGET" [gameboy]="gameboy">
+                        <app-bg-map-viewer *ngIf="currentDebugWidget.id === BG_MAP_WIDGET" [gameboy]="gameboy">
                         </app-bg-map-viewer>
-                        <app-tile-data-viewer *ngIf="currentDebugWidget === TILE_DATA_WIDGET" [gameboy]="gameboy">
+                        <app-tile-data-viewer *ngIf="currentDebugWidget.id === TILE_DATA_WIDGET" [gameboy]="gameboy">
                         </app-tile-data-viewer>
                     </div>
                 </div>

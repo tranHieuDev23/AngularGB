@@ -41,9 +41,6 @@ export class BgMapViewerComponent implements AfterViewInit, OnDestroy {
   }
 
   private updateCanvas(): void {
-    if (!this.gameboy.isDebugging) {
-      return;
-    }
     const { tileMap, palettes, positionControl } = this.gameboy.gameboy.gpu;
     let tileX = 0;
     let tileY = 0;
