@@ -93,7 +93,7 @@ export class DisassemblerComponent implements OnInit, OnDestroy {
   }
 
   public getPc(): number {
-    return this.gameboy.gameboy.cpu.rs.pc.getValue();
+    return this.gameboy.gameboy.rs.pc.getValue();
   }
 
   public scrollToPc(): void {

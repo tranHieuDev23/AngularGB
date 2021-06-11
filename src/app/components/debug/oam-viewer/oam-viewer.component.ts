@@ -57,7 +57,7 @@ export class OamViewerComponent implements AfterViewInit, OnDestroy {
   }
 
   private update(): void {
-    const { oam, palettes } = this.gameboy.gameboy.gpu;
+    const { oam, palettes } = this.gameboy.gameboy;
     const tileRenderPromises = [];
     for (let i = 0; i < 40; i++) {
       tileRenderPromises.push(

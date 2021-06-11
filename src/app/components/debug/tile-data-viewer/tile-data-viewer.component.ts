@@ -41,7 +41,7 @@ export class TileDataViewerComponent implements AfterViewInit, OnDestroy {
   }
 
   private updateCanvas(): void {
-    const { tileData, palettes } = this.gameboy.gameboy.gpu;
+    const { tileData, palettes } = this.gameboy.gameboy;
     let tileX = 0;
     let tileY = 0;
     for (let address = 0x8000; address < 0x9800; address += 16) {

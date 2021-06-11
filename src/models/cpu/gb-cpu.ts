@@ -31,11 +31,11 @@ const ISR_ADDRESSES = [
 ];
 
 export class GbCpu {
-    public readonly interrupts: GbInterrupts;
+    private readonly interrupts: GbInterrupts;
 
     constructor(
-        public readonly rs: GbRegisterSet,
-        public readonly mmu: GbMmu
+        private readonly rs: GbRegisterSet,
+        private readonly mmu: GbMmu
     ) {
         this.interrupts = new GbInterrupts(mmu);
         rs.getAllRegisters().forEach(item => {

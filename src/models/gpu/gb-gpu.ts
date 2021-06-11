@@ -11,24 +11,20 @@ import { GbTileMap } from "../mmu/mmu-wrappers/gb-tile-map";
 export class GbGpu {
     private modeCycleCount = 0;
 
-    public readonly lcdc: GbLcdc;
-    public readonly palettes: GbPalettes;
-    public readonly positionControl: GbPositionControl;
-    public readonly oam: GbOam;
-    public readonly stat: GbStat;
-    public readonly tileData: GbTileData;
-    public readonly tileMap: GbTileMap;
+    private readonly palettes: GbPalettes;
+    private readonly positionControl: GbPositionControl;
+    private readonly oam: GbOam;
+    private readonly stat: GbStat;
+    private readonly tileMap: GbTileMap;
 
     constructor(
         readonly mmu: GbMmu,
         private readonly lcd: Lcd
     ) {
-        this.lcdc = new GbLcdc(mmu);
         this.palettes = new GbPalettes(mmu);
         this.positionControl = new GbPositionControl(mmu);
         this.oam = new GbOam(mmu);
         this.stat = new GbStat(mmu);
-        this.tileData = new GbTileData(mmu);
         this.tileMap = new GbTileMap(mmu);
     }
 

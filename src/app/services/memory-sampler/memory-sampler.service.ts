@@ -8,7 +8,7 @@ import { TWO_POW_SIXTEEN } from "src/utils/constants";
 })
 export class MemorySamplerService {
   public sampleMemory(gameboy: Gameboy, fromAddress: number = 0, toAddress: number = TWO_POW_SIXTEEN): number[] {
-    const { mmu } = gameboy.cpu;
+    const { mmu } = gameboy;
     const memory = new Array<number>(TWO_POW_SIXTEEN);
     for (let address = fromAddress; address < toAddress; address++) {
       memory[address - fromAddress] = this.readByte(mmu, address);
