@@ -1,5 +1,5 @@
 import { getBit } from "src/utils/arithmetic-utils";
-import { GbMmu } from "../../mmu/gb-mmu";
+import { GbMmu } from "../gb-mmu";
 
 export class GbStat {
     constructor(
@@ -32,6 +32,13 @@ export class GbStat {
 
     public getModeFlag(): number {
         return this.getValue() & 3;
+    }
+
+    public getStatInterruptLine(): number {
+        return this.getLycEqualLyInterruptEnable()
+            | this.getMode2InterruptEnable()
+            | this.getMode1InterruptEnable()
+            | this.getMode0InterruptEnable();
     }
 
     public setLycEqualLy(value: number) {

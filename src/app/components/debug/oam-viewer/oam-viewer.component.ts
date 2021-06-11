@@ -2,7 +2,7 @@ import { AfterViewInit, Component, Input, OnDestroy, ViewChild } from "@angular/
 import { NzTableComponent } from "ng-zorro-antd/table";
 import { Subscription } from "rxjs";
 import { TileRenderService } from "src/app/services/tile-render/tile-render.service";
-import { GbOamFlags } from "src/models/gpu/mmu-wrappers/gb-oam";
+import { GbOamFlags } from "src/models/mmu/mmu-wrappers/gb-oam";
 import { GameboyComponent } from "../../gameboy/gameboy.component";
 
 export class OamViewerItem {

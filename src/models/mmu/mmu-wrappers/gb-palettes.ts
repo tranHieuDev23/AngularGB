@@ -1,4 +1,4 @@
-import { GbMmu } from "../../mmu/gb-mmu";
+import { GbMmu } from "../gb-mmu";
 
 export class GbPalettes {
     constructor(

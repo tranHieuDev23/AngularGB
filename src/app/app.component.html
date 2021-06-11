@@ -88,6 +88,9 @@
                         </app-tile-data-viewer>
                         <app-oam-viewer *ngIf="currentDebugWidget.id === OAM_VIEWER_WIDGET" [gameboy]="gameboy">
                         </app-oam-viewer>
+                        <app-interrupts-state *ngIf="currentDebugWidget.id === INTERRUPTS_STATE_WIDGET"
+                            [gameboy]="gameboy">
+                        </app-interrupts-state>
                     </div>
                 </div>
             </div>

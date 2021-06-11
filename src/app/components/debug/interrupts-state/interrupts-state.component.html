@@ -1,0 +1,14 @@
+<nz-table #interruptState [nzData]="rows" nzFrontPagination="false" nzShowPagination="false">
+    <thead>
+        <tr>
+            <th>Flag</th>
+            <th>Value</th>
+        </tr>
+    </thead>
+    <tbody class="monospace">
+        <tr *ngFor="let item of interruptState.data">
+            <td>{{ item.title }}</td>
+            <td>{{ item.value() }}</td>
+        </tr>
+    </tbody>
+</nz-table>

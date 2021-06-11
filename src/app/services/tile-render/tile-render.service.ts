@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
-import { GbOam } from "src/models/gpu/mmu-wrappers/gb-oam";
-import { GbPalettes } from "src/models/gpu/mmu-wrappers/gb-palettes";
 import { CanvasLcd } from "src/models/lcd/canvas-lcd";
+import { GbOam } from "src/models/mmu/mmu-wrappers/gb-oam";
+import { GbPalettes } from "src/models/mmu/mmu-wrappers/gb-palettes";
 
 const PIXEL_SIZE = 3;
 

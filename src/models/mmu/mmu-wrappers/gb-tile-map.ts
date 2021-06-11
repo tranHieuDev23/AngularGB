@@ -1,4 +1,4 @@
-import { GbMmu } from "../../mmu/gb-mmu";
+import { GbMmu } from "../gb-mmu";
 import { GbLcdc } from "./gb-lcdc";
 import { GbTile, GbTileData } from "./gb-tile-data";
 

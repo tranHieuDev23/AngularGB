@@ -1,5 +1,5 @@
 import { getBit } from "src/utils/arithmetic-utils";
-import { GbMmu } from "../../mmu/gb-mmu";
+import { GbMmu } from "../gb-mmu";
 import { GbLcdc } from "./gb-lcdc";
 import { Gb8x16Tile, GbTile, GbTileData } from "./gb-tile-data";
 

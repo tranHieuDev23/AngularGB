@@ -1,12 +1,12 @@
 import { Lcd } from "../lcd/lcd";
 import { GbMmu } from "../mmu/gb-mmu";
-import { GbLcdc } from "./mmu-wrappers/gb-lcdc";
-import { GbOam } from "./mmu-wrappers/gb-oam";
-import { GbPalettes } from "./mmu-wrappers/gb-palettes";
-import { GbPositionControl } from "./mmu-wrappers/gb-position-control";
-import { GbStat } from "./mmu-wrappers/gb-stat";
-import { GbTileData } from "./mmu-wrappers/gb-tile-data";
-import { GbTileMap } from "./mmu-wrappers/gb-tile-map";
+import { GbLcdc } from "../mmu/mmu-wrappers/gb-lcdc";
+import { GbOam } from "../mmu/mmu-wrappers/gb-oam";
+import { GbPalettes } from "../mmu/mmu-wrappers/gb-palettes";
+import { GbPositionControl } from "../mmu/mmu-wrappers/gb-position-control";
+import { GbStat } from "../mmu/mmu-wrappers/gb-stat";
+import { GbTileData } from "../mmu/mmu-wrappers/gb-tile-data";
+import { GbTileMap } from "../mmu/mmu-wrappers/gb-tile-map";
 
 export class GbGpu {
     private modeCycleCount = 0;

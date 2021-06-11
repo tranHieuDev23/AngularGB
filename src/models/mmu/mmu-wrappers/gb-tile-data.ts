@@ -1,5 +1,5 @@
 import { getBit, toSigned8Bit } from "src/utils/arithmetic-utils";
-import { GbMmu } from "../../mmu/gb-mmu";
+import { GbMmu } from "../gb-mmu";
 import { GbLcdc } from "./gb-lcdc";
 
 export interface GbTile {
