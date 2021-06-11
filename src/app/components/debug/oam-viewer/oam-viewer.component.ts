@@ -1,9 +1,9 @@
-import { AfterViewInit, Component, Input, OnDestroy, ViewChild } from '@angular/core';
-import { NzTableComponent } from 'ng-zorro-antd/table';
-import { Subscription } from 'rxjs';
-import { TileRenderService } from 'src/app/services/tile-render/tile-render.service';
-import { GbOamFlags } from 'src/models/gpu/mmu-wrappers/gb-oam';
-import { GameboyComponent } from '../../gameboy/gameboy.component';
+import { AfterViewInit, Component, Input, OnDestroy, ViewChild } from "@angular/core";
+import { NzTableComponent } from "ng-zorro-antd/table";
+import { Subscription } from "rxjs";
+import { TileRenderService } from "src/app/services/tile-render/tile-render.service";
+import { GbOamFlags } from "src/models/gpu/mmu-wrappers/gb-oam";
+import { GameboyComponent } from "../../gameboy/gameboy.component";
 
 export class OamViewerItem {
   constructor(
@@ -15,9 +15,9 @@ export class OamViewerItem {
 }
 
 @Component({
-  selector: 'app-oam-viewer',
-  templateUrl: './oam-viewer.component.html',
-  styleUrls: ['./oam-viewer.component.scss']
+  selector: "app-oam-viewer",
+  templateUrl: "./oam-viewer.component.html",
+  styleUrls: ["./oam-viewer.component.scss"]
 })
 export class OamViewerComponent implements AfterViewInit, OnDestroy {
   @ViewChild("oamTable") oamTable: NzTableComponent;
@@ -32,7 +32,7 @@ export class OamViewerComponent implements AfterViewInit, OnDestroy {
   ];
 
   public rows: OamViewerItem[];
-  public skipToIndex: number = 0;
+  public skipToIndex = 0;
 
   private subscriptions: Subscription[] = [];
 

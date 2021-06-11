@@ -56,7 +56,7 @@ export class AppComponent {
   constructor(
     private readonly romLoader: RomFileLoaderService
   ) {
-    let currentSubMenu: string = '';
+    let currentSubMenu = "";
     DEBUG_WIDGETS.forEach((item) => {
       if (item.subMenu !== currentSubMenu) {
         currentSubMenu = item.subMenu;

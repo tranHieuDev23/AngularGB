@@ -1,12 +1,12 @@
-import { Injectable } from '@angular/core';
-import { GbOam } from 'src/models/gpu/mmu-wrappers/gb-oam';
-import { GbPalettes } from 'src/models/gpu/mmu-wrappers/gb-palettes';
-import { CanvasLcd } from 'src/models/lcd/canvas-lcd';
+import { Injectable } from "@angular/core";
+import { GbOam } from "src/models/gpu/mmu-wrappers/gb-oam";
+import { GbPalettes } from "src/models/gpu/mmu-wrappers/gb-palettes";
+import { CanvasLcd } from "src/models/lcd/canvas-lcd";
 
 const PIXEL_SIZE = 3;
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: "root"
 })
 export class TileRenderService {
 
