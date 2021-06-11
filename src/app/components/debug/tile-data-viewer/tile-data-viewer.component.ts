@@ -26,7 +26,7 @@ export class TileDataViewerComponent implements AfterViewInit, OnDestroy {
   constructor() { }
 
   ngAfterViewInit(): void {
-    this.lcd = new CanvasLcd(this.canvas.nativeElement, 192, 128, 1, this.palettes);
+    this.lcd = new CanvasLcd(this.canvas.nativeElement, 192, 128, 2, this.palettes);
     this.lcd.clear();
     this.subscriptions = [
       this.gameboy.paused.subscribe(() => this.updateCanvas()),

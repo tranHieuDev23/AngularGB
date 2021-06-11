@@ -1,0 +1,24 @@
+canvas {
+  width: 512px;
+  height: 512px;
+
+  @media (max-width: 1199px) {
+    width: 400px;
+    height: 400px;
+  }
+
+  @media (max-width: 991px) {
+    width: 256px;
+    height: 256px;
+  }
+
+  @media (max-width: 767px) {
+    width: 512px;
+    height: 512px;
+  }
+
+  @media (max-width: 576px) {
+    width: 256px;
+    height: 256px;
+  }
+}

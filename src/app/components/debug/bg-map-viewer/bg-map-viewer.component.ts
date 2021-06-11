@@ -26,7 +26,7 @@ export class BgMapViewerComponent implements AfterViewInit, OnDestroy {
   constructor() { }
 
   ngAfterViewInit(): void {
-    this.lcd = new CanvasLcd(this.canvas.nativeElement, 256, 256, 1, this.palettes);
+    this.lcd = new CanvasLcd(this.canvas.nativeElement, 256, 256, 2, this.palettes);
     this.lcd.clear();
     this.subscriptions = [
       this.gameboy.paused.subscribe(() => this.updateCanvas()),
