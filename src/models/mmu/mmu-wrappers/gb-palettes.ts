@@ -1,4 +1,5 @@
 import { GbMmu } from "../gb-mmu";
+import { BG_PALETTE_DATA_ADDRESS, OBJ_PALETTE_0_DATA_ADDRESS } from "../gb-mmu-constants";
 
 export class GbPalettes {
     constructor(
@@ -6,7 +7,7 @@ export class GbPalettes {
     ) { }
 
     public getBgPalette() {
-        return this.mmu.readByte(0xff47);
+        return this.mmu.readByte(BG_PALETTE_DATA_ADDRESS);
     }
 
     public getBgPaletteColor(index: number) {
@@ -14,7 +15,7 @@ export class GbPalettes {
     }
 
     public getObjPalette(paletteNumber: number) {
-        return this.mmu.readByte(0xff48 | paletteNumber);
+        return this.mmu.readByte(OBJ_PALETTE_0_DATA_ADDRESS | paletteNumber);
     }
 
     public getObjPaletteColor(paletteNumber: number, index: number) {

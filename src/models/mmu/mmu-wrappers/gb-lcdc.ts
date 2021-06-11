@@ -1,5 +1,6 @@
 import { getBit } from "src/utils/arithmetic-utils";
 import { GbMmu } from "../gb-mmu";
+import { LCDC_REG_ADDRESS } from "../gb-mmu-constants";
 
 export class GbLcdc {
     constructor(
@@ -7,7 +8,7 @@ export class GbLcdc {
     ) { }
 
     public getValue(): number {
-        return this.mmu.readByte(0xff40);
+        return this.mmu.readByte(LCDC_REG_ADDRESS);
     }
 
     public getLcdAndPpuEnable(): number {

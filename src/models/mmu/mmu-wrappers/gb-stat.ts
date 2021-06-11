@@ -1,5 +1,6 @@
 import { getBit } from "src/utils/arithmetic-utils";
 import { GbMmu } from "../gb-mmu";
+import { STAT_REG_ADDRESS } from "../gb-mmu-constants";
 
 export class GbStat {
     constructor(
@@ -7,7 +8,7 @@ export class GbStat {
     ) { }
 
     public getValue(): number {
-        return this.mmu.readByte(0xff41);
+        return this.mmu.readByte(STAT_REG_ADDRESS);
     }
 
     public getLycEqualLyInterruptEnable(): number {
@@ -34,22 +35,9 @@ export class GbStat {
         return this.getValue() & 3;
     }
 
-    public getStatInterruptLine(): number {
-        return this.getLycEqualLyInterruptEnable()
-            | this.getMode2InterruptEnable()
-            | this.getMode1InterruptEnable()
-            | this.getMode0InterruptEnable();
-    }
-
-    public setLycEqualLy(value: number) {
-        const oldValue = this.getValue();
-        const newValue = (oldValue & 0xfb) | ((value & 1) << 2);
-        this.mmu.writeByte(0xff41, newValue);
-    }
-
     public setModeFlag(mode: number): void {
         const oldValue = this.getValue();
         const newValue = (oldValue & 0xfc) | (mode & 3);
-        this.mmu.writeByte(0xff41, newValue);
+        this.mmu.writeByte(STAT_REG_ADDRESS, newValue);
     }
 }

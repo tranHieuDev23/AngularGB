@@ -1,16 +1,18 @@
 import { Lcd } from "../lcd/lcd";
 import { GbMmu } from "../mmu/gb-mmu";
+import { GbInterrupts } from "../mmu/mmu-wrappers/gb-interrupts";
 import { GbLcdc } from "../mmu/mmu-wrappers/gb-lcdc";
 import { GbOam } from "../mmu/mmu-wrappers/gb-oam";
 import { GbPalettes } from "../mmu/mmu-wrappers/gb-palettes";
 import { GbPositionControl } from "../mmu/mmu-wrappers/gb-position-control";
 import { GbStat } from "../mmu/mmu-wrappers/gb-stat";
-import { GbTileData } from "../mmu/mmu-wrappers/gb-tile-data";
 import { GbTileMap } from "../mmu/mmu-wrappers/gb-tile-map";
 
 export class GbGpu {
     private modeCycleCount = 0;
 
+    private readonly interrupts: GbInterrupts;
+    private readonly lcdc: GbLcdc;
     private readonly palettes: GbPalettes;
     private readonly positionControl: GbPositionControl;
     private readonly oam: GbOam;
@@ -21,6 +23,8 @@ export class GbGpu {
         readonly mmu: GbMmu,
         private readonly lcd: Lcd
     ) {
+        this.interrupts = new GbInterrupts(mmu);
+        this.lcdc = new GbLcdc(mmu);
         this.palettes = new GbPalettes(mmu);
         this.positionControl = new GbPositionControl(mmu);
         this.oam = new GbOam(mmu);
@@ -29,6 +33,9 @@ export class GbGpu {
     }
 
     public step(deltaCycleCount: number): void {
+        if (this.lcdc.getLcdAndPpuEnable() === 0) {
+            return;
+        }
         this.modeCycleCount += deltaCycleCount;
         const mode = this.stat.getModeFlag();
         switch (mode) {
@@ -45,8 +52,6 @@ export class GbGpu {
                 this.stepMode3();
                 break;
         }
-        const lycEqualLy = this.positionControl.getLy() === this.positionControl.getLyc();
-        this.stat.setLycEqualLy(lycEqualLy ? 1 : 0);
     }
 
     private stepMode0(): void {
@@ -58,6 +63,7 @@ export class GbGpu {
         if (this.positionControl.getLy() > 144) {
             this.lcd.draw();
             this.stat.setModeFlag(1);
+            this.interrupts.setVBlankInterruptFlag(1);
         } else {
             this.stat.setModeFlag(2);
         }

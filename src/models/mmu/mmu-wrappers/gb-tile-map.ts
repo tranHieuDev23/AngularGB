@@ -1,4 +1,5 @@
 import { GbMmu } from "../gb-mmu";
+import { TILE_MAP_0_ADDRESS, TILE_MAP_1_ADDRESS } from "../gb-mmu-constants";
 import { GbLcdc } from "./gb-lcdc";
 import { GbTile, GbTileData } from "./gb-tile-data";
 
@@ -26,6 +27,6 @@ export class GbTileMap {
     }
 
     private getTileIndexAddress(index: number, mapId: number): number {
-        return mapId === 0 ? 0x9800 + index : 0x9c00 + index;
+        return mapId === 0 ? TILE_MAP_0_ADDRESS + index : TILE_MAP_1_ADDRESS + index;
     }
 }

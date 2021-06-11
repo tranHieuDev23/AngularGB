@@ -1,5 +1,6 @@
 import { getBit, toSigned8Bit } from "src/utils/arithmetic-utils";
 import { GbMmu } from "../gb-mmu";
+import { TILE_DATA_BLOCK_0_ADDRESS, TILE_DATA_BLOCK_2_ADDRESS } from "../gb-mmu-constants";
 import { GbLcdc } from "./gb-lcdc";
 
 export interface GbTile {
@@ -57,14 +58,14 @@ export class GbTileData {
     }
 
     public getObjTile(index: number): Gb8x8Tile {
-        return this.getTile(0x8000 + (16 << index));
+        return this.getTile(TILE_DATA_BLOCK_0_ADDRESS + (16 << index));
     }
 
     public getBgAndWindowTile(index: number): Gb8x8Tile {
         if (this.lcdc.getBgAndWindowTileDataArea() === 1) {
-            return this.getTile(0x8000 + (index * 16));
+            return this.getTile(TILE_DATA_BLOCK_0_ADDRESS + (index * 16));
         } else {
-            return this.getTile(0x9000 + (toSigned8Bit(index) * 16));
+            return this.getTile(TILE_DATA_BLOCK_2_ADDRESS + (toSigned8Bit(index) * 16));
         }
     }
 

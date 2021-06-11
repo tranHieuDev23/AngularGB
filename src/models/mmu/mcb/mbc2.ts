@@ -1,4 +1,4 @@
-import { ROM_BANK_START } from "../gb-mmu";
+import { ROM_BANK_START } from "../gb-mmu-constants";
 import { Mbc } from "./gb-mcb";
 
 export class GbMcb2 implements Mbc {

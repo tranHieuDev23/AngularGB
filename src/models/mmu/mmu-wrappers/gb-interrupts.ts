@@ -1,8 +1,6 @@
 import { GbMmu } from "src/models/mmu/gb-mmu";
 import { getBit } from "src/utils/arithmetic-utils";
-
-const INTERRUPT_ENABLE_ADDRESS = 0xffff;
-const INTERRUPT_FLAG_ADDRESS = 0xff0f;
+import { INTERRUPT_ENABLE_ADDRESS, INTERRUPT_FLAG_ADDRESS } from "../gb-mmu-constants";
 
 export class GbInterrupts {
     constructor(

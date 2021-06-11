@@ -52,9 +52,17 @@ export class Gameboy {
         if (this.currentFrameCycleCount >= CYCLE_PER_FRAME) {
             this.currentFrameCycleCount = 0;
         }
+        const oldStatLine = this.getStatInterruptLine();
+
         const deltaCycleCount = this.cpu.step().cycleCount;
         this.gpu.step(deltaCycleCount);
         this.currentFrameCycleCount += deltaCycleCount;
+
+        const newStatLine = this.getStatInterruptLine();
+        // STAT interrupt is only triggered by a rising edge
+        if (oldStatLine === 0 || newStatLine === 1) {
+            this.interrupts.setLcdStatInterruptFlag(1);
+        }
     }
 
     public frame(): void {
@@ -73,5 +81,14 @@ export class Gameboy {
         }
         while (this.currentFrameCycleCount < CYCLE_PER_FRAME);
         return false;
+    }
+
+    private getStatInterruptLine(): number {
+        const lycEqualLySource = this.stat.getLycEqualLyInterruptEnable() & this.stat.getLycEqualLy();
+        const mode = this.stat.getModeFlag();
+        const mode2Source = this.stat.getMode2InterruptEnable() === 1 && mode === 2 ? 1 : 0;
+        const mode1Source = this.stat.getMode1InterruptEnable() === 1 && mode === 1 ? 1 : 0;
+        const mode0Source = this.stat.getMode0InterruptEnable() === 1 && mode === 0 ? 1 : 0;
+        return lycEqualLySource | mode2Source | mode1Source | mode0Source;
     }
 }

@@ -1,5 +1,5 @@
 import { TWO_POW_EIGHT } from "src/utils/constants";
-import { EXT_RAM_START } from "../gb-mmu";
+import { EXT_RAM_START } from "../gb-mmu-constants";
 import { Mbc } from "./gb-mcb";
 
 export class RomMcb implements Mbc {

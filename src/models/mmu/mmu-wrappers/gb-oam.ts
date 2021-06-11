@@ -1,5 +1,6 @@
 import { getBit } from "src/utils/arithmetic-utils";
 import { GbMmu } from "../gb-mmu";
+import { OAM_ADDRESS } from "../gb-mmu-constants";
 import { GbLcdc } from "./gb-lcdc";
 import { Gb8x16Tile, GbTile, GbTileData } from "./gb-tile-data";
 
@@ -61,6 +62,6 @@ export class GbOam {
     }
 
     private getSpriteStartIndex(index: number): number {
-        return 0xf300 + (index << 2);
+        return OAM_ADDRESS + index * 4;
     }
 }

@@ -1,5 +1,7 @@
-import { EIGHT_ONE_BITS, TWO_POW_EIGHT, TWO_POW_SIXTEEN } from "src/utils/constants";
+import { getBit } from "src/utils/arithmetic-utils";
+import { EIGHT_ONE_BITS, SIXTEEN_ONE_BITS, TWO_POW_EIGHT, TWO_POW_SIXTEEN } from "src/utils/constants";
 import { randomInteger } from "src/utils/random";
+import { EXT_RAM_START, VRAM_START, WORK_RAM_START, FORBIDDEN_RAM_START, SPRITE_RAM_START, HIGH_RAM_START, IO_REG_START, IE_REG, ECHO_RAM_START, DMA_REG_ADDRESS, LY_ADDRESS, LYC_ADDRESS, STAT_REG_ADDRESS, LCDC_REG_ADDRESS } from "./gb-mmu-constants";
 import { GB_INITIALIZE_ROM } from "./gb-rom";
 import { Mbc } from "./mcb/gb-mcb";
 import { Mmu } from "./mmu";
@@ -40,17 +42,6 @@ export class GbTestMmu implements GbMmu {
         }
     }
 }
-
-export const ROM_BANK_START = 0x4000;
-export const VRAM_START = 0x8000;
-export const EXT_RAM_START = 0xa000;
-export const WORK_RAM_START = 0xc000;
-export const ECHO_RAM_START = 0xe000;
-export const SPRITE_RAM_START = 0xfe00;
-export const FORBIDDEN_RAM_START = 0xfea0;
-export const IO_REG_START = 0xff00;
-export const HIGH_RAM_START = 0xff80;
-export const IE_REG = 0xffff;
 
 export class GbMmuImpl implements GbMmu {
     private readonly vram: number[] = new Array<number>(EXT_RAM_START - VRAM_START);
@@ -102,7 +93,7 @@ export class GbMmuImpl implements GbMmu {
     }
 
     readWord(address: number): number {
-        return (this.readByte(address + 1) << 8) | this.readByte(address);
+        return (this.readByte((address + 1) & SIXTEEN_ONE_BITS) << 8) | this.readByte(address);
     }
 
     writeByte(address: number, value: number): void {
@@ -134,15 +125,9 @@ export class GbMmuImpl implements GbMmu {
             throw new Error(`Trying to write to forbidden RAM address: ${address}`);
         }
         if (address < HIGH_RAM_START) {
+            const oldValue = this.ioRam[address - IO_REG_START];
             this.ioRam[address - IO_REG_START] = value;
-            if (address === 0xff46) {
-                // HACK: DMA Transfer
-                const startAddress = value << 8;
-                const endAddress = startAddress | 0xa0;
-                for (let i = startAddress; i < endAddress; i++) {
-                    this.spriteRam[i - startAddress] = this.readByte(i);
-                }
-            }
+            this.handleIoRegisterWrite(address, oldValue, value);
             return;
         }
         if (address < IE_REG) {
@@ -160,7 +145,7 @@ export class GbMmuImpl implements GbMmu {
         const lowerHalf = value & EIGHT_ONE_BITS;
         const upperHalf = (value >> 8) & EIGHT_ONE_BITS;
         this.writeByte(address, lowerHalf);
-        this.writeByte(address + 1, upperHalf);
+        this.writeByte((address + 1) & SIXTEEN_ONE_BITS, upperHalf);
     }
 
     randomize(): void {
@@ -183,6 +168,34 @@ export class GbMmuImpl implements GbMmu {
 
     public getIsBootingUp(): number {
         return this.ioRam[0xff50 - IO_REG_START];
+    }
+
+    private handleIoRegisterWrite(address: number, oldValue: number, value: number): void {
+        switch (address) {
+            case DMA_REG_ADDRESS:
+                const startAddress = value << 8;
+                const endAddress = startAddress | 0xa0;
+                for (let i = startAddress; i < endAddress; i++) {
+                    this.spriteRam[i - startAddress] = this.readByte(i);
+                }
+                break;
+
+            case LCDC_REG_ADDRESS:
+                const oldLcdEnable = getBit(oldValue, 7);
+                const lcdEnable = getBit(value, 7);
+                if (oldLcdEnable === 1 && lcdEnable === 0) {
+                    this.ioRam[LY_ADDRESS - IO_REG_START] = 0;
+                }
+                break;
+
+            case LY_ADDRESS:
+            case LYC_ADDRESS:
+                const oldStat = this.ioRam[STAT_REG_ADDRESS - IO_REG_START];
+                const lyEqualLyc = this.ioRam[LY_ADDRESS - IO_REG_START] === this.ioRam[LYC_ADDRESS - IO_REG_START];
+                const newStat = (oldStat & 0xfb) | ((lyEqualLyc ? 1 : 0) << 2);
+                this.ioRam[STAT_REG_ADDRESS - IO_REG_START] = newStat;
+                break;
+        }
     }
 }
 
