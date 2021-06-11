@@ -28,6 +28,7 @@ export class DisassemblerComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    this.runDisassembler();
     this.subscriptions = [
       this.gameboy.paused.subscribe(() => this.runDisassembler()),
       this.gameboy.stepSkipped.subscribe(() => this.runDisassembler()),

@@ -18,6 +18,7 @@ const MEMORY_STATE_WIDGET = 2;
 const GPU_STATE_WIDGET = 3;
 const BG_MAP_WIDGET = 4;
 const TILE_DATA_WIDGET = 5;
+const OAM_VIEWER_WIDGET = 6;
 
 const DEBUG_WIDGETS = [
   new DebugWidget("CPU", "CPU State", CPU_STATE_WIDGET),
@@ -25,7 +26,8 @@ const DEBUG_WIDGETS = [
   new DebugWidget("Memory", "Memory State", MEMORY_STATE_WIDGET),
   new DebugWidget("Graphic", "GPU State", GPU_STATE_WIDGET),
   new DebugWidget("Graphic", "Background Map Viewer", BG_MAP_WIDGET),
-  new DebugWidget("Graphic", "Tile Data Viewer", TILE_DATA_WIDGET)
+  new DebugWidget("Graphic", "Tile Data Viewer", TILE_DATA_WIDGET),
+  new DebugWidget("Graphic", "OAM Viewer", OAM_VIEWER_WIDGET)
 ];
 
 @Component({
@@ -40,6 +42,7 @@ export class AppComponent {
   public readonly GPU_STATE_WIDGET = GPU_STATE_WIDGET;
   public readonly BG_MAP_WIDGET = BG_MAP_WIDGET;
   public readonly TILE_DATA_WIDGET = TILE_DATA_WIDGET;
+  public readonly OAM_VIEWER_WIDGET = OAM_VIEWER_WIDGET;
   public readonly DEBUG_MENU_ITEMS: { subMenu: string, items: DebugWidget[] }[] = [];
 
   @ViewChild("gameboy", { static: true }) gameboy: GameboyComponent;

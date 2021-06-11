@@ -26,6 +26,7 @@ import { MemorySamplerModule } from "./components/debug/memory-sampler/memory-sa
 import { GpuStateModule } from "./components/debug/gpu-state/gpu-state.module";
 import { BgMapViewerModule } from "./components/debug/bg-map-viewer/bg-map-viewer.module";
 import { TileDataViewModule } from "./components/debug/tile-data-viewer/tile-data-viewer.module";
+import { OamViewerModule } from "./components/debug/oam-viewer/oam-viewer.module";
 
 registerLocaleData(en);
 
@@ -54,7 +55,8 @@ registerLocaleData(en);
     MemorySamplerModule,
     GpuStateModule,
     BgMapViewerModule,
-    TileDataViewModule
+    TileDataViewModule,
+    OamViewerModule
   ],
   providers: [
     { provide: NZ_I18N, useValue: en_US },

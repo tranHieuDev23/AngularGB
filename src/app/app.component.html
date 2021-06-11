@@ -86,6 +86,8 @@
                         </app-bg-map-viewer>
                         <app-tile-data-viewer *ngIf="currentDebugWidget.id === TILE_DATA_WIDGET" [gameboy]="gameboy">
                         </app-tile-data-viewer>
+                        <app-oam-viewer *ngIf="currentDebugWidget.id === OAM_VIEWER_WIDGET" [gameboy]="gameboy">
+                        </app-oam-viewer>
                     </div>
                 </div>
             </div>

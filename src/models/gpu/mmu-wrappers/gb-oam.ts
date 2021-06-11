@@ -10,7 +10,7 @@ export class GbOamFlags {
     public readonly paletteNumber: number;
 
     constructor(
-        readonly flagByte: number
+        public readonly flagByte: number
     ) {
         this.bgAndWindowOverObj = getBit(flagByte, 7);
         this.yFlip = getBit(flagByte, 6);

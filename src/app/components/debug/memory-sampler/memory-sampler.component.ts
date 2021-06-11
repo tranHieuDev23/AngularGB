@@ -1,4 +1,5 @@
-import { Component, Input, OnInit } from "@angular/core";
+import { Component, Input, OnDestroy, OnInit } from "@angular/core";
+import { Subscription } from "rxjs";
 import { MemorySamplerService } from "src/app/services/memory-sampler/memory-sampler.service";
 import { GameboyComponent } from "../../gameboy/gameboy.component";
 
@@ -7,7 +8,7 @@ import { GameboyComponent } from "../../gameboy/gameboy.component";
   templateUrl: "./memory-sampler.component.html",
   styleUrls: ["./memory-sampler.component.scss"]
 })
-export class MemorySamplerComponent implements OnInit {
+export class MemorySamplerComponent implements OnInit, OnDestroy {
   @Input("gameboy") gameboy: GameboyComponent;
 
   public readonly hexDigits: string[] = [
@@ -18,6 +19,8 @@ export class MemorySamplerComponent implements OnInit {
   private fromAddress: number;
   private toAddress: number;
 
+  private subscriptions: Subscription[] = [];
+
   constructor(
     private readonly memorySampler: MemorySamplerService
   ) {
@@ -25,10 +28,17 @@ export class MemorySamplerComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.gameboy.paused.subscribe(() => this.sampleMemory());
-    this.gameboy.stepSkipped.subscribe(() => this.sampleMemory());
-    this.gameboy.frameSkipped.subscribe(() => this.sampleMemory());
-    this.gameboy.stopped.subscribe(() => this.clear());
+    this.sampleMemory();
+    this.subscriptions = [
+      this.gameboy.paused.subscribe(() => this.sampleMemory()),
+      this.gameboy.stepSkipped.subscribe(() => this.sampleMemory()),
+      this.gameboy.frameSkipped.subscribe(() => this.sampleMemory()),
+      this.gameboy.stopped.subscribe(() => this.clear())
+    ];
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptions.forEach(item => item.unsubscribe());
   }
 
   public jumpToAddress(hexAddress: string): void {

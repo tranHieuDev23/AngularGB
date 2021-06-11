@@ -1,0 +1,36 @@
+<nz-input-group class="oam-viewer-control" nzPrefix="Jump to sprite" [nzSuffix]="jumpTemplate">
+    <nz-input-number [nzDisabled]="!gameboy.isPaused()" [nzMin]="0" [nzMax]="39" [nzStep]="1" [(ngModel)]="skipToIndex"
+        (keydown.enter)="jumpToSprite(skipToIndex)">
+    </nz-input-number>
+    <ng-template #jumpTemplate>
+        <button nz-button (click)="jumpToSprite(skipToIndex)">
+            <i nz-icon nzType="search" nzTheme="outline"></i>
+        </button>
+    </ng-template>
+</nz-input-group>
+
+<nz-table #oamTable [nzData]="rows" [nzScroll]="{ y: '500px' }" nzFrontPagination="false" nzShowPagination="false"
+    [nzVirtualItemSize]="54" [nzVirtualMaxBufferPx]="1000" [nzVirtualMinBufferPx]="500">
+    <thead>
+        <tr>
+            <th>Index</th>
+            <th>Y</th>
+            <th>X</th>
+            <th>Flags</th>
+            <th>Tile</th>
+        </tr>
+    </thead>
+    <tbody>
+        <ng-template nz-virtual-scroll let-data let-index="index">
+            <tr class="monospace">
+                <td>{{ index }}</td>
+                <td>{{ data.yPosition }}</td>
+                <td>{{ data.xPosition }}</td>
+                <td>{{ data.flags.flagByte }}</td>
+                <td>
+                    <img [src]="data.tile" />
+                </td>
+            </tr>
+        </ng-template>
+    </tbody>
+</nz-table>

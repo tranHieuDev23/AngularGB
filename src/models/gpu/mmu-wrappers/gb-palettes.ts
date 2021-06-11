@@ -13,19 +13,11 @@ export class GbPalettes {
         return (this.getBgPalette() >> (index << 1)) & 3;
     }
 
-    public getObj0Palette() {
-        return this.mmu.readByte(0xff48);
+    public getObjPalette(paletteNumber: number) {
+        return this.mmu.readByte(0xff48 | paletteNumber);
     }
 
-    public getObj0PaletteColor(index: number) {
-        return (this.getObj0Palette() >> (index << 1)) & 3;
-    }
-
-    public getObj1Palette() {
-        return this.mmu.readByte(0xff49);
-    }
-
-    public getObj1PaletteColor(index: number) {
-        return (this.getObj1Palette() >> (index << 1)) & 3;
+    public getObjPaletteColor(paletteNumber: number, index: number) {
+        return (this.getObjPalette(paletteNumber) >> (index << 1)) & 3;
     }
 }

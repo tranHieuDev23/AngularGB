@@ -1,6 +1,7 @@
 import { Lcd } from "../lcd/lcd";
 import { GbMmu } from "../mmu/gb-mmu";
 import { GbLcdc } from "./mmu-wrappers/gb-lcdc";
+import { GbOam } from "./mmu-wrappers/gb-oam";
 import { GbPalettes } from "./mmu-wrappers/gb-palettes";
 import { GbPositionControl } from "./mmu-wrappers/gb-position-control";
 import { GbStat } from "./mmu-wrappers/gb-stat";
@@ -13,6 +14,7 @@ export class GbGpu {
     public readonly lcdc: GbLcdc;
     public readonly palettes: GbPalettes;
     public readonly positionControl: GbPositionControl;
+    public readonly oam: GbOam;
     public readonly stat: GbStat;
     public readonly tileData: GbTileData;
     public readonly tileMap: GbTileMap;
@@ -24,6 +26,7 @@ export class GbGpu {
         this.lcdc = new GbLcdc(mmu);
         this.palettes = new GbPalettes(mmu);
         this.positionControl = new GbPositionControl(mmu);
+        this.oam = new GbOam(mmu);
         this.stat = new GbStat(mmu);
         this.tileData = new GbTileData(mmu);
         this.tileMap = new GbTileMap(mmu);

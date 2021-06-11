@@ -48,6 +48,10 @@ export class CanvasLcd implements Lcd {
         }
     }
 
+    public getContentAsBase64(): string {
+        return this.canvas.toDataURL();
+    }
+
     private drawPixel(context: CanvasRenderingContext2D, x: number, y: number, color: string): void {
         context.fillStyle = color;
         context.fillRect(x * this.pixelSize, y * this.pixelSize, this.pixelSize, this.pixelSize);
