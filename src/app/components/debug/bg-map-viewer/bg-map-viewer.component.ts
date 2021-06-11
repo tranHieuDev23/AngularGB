@@ -1,4 +1,5 @@
-import { AfterViewInit, Component, ElementRef, Input, ViewChild } from "@angular/core";
+import { AfterViewInit, Component, ElementRef, Input, OnDestroy, ViewChild } from "@angular/core";
+import { Subscription } from "rxjs";
 import { CanvasLcd } from "src/models/lcd/canvas-lcd";
 import { GameboyComponent } from "../../gameboy/gameboy.component";
 
@@ -7,7 +8,7 @@ import { GameboyComponent } from "../../gameboy/gameboy.component";
   templateUrl: "./bg-map-viewer.component.html",
   styleUrls: ["./bg-map-viewer.component.scss"]
 })
-export class BgMapViewerComponent implements AfterViewInit {
+export class BgMapViewerComponent implements AfterViewInit, OnDestroy {
   @ViewChild("canvas") canvas: ElementRef<HTMLCanvasElement>;
 
   @Input("gameboy") gameboy: GameboyComponent;
@@ -20,16 +21,23 @@ export class BgMapViewerComponent implements AfterViewInit {
   ];
 
   private lcd: CanvasLcd;
+  private subscriptions: Subscription[] = [];
 
   constructor() { }
 
   ngAfterViewInit(): void {
     this.lcd = new CanvasLcd(this.canvas.nativeElement, 256, 256, 1, this.palettes);
     this.lcd.clear();
-    this.gameboy.paused.subscribe(() => this.updateCanvas());
-    this.gameboy.stepSkipped.subscribe(() => this.updateCanvas());
-    this.gameboy.frameSkipped.subscribe(() => this.updateCanvas());
-    this.gameboy.stopped.subscribe(() => this.lcd.clear());
+    this.subscriptions = [
+      this.gameboy.paused.subscribe(() => this.updateCanvas()),
+      this.gameboy.stepSkipped.subscribe(() => this.updateCanvas()),
+      this.gameboy.frameSkipped.subscribe(() => this.updateCanvas()),
+      this.gameboy.stopped.subscribe(() => this.lcd.clear())
+    ];
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptions.forEach(item => item.unsubscribe());
   }
 
   private updateCanvas(): void {

@@ -1,5 +1,6 @@
-import { Component, Input, OnInit, ViewChild } from "@angular/core";
+import { Component, Input, OnDestroy, OnInit, ViewChild } from "@angular/core";
 import { NzTableComponent } from "ng-zorro-antd/table";
+import { Subscription } from "rxjs";
 import { RomDisassemblerService } from "src/app/services/rom-disassembler/rom-disassembler.service";
 import { GbDisassembledInstruction } from "src/models/cpu/gb-cpu";
 import { GameboyComponent } from "../../gameboy/gameboy.component";
@@ -9,7 +10,7 @@ import { GameboyComponent } from "../../gameboy/gameboy.component";
   templateUrl: "./disassembler.component.html",
   styleUrls: ["./disassembler.component.scss"]
 })
-export class DisassemblerComponent implements OnInit {
+export class DisassemblerComponent implements OnInit, OnDestroy {
   @ViewChild("disassembled") disassembledTable: NzTableComponent;
 
   @Input("gameboy") gameboy: GameboyComponent;
@@ -18,23 +19,28 @@ export class DisassemblerComponent implements OnInit {
   private breakpointIndex: number;
   public breakpointInstruction: GbDisassembledInstruction;
 
+  private subscriptions: Subscription[] = [];
+
   constructor(
-    private readonly disassembler: RomDisassemblerService
+    private readonly disassembler: RomDisassemblerService,
   ) {
     this.clear();
   }
 
   ngOnInit(): void {
-    this.gameboy.paused.subscribe(() => this.runDisassembler());
-    this.gameboy.stepSkipped.subscribe(() => this.runDisassembler());
-    this.gameboy.frameSkipped.subscribe(() => this.runDisassembler());
-    this.gameboy.stopped.subscribe(() => this.clear());
+    this.subscriptions = [
+      this.gameboy.paused.subscribe(() => this.runDisassembler()),
+      this.gameboy.stepSkipped.subscribe(() => this.runDisassembler()),
+      this.gameboy.frameSkipped.subscribe(() => this.runDisassembler()),
+      this.gameboy.stopped.subscribe(() => this.clear())
+    ];
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptions.forEach(item => item.unsubscribe());
   }
 
   private async runDisassembler(): Promise<void> {
-    if (!this.gameboy.isDebugging) {
-      return;
-    }
     this.disassembledInstructions = await this.disassembler.disassembleCurrentRomMemory(this.gameboy.gameboy);
     if (this.breakpointInstruction !== null) {
       this.breakpointIndex = this.findInstructionIndex(this.breakpointInstruction.address);
