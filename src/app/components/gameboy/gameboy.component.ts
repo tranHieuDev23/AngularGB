@@ -13,6 +13,7 @@ export class GameboyComponent implements OnInit {
   @ViewChild("battery", { static: true }) batter: ElementRef<HTMLElement>;
   @ViewChild("canvas", { static: true }) canvas: ElementRef<HTMLCanvasElement>;
 
+  @Output("frameEnded") public frameEnded = new EventEmitter<void>();
   @Output("resumed") public resumed = new EventEmitter<void>();
   @Output("paused") public paused = new EventEmitter<void>();
   @Output("stepSkipped") public stepSkipped = new EventEmitter<void>();
@@ -60,12 +61,14 @@ export class GameboyComponent implements OnInit {
     if (breakpointAddress === null) {
       this.gameboyIntervalId = setInterval(() => {
         this.gameboy.frame();
+        this.frameEnded.emit();
       }, 1.0 / 60);
     } else {
       this.gameboyIntervalId = setInterval(() => {
         if (this.gameboy.frameWithBreakpoint(breakpointAddress)) {
           this.pause();
         }
+        this.frameEnded.emit();
       }, 1.0 / 60);
     }
     this.resumed.emit();

@@ -45,6 +45,7 @@ export class OamViewerComponent implements AfterViewInit, OnDestroy {
   ngAfterViewInit(): void {
     this.update();
     this.subscriptions = [
+      this.gameboy.frameEnded.subscribe(() => this.update()),
       this.gameboy.paused.subscribe(() => this.update()),
       this.gameboy.stepSkipped.subscribe(() => this.update()),
       this.gameboy.frameSkipped.subscribe(() => this.update()),

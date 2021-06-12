@@ -29,6 +29,7 @@ export class BgMapViewerComponent implements AfterViewInit, OnDestroy {
     this.lcd = new CanvasLcd(this.canvas.nativeElement, 256, 256, 2, this.palettes);
     this.updateCanvas();
     this.subscriptions = [
+      this.gameboy.frameEnded.subscribe(() => this.updateCanvas()),
       this.gameboy.paused.subscribe(() => this.updateCanvas()),
       this.gameboy.stepSkipped.subscribe(() => this.updateCanvas()),
       this.gameboy.frameSkipped.subscribe(() => this.updateCanvas()),
@@ -61,15 +62,19 @@ export class BgMapViewerComponent implements AfterViewInit, OnDestroy {
         tileY += 8;
       }
     }
-    const scrollX = positionControl.getScrollX();
-    const scrollY = positionControl.getScrollY();
-    for (let x = scrollX; x < scrollX + 160; x++) {
-      this.lcd.updatePixel(x, scrollY, 4);
-      this.lcd.updatePixel(x, scrollY + 143, 4);
+    const scrollXTop = positionControl.getScrollX() & 255;
+    const scrollXBottom = (scrollXTop + 159) & 255;
+    const scrollYTop = positionControl.getScrollY();
+    const scrollYBottom = (scrollYTop + 143) & 255;
+    for (let i = 0; i < 160; i++) {
+      const x = (scrollXTop + i) & 255;
+      this.lcd.updatePixel(x, scrollYTop, 4);
+      this.lcd.updatePixel(x, scrollYBottom, 4);
     }
-    for (let y = scrollY; y < scrollY + 144; y++) {
-      this.lcd.updatePixel(scrollX, y, 4);
-      this.lcd.updatePixel(scrollX + 159, y, 4);
+    for (let i = 0; i < 144; i++) {
+      const y = (scrollYTop + i) & 255;
+      this.lcd.updatePixel(scrollXTop, y, 4);
+      this.lcd.updatePixel(scrollXBottom, y, 4);
     }
     this.lcd.draw();
   }
