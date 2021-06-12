@@ -6,7 +6,6 @@ export class GbMcb1 implements Mbc {
 
     private lower5Bits = 0x00;
     private upper2Bits = 0x0;
-    private ramEnable = false;
     private bankingMode = 0;
 
     constructor(
@@ -35,16 +34,12 @@ export class GbMcb1 implements Mbc {
     }
 
     readRam(address: number): number {
-        if (!this.ramEnable) {
-            throw new Error("RAM is not yet enabled!");
-        }
         const ramBankOffset = this.getCurrentRamBank() * 0x2000;
         return this.extRam[ramBankOffset + address - EXT_RAM_START];
     }
 
     writeRom(address: number, value: number): void {
         if (0x0000 <= address && address < 0x2000) {
-            this.ramEnable = (value & 0x0a) !== 0;
             return;
         }
         if (0x2000 <= address && address < 0x4000) {
@@ -64,9 +59,6 @@ export class GbMcb1 implements Mbc {
     }
 
     writeRam(address: number, value: number): void {
-        if (!this.ramEnable) {
-            throw new Error("RAM is not yet enabled!");
-        }
         const ramBankOffset = this.getCurrentRamBank() * 0x2000;
         this.extRam[ramBankOffset + address - EXT_RAM_START] = value;
     }

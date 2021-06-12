@@ -5,7 +5,6 @@ export class GbMcb2 implements Mbc {
     private readonly extRam: number[] = new Array<number>(512);
 
     private romBankOffset = 0x4000;
-    private ramEnabled = false;
 
     constructor(
         private readonly code: number,
@@ -27,9 +26,6 @@ export class GbMcb2 implements Mbc {
         if (address >= 0xc000) {
             throw new Error(`Trying to read from invalid RAM address: ${address}`);
         }
-        if (!this.ramEnabled) {
-            throw new Error("RAM is not yet enabled!");
-        }
         const address9Bit = address & 0x1ff;
         return this.extRam[address9Bit];
     }
@@ -41,7 +37,6 @@ export class GbMcb2 implements Mbc {
         const bit8 = (address >> 8) & 1;
         if (bit8 === 0) {
             // RAM control
-            this.ramEnabled = (value === 0xa);
         } else {
             // ROM control
             this.romBankOffset = (value & 0xf) * 0x4000;
@@ -54,9 +49,6 @@ export class GbMcb2 implements Mbc {
     writeRam(address: number, value: number): void {
         if (address >= 0xc000) {
             throw new Error(`Trying to read from invalid RAM address: ${address}`);
-        }
-        if (!this.ramEnabled) {
-            throw new Error("RAM is not yet enabled!");
         }
         const address9Bit = address & 0x1ff;
         this.extRam[address9Bit] = value;

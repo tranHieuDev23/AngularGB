@@ -64,7 +64,7 @@ export class GbMmuImpl implements GbMmu {
             return this.ram[address - (ECHO_RAM_START - WORK_RAM_START)];
         }
         if (FORBIDDEN_RAM_START <= address && address < IO_REG_START) {
-            throw new Error(`Trying to read forbidden RAM address: ${address}`);
+            return 0xff;
         }
         if (0x10000 <= address) {
             throw new Error(`Trying to read invalid address: ${address}`);
@@ -90,7 +90,7 @@ export class GbMmuImpl implements GbMmu {
             return;
         }
         if (FORBIDDEN_RAM_START <= address && address < IO_REG_START) {
-            throw new Error(`Trying to write to forbidden RAM address: ${address}`);
+            return;
         }
         if (0x10000 <= address) {
             throw new Error(`Trying to write to invalid address: ${address}`);

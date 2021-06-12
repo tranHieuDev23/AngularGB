@@ -59,17 +59,18 @@ export class GameboyComponent implements OnInit {
       return;
     }
     if (breakpointAddress === null) {
-      this.gameboyIntervalId = setInterval(() => {
+      this.setGameboyIntervalId(setInterval(() => {
         this.gameboy.frame();
         this.frameEnded.emit();
-      }, 1.0 / 60);
+      }, 1.0 / 60));
     } else {
-      this.gameboyIntervalId = setInterval(() => {
-        if (this.gameboy.frameWithBreakpoint(breakpointAddress)) {
+      this.setGameboyIntervalId(setInterval(() => {
+        const metBreakpoint = this.gameboy.frameWithBreakpoint(breakpointAddress);
+        this.frameEnded.emit();
+        if (metBreakpoint) {
           this.pause();
         }
-        this.frameEnded.emit();
-      }, 1.0 / 60);
+      }, 1.0 / 60));
     }
     this.resumed.emit();
   }
@@ -78,8 +79,7 @@ export class GameboyComponent implements OnInit {
     if (this.isPaused()) {
       return;
     }
-    clearInterval(this.gameboyIntervalId);
-    this.gameboyIntervalId = null;
+    this.setGameboyIntervalId(null);
     this.paused.emit();
   }
 
@@ -107,12 +107,19 @@ export class GameboyComponent implements OnInit {
     if (!this.isRomLoaded()) {
       return;
     }
-    this.lcd.clear();
     if (this.isPlaying()) {
       this.pause();
     }
+    this.lcd.clear();
     this.rom = null;
     this.gameboy = null;
     this.stopped.emit();
+  }
+
+  private setGameboyIntervalId(id: any): void {
+    if (this.gameboyIntervalId !== null) {
+      clearInterval(this.gameboyIntervalId);
+    }
+    this.gameboyIntervalId = id;
   }
 }

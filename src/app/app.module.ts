@@ -28,6 +28,7 @@ import { BgMapViewerModule } from "./components/debug/bg-map-viewer/bg-map-viewe
 import { TileDataViewModule } from "./components/debug/tile-data-viewer/tile-data-viewer.module";
 import { OamViewerModule } from "./components/debug/oam-viewer/oam-viewer.module";
 import { InterruptsStateModule } from "./components/debug/interrupts-state/interrupts-state.module";
+import { WindowMapViewerModule } from "./components/debug/window-map-viewer/window-map-viewer.module";
 
 registerLocaleData(en);
 
@@ -58,7 +59,8 @@ registerLocaleData(en);
     BgMapViewerModule,
     TileDataViewModule,
     OamViewerModule,
-    InterruptsStateModule
+    InterruptsStateModule,
+    WindowMapViewerModule
   ],
   providers: [
     { provide: NZ_I18N, useValue: en_US },

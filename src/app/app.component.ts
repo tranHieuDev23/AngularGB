@@ -17,9 +17,10 @@ const DISASSEMBLER_WIDGET = 1;
 const MEMORY_STATE_WIDGET = 2;
 const GPU_STATE_WIDGET = 3;
 const BG_MAP_WIDGET = 4;
-const TILE_DATA_WIDGET = 5;
-const OAM_VIEWER_WIDGET = 6;
-const INTERRUPTS_STATE_WIDGET = 7;
+const WINDOW_MAP_WIDGET = 5;
+const TILE_DATA_WIDGET = 6;
+const OAM_VIEWER_WIDGET = 7;
+const INTERRUPTS_STATE_WIDGET = 8;
 
 const DEBUG_WIDGETS = [
   new DebugWidget("CPU", "CPU State", CPU_STATE_WIDGET),
@@ -27,6 +28,7 @@ const DEBUG_WIDGETS = [
   new DebugWidget("Memory", "Memory State", MEMORY_STATE_WIDGET),
   new DebugWidget("Graphic", "GPU State", GPU_STATE_WIDGET),
   new DebugWidget("Graphic", "Background Map Viewer", BG_MAP_WIDGET),
+  new DebugWidget("Graphic", "Window Map Viewer", WINDOW_MAP_WIDGET),
   new DebugWidget("Graphic", "Tile Data Viewer", TILE_DATA_WIDGET),
   new DebugWidget("Graphic", "OAM Viewer", OAM_VIEWER_WIDGET),
   new DebugWidget("Interrupts", "Interrupts State", INTERRUPTS_STATE_WIDGET),
@@ -43,6 +45,7 @@ export class AppComponent {
   public readonly MEMORY_STATE_WIDGET = MEMORY_STATE_WIDGET;
   public readonly GPU_STATE_WIDGET = GPU_STATE_WIDGET;
   public readonly BG_MAP_WIDGET = BG_MAP_WIDGET;
+  public readonly WINDOW_MAP_WIDGET = WINDOW_MAP_WIDGET;
   public readonly TILE_DATA_WIDGET = TILE_DATA_WIDGET;
   public readonly OAM_VIEWER_WIDGET = OAM_VIEWER_WIDGET;
   public readonly INTERRUPTS_STATE_WIDGET = INTERRUPTS_STATE_WIDGET;
@@ -70,7 +73,7 @@ export class AppComponent {
   }
 
   public openDebugWidget(widget: DebugWidget): void {
-    if (this.currentDebugWidget.id === widget.id) {
+    if (this.currentDebugWidget?.id === widget.id) {
       this.currentDebugWidget = null;
     } else {
       this.currentDebugWidget = widget;

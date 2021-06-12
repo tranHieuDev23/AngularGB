@@ -84,6 +84,8 @@
                         </app-gpu-state>
                         <app-bg-map-viewer *ngIf="currentDebugWidget.id === BG_MAP_WIDGET" [gameboy]="gameboy">
                         </app-bg-map-viewer>
+                        <app-window-map-viewer *ngIf="currentDebugWidget.id === WINDOW_MAP_WIDGET" [gameboy]="gameboy">
+                        </app-window-map-viewer>
                         <app-tile-data-viewer *ngIf="currentDebugWidget.id === TILE_DATA_WIDGET" [gameboy]="gameboy">
                         </app-tile-data-viewer>
                         <app-oam-viewer *ngIf="currentDebugWidget.id === OAM_VIEWER_WIDGET" [gameboy]="gameboy">
