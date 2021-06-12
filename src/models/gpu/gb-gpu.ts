@@ -20,6 +20,9 @@ export class GbGpu {
     private readonly stat: GbStat;
     private readonly tileMap: GbTileMap;
 
+    // Window layer keeps an internal line count, independent from LY
+    private windowLy: number;
+
     constructor(
         readonly mmu: GbMmu,
         private readonly lcd: Lcd
@@ -31,11 +34,23 @@ export class GbGpu {
         this.oam = new GbOam(mmu);
         this.stat = new GbStat(mmu);
         this.tileMap = new GbTileMap(mmu);
+        this.windowLy = null;
     }
 
     public step(deltaCycleCount: number): void {
-        this.modeCycleCount += deltaCycleCount;
+        // Check Window layer render condition, this only runs in the beginning of mode 2
+        // Read here: https://gbdev.io/pandocs/Scrolling.html#ff4a---wy-window-y-position-rw-ff4b---wx-window-x-position--7-rw
         const mode = this.stat.getModeFlag();
+        if (mode === 2 && this.modeCycleCount === 0) {
+            const windowY = this.positionControl.getWindowY();
+            const ly = this.positionControl.getLy();
+            if (windowY === ly) {
+                // Start rendering window
+                this.windowLy = 0;
+            }
+        }
+
+        this.modeCycleCount += deltaCycleCount;
         switch (mode) {
             case 0:
                 this.stepMode0();
@@ -75,6 +90,7 @@ export class GbGpu {
         this.positionControl.setLy(this.positionControl.getLy() + 1);
         if (this.positionControl.getLy() > 153) {
             this.positionControl.setLy(0);
+            this.windowLy = null;
             this.stat.setModeFlag(2);
         }
     }
@@ -118,16 +134,15 @@ export class GbGpu {
                 }
             }
 
-            const windowY = this.positionControl.getWindowY();
             const windowX = this.positionControl.getWindowX();
-            const canDrawWindow = this.lcdc.getWindowEnable() === 1
-                && 0 <= windowX && windowX <= 166 && 0 <= windowY && windowY <= scanLine;
+            const windowEnable = this.lcdc.getWindowEnable();
+            const canDrawWindow = windowEnable === 1 && this.windowLy !== null && windowX <= 166;
             if (canDrawWindow) {
                 // Drawing window
                 const xStartFrom = Math.max(0, windowX - 7);
-                let windowTileIndex = ((scanLine - windowY) >> 3) << 5;
+                let windowTileIndex = (this.windowLy >> 3) << 5;
                 let windowTile = this.tileMap.getWindowTile(windowTileIndex);
-                const windowTileY = (scanLine - windowY) & 7;
+                const windowTileY = this.windowLy & 7;
                 let windowTileX = windowX < 0 ? - windowX : 0;
                 for (let lineX = xStartFrom; lineX < 160; lineX++) {
                     const color = this.palettes.getBgPaletteColor(windowTile.getColorIndex(windowTileX, windowTileY));
@@ -139,6 +154,7 @@ export class GbGpu {
                         windowTileX = 0;
                     }
                 }
+                this.windowLy++;
             }
         }
 
