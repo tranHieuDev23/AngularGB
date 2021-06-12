@@ -24,7 +24,7 @@ export class Add8BitInstruction implements GbInstruction {
     }
 
     getName(): string {
-        return `ADC ${this.r1.getName()} ${this.r2.getName()}`;
+        return `ADD ${this.r1.getName()} ${this.r2.getName()}`;
     }
 
     getLength(): number {

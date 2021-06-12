@@ -32,9 +32,13 @@
                         <button nz-button>
                             <i nz-icon nzType="upload"></i>Select ROM
                         </button>
-                    </nz-upload> <br />
+                    </nz-upload>
+                    <button class="stop-button" nz-button nzDanger *ngIf="gameboy.isRomLoaded()"
+                        (click)="gameboy.reset()">
+                        <i nz-icon nzType="close" nzTheme="outline"></i>
+                    </button> <br />
 
-                    <nz-button-group class="gb-control">
+                    <nz-button-group *ngIf="gameboy.isRomLoaded()" class="gb-control">
                         <button nz-button [disabled]="!gameboy.isPaused()" (click)="gameboy.resume()">
                             <i nz-icon nzType="caret-right" nzTheme="outline"></i>
                         </button>
@@ -43,8 +47,8 @@
                         </button>
                     </nz-button-group> <br />
 
-                    <nz-input-group *ngIf="isDebugging()" class="gb-control" nzPrefix="Skip steps"
-                        [nzSuffix]="stepTemplate">
+                    <nz-input-group *ngIf="gameboy.isRomLoaded() && isDebugging()" class="gb-control"
+                        nzPrefix="Skip steps" [nzSuffix]="stepTemplate">
                         <nz-input-number [(ngModel)]="skipStepCnt" [nzDisabled]="!gameboy.isPaused()" [nzMin]="1"
                             [nzStep]="1">
                         </nz-input-number>
@@ -55,8 +59,8 @@
                         </ng-template>
                     </nz-input-group> <br />
 
-                    <nz-input-group *ngIf="isDebugging()" class="gb-control" nzPrefix="Skip frames"
-                        [nzSuffix]="stepTemplate">
+                    <nz-input-group *ngIf="gameboy.isRomLoaded() && isDebugging()" class="gb-control"
+                        nzPrefix="Skip frames" [nzSuffix]="stepTemplate">
                         <nz-input-number [(ngModel)]="skipFrameCnt" [nzDisabled]="!gameboy.isPaused()" [nzMin]="1"
                             [nzStep]="1">
                         </nz-input-number>

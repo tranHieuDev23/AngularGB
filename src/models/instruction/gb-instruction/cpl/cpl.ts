@@ -21,7 +21,7 @@ export class CplInstruction implements GbInstruction {
     }
 
     run(rs: GbRegisterSet, mmu: GbMmu, args: number[]): number {
-        rs.a.setValue((~rs.a.getValue()) & EIGHT_ONE_BITS);
+        rs.a.setValue(rs.a.getValue() ^ EIGHT_ONE_BITS);
         rs.setOperationFlag(1);
         rs.setHalfCarryFlag(1);
         return 1;

@@ -20,7 +20,7 @@ export class SwapInstruction implements GbInstruction {
     }
 
     getName(): string {
-        return `SLA ${this.r1.getName()}`;
+        return `SWAP ${this.r1.getName()}`;
     }
 
     getLength(): number {
