@@ -11,7 +11,7 @@ export interface GbTile {
 
 export class Gb8x8Tile implements GbTile {
     constructor(
-        private readonly colorIndices: number[][]
+        private readonly dataBytes: number[]
     ) { }
 
     getWidth(): number {
@@ -23,7 +23,12 @@ export class Gb8x8Tile implements GbTile {
     }
 
     getColorIndex(x: number, y: number): number {
-        return this.colorIndices[x][y];
+        const lowByteIndex = y << 1;
+        const highByteIndex = lowByteIndex | 1;
+        const lowByte = this.dataBytes[lowByteIndex];
+        const highByte = this.dataBytes[highByteIndex];
+        const pixel = (getBit(highByte, 7 - x) << 1) | getBit(lowByte, 7 - x);
+        return pixel;
     }
 }
 
@@ -42,7 +47,7 @@ export class Gb8x16Tile implements GbTile {
     }
 
     getColorIndex(x: number, y: number): number {
-        return y < 8
+        return (y & 8) === 0
             ? this.topTile.getColorIndex(x, y)
             : this.bottomTile.getColorIndex(x, y - 8);
     }
@@ -70,19 +75,10 @@ export class GbTileData {
     }
 
     public getTile(address: number): Gb8x8Tile {
-        const colorIndices: number[][] = [
-            [], [], [], [], [], [], [], []
-        ];
-        for (let y = 0; y < 8; y++) {
-            const lowByteAddress = address | (y << 1);
-            const highByteAddress = lowByteAddress | 1;
-            const lineLowByte = this.mmu.readByte(lowByteAddress);
-            const lineHighByte = this.mmu.readByte(highByteAddress);
-            for (let x = 0; x < 8; x++) {
-                const pixel = (getBit(lineHighByte, x) << 1) | getBit(lineLowByte, x);
-                colorIndices[7 - x].push(pixel);
-            }
+        const dataBytes: number[] = [];
+        for (let i = address; i < address + 16; i++) {
+            dataBytes.push(this.mmu.readByte(i));
         }
-        return new Gb8x8Tile(colorIndices);
+        return new Gb8x8Tile(dataBytes);
     }
 }
