@@ -13,7 +13,7 @@ function add(a: number, b: number, bitCount: number): ArithmeticResult {
     const croppedResult = fullResult & (twoPowerBitCount - 1);
     const zero = croppedResult === 0;
     const halfCarry = (((a & 0xf) + (b & 0xf)) & 0x10) === 0x10;
-    const carry = (fullResult & twoPowerBitCount) === twoPowerBitCount;
+    const carry = fullResult >= twoPowerBitCount;
     return new ArithmeticResult(croppedResult, zero, halfCarry, carry);
 }
 
@@ -23,7 +23,7 @@ function subtract(a: number, b: number, bitCount: number): ArithmeticResult {
     const croppedResult = fullResult & (twoPowerBitCount - 1);
     const zero = croppedResult === 0;
     const halfCarry = (((a & 0xf) - (b & 0xf)) & 0x10) === 0x10;
-    const carry = (fullResult & twoPowerBitCount) === twoPowerBitCount;
+    const carry = fullResult < 0;
     return new ArithmeticResult(croppedResult, zero, halfCarry, carry);
 }
 

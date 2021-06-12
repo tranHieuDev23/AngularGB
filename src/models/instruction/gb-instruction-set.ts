@@ -44,7 +44,6 @@ const REG_ARG_B = new GbRegisterArg(RegisterName.B);
 const REG_ARG_C = new GbRegisterArg(RegisterName.C);
 const REG_ARG_D = new GbRegisterArg(RegisterName.D);
 const REG_ARG_E = new GbRegisterArg(RegisterName.E);
-const REG_ARG_F = new GbRegisterArg(RegisterName.F);
 const REG_ARG_H = new GbRegisterArg(RegisterName.H);
 const REG_ARG_L = new GbRegisterArg(RegisterName.L);
 const REG_ARG_SP = new GbRegisterArg(RegisterName.SP);
@@ -192,7 +191,7 @@ export const GB_INSTRUCTION_SET = [
     new OrInstruction(0xb6, MEM_REG_ARG_HL), new OrInstruction(0xb7, REG_ARG_A),
     new CpInstruction(0xb8, REG_ARG_B), new CpInstruction(0xb9, REG_ARG_C),
     new CpInstruction(0xba, REG_ARG_D), new CpInstruction(0xbb, REG_ARG_E),
-    new SbcInstruction(0xbc, REG_ARG_H), new CpInstruction(0xbd, REG_ARG_L),
+    new CpInstruction(0xbc, REG_ARG_H), new CpInstruction(0xbd, REG_ARG_L),
     new CpInstruction(0xbe, MEM_REG_ARG_HL), new CpInstruction(0xbf, REG_ARG_A),
 
     // 0xcx
@@ -280,121 +279,121 @@ export const GB_0XCB_INSTRUCTION_SET = [
 
     // 0x4x
     new BitInstruction(0x40, 0, REG_ARG_B), new BitInstruction(0x41, 0, REG_ARG_C),
-    new BitInstruction(0x42, 0, REG_ARG_D), new BitInstruction(0x43, 0, REG_ARG_F),
+    new BitInstruction(0x42, 0, REG_ARG_D), new BitInstruction(0x43, 0, REG_ARG_E),
     new BitInstruction(0x44, 0, REG_ARG_H), new BitInstruction(0x45, 0, REG_ARG_L),
     new BitInstruction(0x46, 0, MEM_REG_ARG_HL), new BitInstruction(0x47, 0, REG_ARG_A),
     new BitInstruction(0x48, 1, REG_ARG_B), new BitInstruction(0x49, 1, REG_ARG_C),
-    new BitInstruction(0x4a, 1, REG_ARG_D), new BitInstruction(0x4b, 1, REG_ARG_F),
+    new BitInstruction(0x4a, 1, REG_ARG_D), new BitInstruction(0x4b, 1, REG_ARG_E),
     new BitInstruction(0x4c, 1, REG_ARG_H), new BitInstruction(0x4d, 1, REG_ARG_L),
     new BitInstruction(0x4e, 1, MEM_REG_ARG_HL), new BitInstruction(0x4f, 1, REG_ARG_A),
 
     // 0x5x
     new BitInstruction(0x50, 2, REG_ARG_B), new BitInstruction(0x51, 2, REG_ARG_C),
-    new BitInstruction(0x52, 2, REG_ARG_D), new BitInstruction(0x53, 2, REG_ARG_F),
+    new BitInstruction(0x52, 2, REG_ARG_D), new BitInstruction(0x53, 2, REG_ARG_E),
     new BitInstruction(0x54, 2, REG_ARG_H), new BitInstruction(0x55, 2, REG_ARG_L),
     new BitInstruction(0x56, 2, MEM_REG_ARG_HL), new BitInstruction(0x57, 2, REG_ARG_A),
     new BitInstruction(0x58, 3, REG_ARG_B), new BitInstruction(0x59, 3, REG_ARG_C),
-    new BitInstruction(0x5a, 3, REG_ARG_D), new BitInstruction(0x5b, 3, REG_ARG_F),
+    new BitInstruction(0x5a, 3, REG_ARG_D), new BitInstruction(0x5b, 3, REG_ARG_E),
     new BitInstruction(0x5c, 3, REG_ARG_H), new BitInstruction(0x5d, 3, REG_ARG_L),
     new BitInstruction(0x5e, 3, MEM_REG_ARG_HL), new BitInstruction(0x5f, 3, REG_ARG_A),
 
     // 0x6x
     new BitInstruction(0x60, 4, REG_ARG_B), new BitInstruction(0x61, 4, REG_ARG_C),
-    new BitInstruction(0x62, 4, REG_ARG_D), new BitInstruction(0x63, 4, REG_ARG_F),
+    new BitInstruction(0x62, 4, REG_ARG_D), new BitInstruction(0x63, 4, REG_ARG_E),
     new BitInstruction(0x64, 4, REG_ARG_H), new BitInstruction(0x65, 4, REG_ARG_L),
     new BitInstruction(0x66, 4, MEM_REG_ARG_HL), new BitInstruction(0x67, 4, REG_ARG_A),
     new BitInstruction(0x68, 5, REG_ARG_B), new BitInstruction(0x69, 5, REG_ARG_C),
-    new BitInstruction(0x6a, 5, REG_ARG_D), new BitInstruction(0x6b, 5, REG_ARG_F),
+    new BitInstruction(0x6a, 5, REG_ARG_D), new BitInstruction(0x6b, 5, REG_ARG_E),
     new BitInstruction(0x6c, 5, REG_ARG_H), new BitInstruction(0x6d, 5, REG_ARG_L),
     new BitInstruction(0x6e, 5, MEM_REG_ARG_HL), new BitInstruction(0x6f, 5, REG_ARG_A),
 
     // 0x7x
     new BitInstruction(0x70, 6, REG_ARG_B), new BitInstruction(0x71, 6, REG_ARG_C),
-    new BitInstruction(0x72, 6, REG_ARG_D), new BitInstruction(0x73, 6, REG_ARG_F),
+    new BitInstruction(0x72, 6, REG_ARG_D), new BitInstruction(0x73, 6, REG_ARG_E),
     new BitInstruction(0x74, 6, REG_ARG_H), new BitInstruction(0x75, 6, REG_ARG_L),
     new BitInstruction(0x76, 6, MEM_REG_ARG_HL), new BitInstruction(0x77, 6, REG_ARG_A),
     new BitInstruction(0x78, 7, REG_ARG_B), new BitInstruction(0x79, 7, REG_ARG_C),
-    new BitInstruction(0x7a, 7, REG_ARG_D), new BitInstruction(0x7b, 7, REG_ARG_F),
+    new BitInstruction(0x7a, 7, REG_ARG_D), new BitInstruction(0x7b, 7, REG_ARG_E),
     new BitInstruction(0x7c, 7, REG_ARG_H), new BitInstruction(0x7d, 7, REG_ARG_L),
     new BitInstruction(0x7e, 7, MEM_REG_ARG_HL), new BitInstruction(0x7f, 7, REG_ARG_A),
 
     // 0x8x
     new ResInstruction(0x80, 0, REG_ARG_B), new ResInstruction(0x81, 0, REG_ARG_C),
-    new ResInstruction(0x82, 0, REG_ARG_D), new ResInstruction(0x83, 0, REG_ARG_F),
+    new ResInstruction(0x82, 0, REG_ARG_D), new ResInstruction(0x83, 0, REG_ARG_E),
     new ResInstruction(0x84, 0, REG_ARG_H), new ResInstruction(0x85, 0, REG_ARG_L),
     new ResInstruction(0x86, 0, MEM_REG_ARG_HL), new ResInstruction(0x87, 0, REG_ARG_A),
     new ResInstruction(0x88, 1, REG_ARG_B), new ResInstruction(0x89, 1, REG_ARG_C),
-    new ResInstruction(0x8a, 1, REG_ARG_D), new ResInstruction(0x8b, 1, REG_ARG_F),
+    new ResInstruction(0x8a, 1, REG_ARG_D), new ResInstruction(0x8b, 1, REG_ARG_E),
     new ResInstruction(0x8c, 1, REG_ARG_H), new ResInstruction(0x8d, 1, REG_ARG_L),
     new ResInstruction(0x8e, 1, MEM_REG_ARG_HL), new ResInstruction(0x8f, 1, REG_ARG_A),
 
     // 0x9x
     new ResInstruction(0x90, 2, REG_ARG_B), new ResInstruction(0x91, 2, REG_ARG_C),
-    new ResInstruction(0x92, 2, REG_ARG_D), new ResInstruction(0x93, 2, REG_ARG_F),
+    new ResInstruction(0x92, 2, REG_ARG_D), new ResInstruction(0x93, 2, REG_ARG_E),
     new ResInstruction(0x94, 2, REG_ARG_H), new ResInstruction(0x95, 2, REG_ARG_L),
     new ResInstruction(0x96, 2, MEM_REG_ARG_HL), new ResInstruction(0x97, 2, REG_ARG_A),
     new ResInstruction(0x98, 3, REG_ARG_B), new ResInstruction(0x99, 3, REG_ARG_C),
-    new ResInstruction(0x9a, 3, REG_ARG_D), new ResInstruction(0x9b, 3, REG_ARG_F),
+    new ResInstruction(0x9a, 3, REG_ARG_D), new ResInstruction(0x9b, 3, REG_ARG_E),
     new ResInstruction(0x9c, 3, REG_ARG_H), new ResInstruction(0x9d, 3, REG_ARG_L),
     new ResInstruction(0x9e, 3, MEM_REG_ARG_HL), new ResInstruction(0x9f, 3, REG_ARG_A),
 
     // 0xax
     new ResInstruction(0xa0, 4, REG_ARG_B), new ResInstruction(0xa1, 4, REG_ARG_C),
-    new ResInstruction(0xa2, 4, REG_ARG_D), new ResInstruction(0xa3, 4, REG_ARG_F),
+    new ResInstruction(0xa2, 4, REG_ARG_D), new ResInstruction(0xa3, 4, REG_ARG_E),
     new ResInstruction(0xa4, 4, REG_ARG_H), new ResInstruction(0xa5, 4, REG_ARG_L),
     new ResInstruction(0xa6, 4, MEM_REG_ARG_HL), new ResInstruction(0xa7, 4, REG_ARG_A),
     new ResInstruction(0xa8, 5, REG_ARG_B), new ResInstruction(0xa9, 5, REG_ARG_C),
-    new ResInstruction(0xaa, 5, REG_ARG_D), new ResInstruction(0xab, 5, REG_ARG_F),
+    new ResInstruction(0xaa, 5, REG_ARG_D), new ResInstruction(0xab, 5, REG_ARG_E),
     new ResInstruction(0xac, 5, REG_ARG_H), new ResInstruction(0xad, 5, REG_ARG_L),
     new ResInstruction(0xae, 5, MEM_REG_ARG_HL), new ResInstruction(0xaf, 5, REG_ARG_A),
 
     // 0xbx
     new ResInstruction(0xb0, 6, REG_ARG_B), new ResInstruction(0xb1, 6, REG_ARG_C),
-    new ResInstruction(0xb2, 6, REG_ARG_D), new ResInstruction(0xb3, 6, REG_ARG_F),
+    new ResInstruction(0xb2, 6, REG_ARG_D), new ResInstruction(0xb3, 6, REG_ARG_E),
     new ResInstruction(0xb4, 6, REG_ARG_H), new ResInstruction(0xb5, 6, REG_ARG_L),
     new ResInstruction(0xb6, 6, MEM_REG_ARG_HL), new ResInstruction(0xb7, 6, REG_ARG_A),
     new ResInstruction(0xb8, 7, REG_ARG_B), new ResInstruction(0xb9, 7, REG_ARG_C),
-    new ResInstruction(0xba, 7, REG_ARG_D), new ResInstruction(0xbb, 7, REG_ARG_F),
+    new ResInstruction(0xba, 7, REG_ARG_D), new ResInstruction(0xbb, 7, REG_ARG_E),
     new ResInstruction(0xbc, 7, REG_ARG_H), new ResInstruction(0xbd, 7, REG_ARG_L),
     new ResInstruction(0xbe, 7, MEM_REG_ARG_HL), new ResInstruction(0xbf, 7, REG_ARG_A),
 
     // 0xcx
     new SetInstruction(0xc0, 0, REG_ARG_B), new SetInstruction(0xc1, 0, REG_ARG_C),
-    new SetInstruction(0xc2, 0, REG_ARG_D), new SetInstruction(0xc3, 0, REG_ARG_F),
+    new SetInstruction(0xc2, 0, REG_ARG_D), new SetInstruction(0xc3, 0, REG_ARG_E),
     new SetInstruction(0xc4, 0, REG_ARG_H), new SetInstruction(0xc5, 0, REG_ARG_L),
     new SetInstruction(0xc6, 0, MEM_REG_ARG_HL), new SetInstruction(0xc7, 0, REG_ARG_A),
     new SetInstruction(0xc8, 1, REG_ARG_B), new SetInstruction(0xc9, 1, REG_ARG_C),
-    new SetInstruction(0xca, 1, REG_ARG_D), new SetInstruction(0xcb, 1, REG_ARG_F),
+    new SetInstruction(0xca, 1, REG_ARG_D), new SetInstruction(0xcb, 1, REG_ARG_E),
     new SetInstruction(0xcc, 1, REG_ARG_H), new SetInstruction(0xcd, 1, REG_ARG_L),
     new SetInstruction(0xce, 1, MEM_REG_ARG_HL), new SetInstruction(0xcf, 1, REG_ARG_A),
 
     // 0xdx
     new SetInstruction(0xd0, 2, REG_ARG_B), new SetInstruction(0xd1, 2, REG_ARG_C),
-    new SetInstruction(0xd2, 2, REG_ARG_D), new SetInstruction(0xd3, 2, REG_ARG_F),
+    new SetInstruction(0xd2, 2, REG_ARG_D), new SetInstruction(0xd3, 2, REG_ARG_E),
     new SetInstruction(0xd4, 2, REG_ARG_H), new SetInstruction(0xd5, 2, REG_ARG_L),
     new SetInstruction(0xd6, 2, MEM_REG_ARG_HL), new SetInstruction(0xd7, 2, REG_ARG_A),
     new SetInstruction(0xd8, 3, REG_ARG_B), new SetInstruction(0xd9, 3, REG_ARG_C),
-    new SetInstruction(0xda, 3, REG_ARG_D), new SetInstruction(0xdb, 3, REG_ARG_F),
+    new SetInstruction(0xda, 3, REG_ARG_D), new SetInstruction(0xdb, 3, REG_ARG_E),
     new SetInstruction(0xdc, 3, REG_ARG_H), new SetInstruction(0xdd, 3, REG_ARG_L),
     new SetInstruction(0xde, 3, MEM_REG_ARG_HL), new SetInstruction(0xdf, 3, REG_ARG_A),
 
     // 0xex
     new SetInstruction(0xe0, 4, REG_ARG_B), new SetInstruction(0xe1, 4, REG_ARG_C),
-    new SetInstruction(0xe2, 4, REG_ARG_D), new SetInstruction(0xe3, 4, REG_ARG_F),
+    new SetInstruction(0xe2, 4, REG_ARG_D), new SetInstruction(0xe3, 4, REG_ARG_E),
     new SetInstruction(0xe4, 4, REG_ARG_H), new SetInstruction(0xe5, 4, REG_ARG_L),
     new SetInstruction(0xe6, 4, MEM_REG_ARG_HL), new SetInstruction(0xe7, 4, REG_ARG_A),
     new SetInstruction(0xe8, 5, REG_ARG_B), new SetInstruction(0xe9, 5, REG_ARG_C),
-    new SetInstruction(0xea, 5, REG_ARG_D), new SetInstruction(0xeb, 5, REG_ARG_F),
+    new SetInstruction(0xea, 5, REG_ARG_D), new SetInstruction(0xeb, 5, REG_ARG_E),
     new SetInstruction(0xec, 5, REG_ARG_H), new SetInstruction(0xed, 5, REG_ARG_L),
     new SetInstruction(0xee, 5, MEM_REG_ARG_HL), new SetInstruction(0xef, 5, REG_ARG_A),
 
     // 0xfx
     new SetInstruction(0xf0, 6, REG_ARG_B), new SetInstruction(0xf1, 6, REG_ARG_C),
-    new SetInstruction(0xf2, 6, REG_ARG_D), new SetInstruction(0xf3, 6, REG_ARG_F),
+    new SetInstruction(0xf2, 6, REG_ARG_D), new SetInstruction(0xf3, 6, REG_ARG_E),
     new SetInstruction(0xf4, 6, REG_ARG_H), new SetInstruction(0xf5, 6, REG_ARG_L),
     new SetInstruction(0xf6, 6, MEM_REG_ARG_HL), new SetInstruction(0xf7, 6, REG_ARG_A),
     new SetInstruction(0xf8, 7, REG_ARG_B), new SetInstruction(0xf9, 7, REG_ARG_C),
-    new SetInstruction(0xfa, 7, REG_ARG_D), new SetInstruction(0xfb, 7, REG_ARG_F),
+    new SetInstruction(0xfa, 7, REG_ARG_D), new SetInstruction(0xfb, 7, REG_ARG_E),
     new SetInstruction(0xfc, 7, REG_ARG_H), new SetInstruction(0xfd, 7, REG_ARG_L),
     new SetInstruction(0xfe, 7, MEM_REG_ARG_HL), new SetInstruction(0xff, 7, REG_ARG_A),
 ];

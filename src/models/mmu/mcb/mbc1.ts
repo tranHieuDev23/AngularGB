@@ -4,7 +4,7 @@ import { Mbc } from "./gb-mcb";
 export class GbMcb1 implements Mbc {
     private readonly extRam: number[];
 
-    private lower5Bits = 0x00;
+    private lower5Bits = 0x01;
     private upper2Bits = 0x0;
     private bankingMode = 0;
 
