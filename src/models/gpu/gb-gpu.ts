@@ -102,42 +102,41 @@ export class GbGpu {
 
         // Fetch background and window layer color
         if (this.lcdc.getBgAndWindowEnable() === 1) {
+            const bgTileRow = ((scanLine + this.positionControl.getScrollY()) & EIGHT_ONE_BITS) >> 3;
+            let bgTileCol = this.positionControl.getScrollX() >> 3;
+            let bgTile = this.tileMap.getBgTile((bgTileRow << 5) + bgTileCol);
+            const bgTileY = (scanLine + this.positionControl.getScrollY()) & 7;
+            let bgTileX = this.positionControl.getScrollX() & 7;
+            for (let lineX = 0; lineX < 160; lineX++) {
+                const color = this.palettes.getBgPaletteColor(bgTile.getColorIndex(bgTileX, bgTileY));
+                lineColor[lineX] = color;
+                bgTileX++;
+                if (bgTileX === 8) {
+                    bgTileCol = (bgTileCol + 1) & 31;
+                    bgTile = this.tileMap.getBgTile((bgTileRow << 5) + bgTileCol);
+                    bgTileX = 0;
+                }
+            }
+
             const windowY = this.positionControl.getWindowY();
-            const windowX = this.positionControl.getWindowX() - 7;
+            const windowX = this.positionControl.getWindowX();
             const canDrawWindow = this.lcdc.getWindowEnable() === 1
-                && -7 <= windowX && windowX <= 159 && 0 <= windowY && windowY <= scanLine;
+                && 0 <= windowX && windowX <= 166 && 0 <= windowY && windowY <= scanLine;
             if (canDrawWindow) {
                 // Drawing window
-                const windowTileRow = ((scanLine - windowY) & EIGHT_ONE_BITS) >> 3;
-                let windowTileCol = ((- windowX) & EIGHT_ONE_BITS) >> 3;
-                let windowTile = this.tileMap.getWindowTile((windowTileRow << 5) + windowTileCol);
+                const xStartFrom = Math.max(0, windowX - 7);
+                let windowTileIndex = ((scanLine - windowY) >> 3) << 5;
+                let windowTile = this.tileMap.getWindowTile(windowTileIndex);
                 const windowTileY = (scanLine - windowY) & 7;
-                let windowTileX = ((- windowX) & EIGHT_ONE_BITS) & 7;
-                for (let lineX = 0; lineX < 160; lineX++) {
+                let windowTileX = windowX < 0 ? - windowX : 0;
+                for (let lineX = xStartFrom; lineX < 160; lineX++) {
                     const color = this.palettes.getBgPaletteColor(windowTile.getColorIndex(windowTileX, windowTileY));
                     lineColor[lineX] = color;
                     windowTileX++;
                     if (windowTileX === 8) {
-                        windowTileCol = (windowTileCol + 1) & 31;
-                        windowTile = this.tileMap.getWindowTile((windowTileRow << 5) + windowTileCol);
+                        windowTileIndex++;
+                        windowTile = this.tileMap.getWindowTile(windowTileIndex);
                         windowTileX = 0;
-                    }
-                }
-            } else {
-                // Drawing background
-                const bgTileRow = ((scanLine + this.positionControl.getScrollY()) & EIGHT_ONE_BITS) >> 3;
-                let bgTileCol = this.positionControl.getScrollX() >> 3;
-                let bgTile = this.tileMap.getBgTile((bgTileRow << 5) + bgTileCol);
-                const bgTileY = (scanLine + this.positionControl.getScrollY()) & 7;
-                let bgTileX = this.positionControl.getScrollX() & 7;
-                for (let lineX = 0; lineX < 160; lineX++) {
-                    const color = this.palettes.getBgPaletteColor(bgTile.getColorIndex(bgTileX, bgTileY));
-                    lineColor[lineX] = color;
-                    bgTileX++;
-                    if (bgTileX === 8) {
-                        bgTileCol = (bgTileCol + 1) & 31;
-                        bgTile = this.tileMap.getBgTile((bgTileRow << 5) + bgTileCol);
-                        bgTileX = 0;
                     }
                 }
             }
@@ -163,8 +162,8 @@ export class GbGpu {
                     if (!drawOverBg) {
                         continue;
                     }
-                    const actualY = spriteFlags.yFlip === 0 ? tileY : 7 - tileY;
-                    const actualX = spriteFlags.xFlip === 0 ? tileX : 7 - tileX;
+                    const actualY = spriteFlags.yFlip === 0 ? tileY : spriteTile.getHeight() - tileY - 1;
+                    const actualX = spriteFlags.xFlip === 0 ? tileX : spriteTile.getWidth() - tileX - 1;
                     const colorIndex = spriteTile.getColorIndex(actualX, actualY);
                     // 0 is transparent color
                     if (colorIndex === 0) {
