@@ -70,7 +70,11 @@ export class AppComponent {
   }
 
   public openDebugWidget(widget: DebugWidget): void {
-    this.currentDebugWidget = widget;
+    if (this.currentDebugWidget.id === widget.id) {
+      this.currentDebugWidget = null;
+    } else {
+      this.currentDebugWidget = widget;
+    }
   }
 
   public isDebugging(): boolean {

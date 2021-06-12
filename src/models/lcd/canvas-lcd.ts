@@ -2,6 +2,7 @@ import { Lcd } from "./lcd";
 
 export class CanvasLcd implements Lcd {
     private readonly graphicBuffer: number[][];
+    private readonly oldBuffer: number[][];
 
     constructor(
         private readonly canvas: HTMLCanvasElement,
@@ -11,12 +12,16 @@ export class CanvasLcd implements Lcd {
         private readonly palettes: string[]
     ) {
         this.graphicBuffer = [];
+        this.oldBuffer = [];
         for (let x = 0; x < width; x++) {
             const col = [];
+            const oldCol = [];
             for (let y = 0; y < height; y++) {
                 col.push(0);
+                oldCol.push(-1);
             }
             this.graphicBuffer.push(col);
+            this.oldBuffer.push(oldCol);
         }
     }
 
@@ -25,35 +30,36 @@ export class CanvasLcd implements Lcd {
     }
 
     draw(): void {
-        const context = this.canvas.getContext("2d");
+        const context = this.canvas.getContext("2d", { alpha: false });
         if (!context) {
             return;
         }
         for (let x = 0; x < this.width; x++) {
             for (let y = 0; y < this.height; y++) {
-                this.drawPixel(context, x, y, this.palettes[this.graphicBuffer[x][y]]);
+                this.drawPixel(context, x, y);
             }
         }
     }
 
     clear(): void {
-        const context = this.canvas.getContext("2d");
-        if (!context) {
-            return;
-        }
         for (let x = 0; x < this.width; x++) {
             for (let y = 0; y < this.height; y++) {
-                this.drawPixel(context, x, y, this.palettes[0]);
+                this.updatePixel(x, y, 0);
             }
         }
+        this.draw();
     }
 
     public getContentAsBase64(): string {
         return this.canvas.toDataURL();
     }
 
-    private drawPixel(context: CanvasRenderingContext2D, x: number, y: number, color: string): void {
-        context.fillStyle = color;
+    private drawPixel(context: CanvasRenderingContext2D, x: number, y: number): void {
+        if (this.oldBuffer[x][y] === this.graphicBuffer[x][y]) {
+            return;
+        }
+        this.oldBuffer[x][y] = this.graphicBuffer[x][y];
+        context.fillStyle = this.palettes[this.graphicBuffer[x][y]];
         context.fillRect(x * this.pixelSize, y * this.pixelSize, this.pixelSize, this.pixelSize);
     }
 }

@@ -58,7 +58,7 @@ export class GbTileData {
     }
 
     public getObjTile(index: number): Gb8x8Tile {
-        return this.getTile(TILE_DATA_BLOCK_0_ADDRESS + (16 << index));
+        return this.getTile(TILE_DATA_BLOCK_0_ADDRESS + (index * 16));
     }
 
     public getBgAndWindowTile(index: number): Gb8x8Tile {

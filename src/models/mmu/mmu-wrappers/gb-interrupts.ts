@@ -110,7 +110,7 @@ export class GbInterrupts {
     private setFlag(address: number, bitId: number, value: number): void {
         const oldValue = this.mmu.readByte(address);
         const oldBit = getBit(oldValue, bitId);
-        const newValue = oldValue + ((value - oldBit) << bitId);
+        const newValue = (oldValue ^ (oldBit << bitId)) | (value << bitId);
         this.mmu.writeByte(address, newValue);
     }
 }

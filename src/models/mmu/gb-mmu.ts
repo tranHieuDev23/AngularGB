@@ -1,7 +1,7 @@
 import { getBit } from "src/utils/arithmetic-utils";
 import { EIGHT_ONE_BITS, SIXTEEN_ONE_BITS, TWO_POW_EIGHT, TWO_POW_SIXTEEN } from "src/utils/constants";
 import { randomInteger } from "src/utils/random";
-import { EXT_RAM_START, VRAM_START, WORK_RAM_START, FORBIDDEN_RAM_START, SPRITE_RAM_START, HIGH_RAM_START, IO_REG_START, IE_REG, ECHO_RAM_START, DMA_REG_ADDRESS, LY_ADDRESS, LYC_ADDRESS, STAT_REG_ADDRESS, LCDC_REG_ADDRESS } from "./gb-mmu-constants";
+import { EXT_RAM_START, VRAM_START, WORK_RAM_START, FORBIDDEN_RAM_START, SPRITE_RAM_START, HIGH_RAM_START, IO_REG_START, ECHO_RAM_START, DMA_REG_ADDRESS, LY_ADDRESS, LYC_ADDRESS, STAT_REG_ADDRESS, LCDC_REG_ADDRESS, DISABLE_BOOT_ROM_REG_ADDRESS } from "./gb-mmu-constants";
 import { GB_INITIALIZE_ROM } from "./gb-rom";
 import { Mbc } from "./mcb/gb-mcb";
 import { Mmu } from "./mmu";
@@ -44,12 +44,7 @@ export class GbTestMmu implements GbMmu {
 }
 
 export class GbMmuImpl implements GbMmu {
-    private readonly vram: number[] = new Array<number>(EXT_RAM_START - VRAM_START);
-    private readonly workRam: number[] = new Array<number>(WORK_RAM_START - EXT_RAM_START);
-    private readonly spriteRam: number[] = new Array<number>(FORBIDDEN_RAM_START - SPRITE_RAM_START);
-    private readonly ioRam: number[] = new Array<number>(HIGH_RAM_START - IO_REG_START);
-    private readonly highRam: number[] = new Array<number>(IE_REG - HIGH_RAM_START);
-    private interruptEnable = 0;
+    private readonly ram: number[] = new Array<number>(TWO_POW_SIXTEEN);
 
     constructor(
         private readonly mbc: Mbc
@@ -62,34 +57,19 @@ export class GbMmuImpl implements GbMmu {
         if (address < VRAM_START) {
             return this.mbc.readRom(address);
         }
-        if (address < EXT_RAM_START) {
-            return this.vram[address - VRAM_START];
-        }
-        if (address < WORK_RAM_START) {
+        if (EXT_RAM_START <= address && address < WORK_RAM_START) {
             return this.mbc.readRam(address);
         }
-        if (address < ECHO_RAM_START) {
-            return this.workRam[address - WORK_RAM_START];
+        if (ECHO_RAM_START <= address && address < SPRITE_RAM_START) {
+            return this.ram[address - (ECHO_RAM_START - WORK_RAM_START)];
         }
-        if (address < SPRITE_RAM_START) {
-            return this.workRam[address - ECHO_RAM_START];
-        }
-        if (address < FORBIDDEN_RAM_START) {
-            return this.spriteRam[address - SPRITE_RAM_START];
-        }
-        if (address < IO_REG_START) {
+        if (FORBIDDEN_RAM_START <= address && address < IO_REG_START) {
             throw new Error(`Trying to read forbidden RAM address: ${address}`);
         }
-        if (address < HIGH_RAM_START) {
-            return this.ioRam[address - IO_REG_START];
+        if (0x10000 <= address) {
+            throw new Error(`Trying to read invalid address: ${address}`);
         }
-        if (address < IE_REG) {
-            return this.highRam[address - HIGH_RAM_START];
-        }
-        if (address === IE_REG) {
-            return this.interruptEnable;
-        }
-        throw new Error(`Trying to read invalid address: ${address}`);
+        return this.ram[address];
     }
 
     readWord(address: number): number {
@@ -101,44 +81,25 @@ export class GbMmuImpl implements GbMmu {
             this.mbc.writeRom(address, value);
             return;
         }
-        if (address < EXT_RAM_START) {
-            this.vram[address - VRAM_START] = value;
-            return;
-        }
-        if (address < WORK_RAM_START) {
+        if (EXT_RAM_START <= address && address < WORK_RAM_START) {
             this.mbc.writeRam(address, value);
             return;
         }
-        if (address < ECHO_RAM_START) {
-            this.workRam[address - WORK_RAM_START] = value;
+        if (ECHO_RAM_START <= address && address < SPRITE_RAM_START) {
+            this.ram[address - (ECHO_RAM_START - WORK_RAM_START)] = value;
             return;
         }
-        if (address < SPRITE_RAM_START) {
-            this.workRam[address - ECHO_RAM_START] = value;
-            return;
-        }
-        if (address < FORBIDDEN_RAM_START) {
-            this.spriteRam[address - SPRITE_RAM_START] = value;
-            return;
-        }
-        if (address < IO_REG_START) {
+        if (FORBIDDEN_RAM_START <= address && address < IO_REG_START) {
             throw new Error(`Trying to write to forbidden RAM address: ${address}`);
         }
-        if (address < HIGH_RAM_START) {
-            const oldValue = this.ioRam[address - IO_REG_START];
-            this.ioRam[address - IO_REG_START] = value;
+        if (0x10000 <= address) {
+            throw new Error(`Trying to write to invalid address: ${address}`);
+        }
+        const oldValue = this.ram[address];
+        this.ram[address] = value;
+        if (IO_REG_START <= address && address < HIGH_RAM_START) {
             this.handleIoRegisterWrite(address, oldValue, value);
-            return;
         }
-        if (address < IE_REG) {
-            this.highRam[address - HIGH_RAM_START] = value;
-            return;
-        }
-        if (address === IE_REG) {
-            this.interruptEnable = value;
-            return;
-        }
-        throw new Error(`Trying to write to invalid address: ${address}`);
     }
 
     writeWord(address: number, value: number): void {
@@ -149,25 +110,17 @@ export class GbMmuImpl implements GbMmu {
     }
 
     randomize(): void {
-        [
-            this.vram, this.workRam, this.spriteRam, this.ioRam, this.highRam
-        ].forEach((array) => {
-            array.forEach((_, index) => {
-                array[index] = randomInteger(0, TWO_POW_EIGHT);
-            });
+        this.ram.forEach((_, index) => {
+            this.ram[index] = randomInteger(0, TWO_POW_EIGHT);
         });
-        this.interruptEnable = randomInteger(0, TWO_POW_EIGHT);
     }
 
     reset(): void {
-        [
-            this.vram, this.workRam, this.spriteRam, this.ioRam, this.highRam
-        ].forEach((array) => { array.fill(0); });
-        this.interruptEnable = 0;
+        this.ram.fill(0);
     }
 
     public getIsBootingUp(): number {
-        return this.ioRam[0xff50 - IO_REG_START];
+        return this.ram[DISABLE_BOOT_ROM_REG_ADDRESS];
     }
 
     private handleIoRegisterWrite(address: number, oldValue: number, value: number): void {
@@ -175,8 +128,8 @@ export class GbMmuImpl implements GbMmu {
             case DMA_REG_ADDRESS:
                 const startAddress = value << 8;
                 const endAddress = startAddress | 0xa0;
-                for (let i = startAddress; i < endAddress; i++) {
-                    this.spriteRam[i - startAddress] = this.readByte(i);
+                for (let from = startAddress, to = 0xfe00; from < endAddress; from++, to++) {
+                    this.ram[to] = this.readByte(from);
                 }
                 break;
 
@@ -184,16 +137,16 @@ export class GbMmuImpl implements GbMmu {
                 const oldLcdEnable = getBit(oldValue, 7);
                 const lcdEnable = getBit(value, 7);
                 if (oldLcdEnable === 1 && lcdEnable === 0) {
-                    this.ioRam[LY_ADDRESS - IO_REG_START] = 0;
+                    this.ram[LY_ADDRESS] = 0;
                 }
                 break;
 
             case LY_ADDRESS:
             case LYC_ADDRESS:
-                const oldStat = this.ioRam[STAT_REG_ADDRESS - IO_REG_START];
-                const lyEqualLyc = this.ioRam[LY_ADDRESS - IO_REG_START] === this.ioRam[LYC_ADDRESS - IO_REG_START];
+                const oldStat = this.ram[STAT_REG_ADDRESS];
+                const lyEqualLyc = this.ram[LY_ADDRESS] === this.ram[LYC_ADDRESS];
                 const newStat = (oldStat & 0xfb) | ((lyEqualLyc ? 1 : 0) << 2);
-                this.ioRam[STAT_REG_ADDRESS - IO_REG_START] = newStat;
+                this.ram[STAT_REG_ADDRESS] = newStat;
                 break;
         }
     }

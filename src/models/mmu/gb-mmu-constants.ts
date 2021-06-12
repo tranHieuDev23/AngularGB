@@ -7,7 +7,6 @@ export const SPRITE_RAM_START = 0xfe00;
 export const FORBIDDEN_RAM_START = 0xfea0;
 export const IO_REG_START = 0xff00;
 export const HIGH_RAM_START = 0xff80;
-export const IE_REG = 0xffff;
 
 export const DISABLE_BOOT_ROM_REG_ADDRESS = 0xff50;
 

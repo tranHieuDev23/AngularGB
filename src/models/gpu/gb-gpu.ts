@@ -33,9 +33,6 @@ export class GbGpu {
     }
 
     public step(deltaCycleCount: number): void {
-        if (this.lcdc.getLcdAndPpuEnable() === 0) {
-            return;
-        }
         this.modeCycleCount += deltaCycleCount;
         const mode = this.stat.getModeFlag();
         switch (mode) {
@@ -93,29 +90,74 @@ export class GbGpu {
         if (this.modeCycleCount < 172) {
             return;
         }
-        this.updateBackgroundLine();
+        this.updateLine();
         this.modeCycleCount = 0;
         this.stat.setModeFlag(0);
     }
 
-    private updateBackgroundLine(): void {
+    private updateLine(): void {
         const scanLine = this.positionControl.getLy();
-        const tileRow = ((scanLine + this.positionControl.getScrollY()) & 255) >> 3;
-        let tileCol = this.positionControl.getScrollX() >> 3;
-        let tile = this.tileMap.getBgTile((tileRow << 5) + tileCol);
+        const lineColor = new Array<number>(160).fill(0);
 
-        const tileY = (scanLine + this.positionControl.getScrollY()) & 7;
-        let tileX = this.positionControl.getScrollX() & 7;
-
-        for (let x = 0; x < 160; x++) {
-            const color = this.palettes.getBgPaletteColor(tile.getColorIndex(tileX, tileY));
-            this.lcd.updatePixel(x, scanLine, color);
-            tileX++;
-            if (tileX === 8) {
-                tileCol = (tileCol + 1) & 31;
-                tile = this.tileMap.getBgTile((tileRow << 5) + tileCol);
-                tileX = 0;
+        // Fetch background layer color
+        if (this.lcdc.getBgAndWindowEnable() === 1) {
+            const bgTileRow = ((scanLine + this.positionControl.getScrollY()) & 255) >> 3;
+            let bgTileCol = this.positionControl.getScrollX() >> 3;
+            let bgTile = this.tileMap.getBgTile((bgTileRow << 5) + bgTileCol);
+            const bgTileY = (scanLine + this.positionControl.getScrollY()) & 7;
+            let bgTileX = this.positionControl.getScrollX() & 7;
+            for (let lineX = 0; lineX < 160; lineX++) {
+                const color = this.palettes.getBgPaletteColor(bgTile.getColorIndex(bgTileX, bgTileY));
+                lineColor[lineX] = color;
+                bgTileX++;
+                if (bgTileX === 8) {
+                    bgTileCol = (bgTileCol + 1) & 31;
+                    bgTile = this.tileMap.getBgTile((bgTileRow << 5) + bgTileCol);
+                    bgTileX = 0;
+                }
             }
+        }
+
+        // Fetch sprites
+        if (this.lcdc.getObjEnable() === 1) {
+            const spriteHeight = this.lcdc.getObjSize() === 0 ? 8 : 16;
+            let drawnSpriteCnt = 0;
+            for (let i = 0; i < 40 && drawnSpriteCnt < 10; i++) {
+                const spriteY = this.oam.getSpriteY(i) - 16;
+                const spriteYBottom = spriteY + spriteHeight;
+                if (scanLine < spriteY || spriteYBottom <= scanLine) {
+                    continue;
+                }
+
+                const spriteX = this.oam.getSpriteX(i) - 8;
+                const spriteTile = this.oam.getSpriteTile(i);
+                const spriteFlags = this.oam.getSpriteFlags(i);
+                const tileY = scanLine - spriteY;
+                for (let tileX = 0, lineX = spriteX; tileX < 8 && lineX < 160; tileX++, lineX++) {
+                    const drawOverBg = spriteFlags.bgAndWindowOverObj === 0 || lineColor[lineX] === 0;
+                    if (!drawOverBg) {
+                        continue;
+                    }
+                    const actualY = spriteFlags.yFlip === 0 ? tileY : 7 - tileY;
+                    const actualX = spriteFlags.xFlip === 0 ? tileX : 7 - tileX;
+                    const color = this.palettes.getObjPaletteColor(
+                        spriteFlags.paletteNumber,
+                        spriteTile.getColorIndex(actualX, actualY)
+                    );
+                    // 0 is transparent color
+                    if (color === 0) {
+                        continue;
+                    }
+                    lineColor[lineX] = color;
+                }
+
+                drawnSpriteCnt++;
+            }
+        }
+
+        // Actually drawing
+        for (let x = 0; x < 160; x++) {
+            this.lcd.updatePixel(x, scanLine, lineColor[x]);
         }
     }
 }

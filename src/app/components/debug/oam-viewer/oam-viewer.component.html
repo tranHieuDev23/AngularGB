@@ -26,7 +26,7 @@
                 <td>{{ index }}</td>
                 <td>{{ data.yPosition }}</td>
                 <td>{{ data.xPosition }}</td>
-                <td>{{ data.flags.flagByte }}</td>
+                <td>{{ data.flags.flagByte | toBaseString : 2 : 8 }}</td>
                 <td>
                     <img [src]="data.tile" />
                 </td>
