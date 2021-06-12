@@ -39,3 +39,8 @@ export const CONTROLLER_REG_ADDRESS = 0xff00;
 
 export const INTERRUPT_ENABLE_ADDRESS = 0xffff;
 export const INTERRUPT_FLAG_ADDRESS = 0xff0f;
+
+export const DIV_TIMER_REG_ADDRESS = 0xff04;
+export const COUNTER_TIMER_REG_ADDRESS = 0xff05;
+export const MODULO_TIMER_REG_ADDRESS = 0xff06;
+export const CONTROL_TIMER_REG_ADDRESS = 0xff07;

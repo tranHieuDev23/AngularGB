@@ -38,6 +38,6 @@ export class GbStat {
     public setModeFlag(mode: number): void {
         const oldValue = this.getValue();
         const newValue = (oldValue & 0xfc) | (mode & 3);
-        this.mmu.writeByte(STAT_REG_ADDRESS, newValue);
+        this.mmu.writeRegister(STAT_REG_ADDRESS, newValue);
     }
 }

@@ -21,6 +21,7 @@ const WINDOW_MAP_WIDGET = 5;
 const TILE_DATA_WIDGET = 6;
 const OAM_VIEWER_WIDGET = 7;
 const INTERRUPTS_STATE_WIDGET = 8;
+const TIMER_STATE_WIDGET = 9;
 
 const DEBUG_WIDGETS = [
   new DebugWidget("CPU", "CPU State", CPU_STATE_WIDGET),
@@ -32,6 +33,7 @@ const DEBUG_WIDGETS = [
   new DebugWidget("Graphic", "Tile Data Viewer", TILE_DATA_WIDGET),
   new DebugWidget("Graphic", "OAM Viewer", OAM_VIEWER_WIDGET),
   new DebugWidget("Interrupts", "Interrupts State", INTERRUPTS_STATE_WIDGET),
+  new DebugWidget("Timer", "Timer State", TIMER_STATE_WIDGET)
 ];
 
 @Component({
@@ -49,6 +51,7 @@ export class AppComponent {
   public readonly TILE_DATA_WIDGET = TILE_DATA_WIDGET;
   public readonly OAM_VIEWER_WIDGET = OAM_VIEWER_WIDGET;
   public readonly INTERRUPTS_STATE_WIDGET = INTERRUPTS_STATE_WIDGET;
+  public readonly TIMER_STATE_WIDGET = TIMER_STATE_WIDGET;
   public readonly DEBUG_MENU_ITEMS: { subMenu: string, items: DebugWidget[] }[] = [];
 
   @ViewChild("gameboy", { static: true }) gameboy: GameboyComponent;

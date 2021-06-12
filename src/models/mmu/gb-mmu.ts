@@ -1,12 +1,30 @@
 import { getBit } from "src/utils/arithmetic-utils";
 import { EIGHT_ONE_BITS, SIXTEEN_ONE_BITS, TWO_POW_EIGHT, TWO_POW_SIXTEEN } from "src/utils/constants";
 import { randomInteger } from "src/utils/random";
-import { EXT_RAM_START, VRAM_START, WORK_RAM_START, FORBIDDEN_RAM_START, SPRITE_RAM_START, HIGH_RAM_START, IO_REG_START, ECHO_RAM_START, DMA_REG_ADDRESS, LY_ADDRESS, LYC_ADDRESS, STAT_REG_ADDRESS, LCDC_REG_ADDRESS, DISABLE_BOOT_ROM_REG_ADDRESS } from "./gb-mmu-constants";
+import {
+    EXT_RAM_START,
+    VRAM_START,
+    WORK_RAM_START,
+    FORBIDDEN_RAM_START,
+    SPRITE_RAM_START,
+    HIGH_RAM_START,
+    IO_REG_START,
+    ECHO_RAM_START,
+    DMA_REG_ADDRESS,
+    LY_ADDRESS,
+    LYC_ADDRESS,
+    STAT_REG_ADDRESS,
+    LCDC_REG_ADDRESS,
+    DISABLE_BOOT_ROM_REG_ADDRESS,
+    DIV_TIMER_REG_ADDRESS
+} from "./gb-mmu-constants";
 import { GB_INITIALIZE_ROM } from "./gb-rom";
 import { Mbc } from "./mcb/gb-mcb";
 import { Mmu } from "./mmu";
 
-export interface GbMmu extends Mmu { }
+export interface GbMmu extends Mmu {
+    writeRegister(address: number, value: number): void;
+}
 
 export class GbTestMmu implements GbMmu {
     private readonly ram: number[] = new Array<number>(TWO_POW_SIXTEEN);
@@ -21,6 +39,10 @@ export class GbTestMmu implements GbMmu {
 
     writeByte(address: number, value: number): void {
         this.ram[address] = value & EIGHT_ONE_BITS;
+    }
+
+    writeRegister(address: number, value: number): void {
+        this.writeByte(address, value);
     }
 
     writeWord(address: number, value: number): void {
@@ -51,7 +73,7 @@ export class GbMmuImpl implements GbMmu {
     ) { }
 
     readByte(address: number): number {
-        if (this.getIsBootingUp() === 0 && address < GB_INITIALIZE_ROM.length) {
+        if (this.getIsBootingUp() && address < GB_INITIALIZE_ROM.length) {
             return GB_INITIALIZE_ROM[address];
         }
         if (address < VRAM_START) {
@@ -109,6 +131,13 @@ export class GbMmuImpl implements GbMmu {
         this.writeByte((address + 1) & SIXTEEN_ONE_BITS, upperHalf);
     }
 
+    writeRegister(address: number, value: number): void {
+        this.ram[address] = value;
+        if (address === LY_ADDRESS) {
+            this.updateLycEqualLy();
+        }
+    }
+
     randomize(): void {
         this.ram.forEach((_, index) => {
             this.ram[index] = randomInteger(0, TWO_POW_EIGHT);
@@ -119,12 +148,20 @@ export class GbMmuImpl implements GbMmu {
         this.ram.fill(0);
     }
 
-    public getIsBootingUp(): number {
-        return this.ram[DISABLE_BOOT_ROM_REG_ADDRESS];
+    private getIsBootingUp(): boolean {
+        return this.ram[DISABLE_BOOT_ROM_REG_ADDRESS] === 0;
     }
 
     private handleIoRegisterWrite(address: number, oldValue: number, value: number): void {
         switch (address) {
+            case LY_ADDRESS:
+                this.ram[address] = oldValue;
+                break;
+
+            case DIV_TIMER_REG_ADDRESS:
+                this.ram[address] = 0;
+                break;
+
             case DMA_REG_ADDRESS:
                 const startAddress = value << 8;
                 const endAddress = startAddress | 0xa0;
@@ -141,14 +178,21 @@ export class GbMmuImpl implements GbMmu {
                 }
                 break;
 
-            case LY_ADDRESS:
             case LYC_ADDRESS:
-                const oldStat = this.ram[STAT_REG_ADDRESS];
-                const lyEqualLyc = this.ram[LY_ADDRESS] === this.ram[LYC_ADDRESS];
-                const newStat = (oldStat & 0xfb) | ((lyEqualLyc ? 1 : 0) << 2);
-                this.ram[STAT_REG_ADDRESS] = newStat;
+                this.updateLycEqualLy();
+                break;
+
+            case DISABLE_BOOT_ROM_REG_ADDRESS:
+                this.ram[address] = 1;
                 break;
         }
+    }
+
+    private updateLycEqualLy(): void {
+        const oldStat = this.ram[STAT_REG_ADDRESS];
+        const lyEqualLyc = this.ram[LY_ADDRESS] === this.ram[LYC_ADDRESS];
+        const newStat = (oldStat & 0xfb) | ((lyEqualLyc ? 1 : 0) << 2);
+        this.ram[STAT_REG_ADDRESS] = newStat;
     }
 }
 
@@ -170,6 +214,10 @@ export class GbDisassemblerMmu implements GbMmu {
     }
 
     writeWord(address: number, value: number): void {
+        // Purposefully left unimplemented
+    }
+
+    writeRegister(address: number, value: number): void {
         // Purposefully left unimplemented
     }
 

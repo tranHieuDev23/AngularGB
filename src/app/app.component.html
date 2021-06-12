@@ -97,6 +97,8 @@
                         <app-interrupts-state *ngIf="currentDebugWidget.id === INTERRUPTS_STATE_WIDGET"
                             [gameboy]="gameboy">
                         </app-interrupts-state>
+                        <app-timer *ngIf="currentDebugWidget.id === TIMER_STATE_WIDGET" [gameboy]="gameboy">
+                        </app-timer>
                     </div>
                 </div>
             </div>

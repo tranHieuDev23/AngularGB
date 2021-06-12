@@ -11,7 +11,9 @@ import { GbPositionControl } from "../mmu/mmu-wrappers/gb-position-control";
 import { GbStat } from "../mmu/mmu-wrappers/gb-stat";
 import { GbTileData } from "../mmu/mmu-wrappers/gb-tile-data";
 import { GbTileMap } from "../mmu/mmu-wrappers/gb-tile-map";
+import { GbTimerWrappers } from "../mmu/mmu-wrappers/gb-timer-wrappers";
 import { GbRegisterSet } from "../register/gb-registers";
+import { GbTimer } from "../timer/gb-timer";
 
 const CYCLE_PER_FRAME = 70224;
 
@@ -30,9 +32,11 @@ export class Gameboy {
     public readonly stat: GbStat;
     public readonly tileData: GbTileData;
     public readonly tileMap: GbTileMap;
+    public readonly timerWrappers: GbTimerWrappers;
 
     private readonly cpu: GbCpu;
     private readonly gpu: GbGpu;
+    private readonly timer: GbTimer;
     private currentFrameCycleCount: number;
 
     constructor(
@@ -42,6 +46,8 @@ export class Gameboy {
         this.rs = new GbRegisterSet();
         this.cpu = new GbCpu(this.rs, mmu);
         this.gpu = new GbGpu(mmu, lcd);
+        this.timer = new GbTimer(mmu);
+
         this.interrupts = new GbInterrupts(mmu);
         this.lcdc = new GbLcdc(mmu);
         this.palettes = new GbPalettes(mmu);
@@ -50,6 +56,8 @@ export class Gameboy {
         this.stat = new GbStat(mmu);
         this.tileData = new GbTileData(mmu);
         this.tileMap = new GbTileMap(mmu);
+        this.timerWrappers = new GbTimerWrappers(mmu);
+
         this.currentFrameCycleCount = 0;
     }
 
@@ -68,6 +76,7 @@ export class Gameboy {
 
         deltaCycleCount += this.cpu.step().cycleCount;
         this.gpu.step(deltaCycleCount);
+        this.timer.step(deltaCycleCount);
         this.currentFrameCycleCount += deltaCycleCount;
 
         const newStatLine = this.getStatInterruptLine();
@@ -98,6 +107,7 @@ export class Gameboy {
 
         deltaCycleCount += this.cpu.step().cycleCount;
         this.gpu.step(deltaCycleCount);
+        this.timer.step(deltaCycleCount);
         this.currentFrameCycleCount += deltaCycleCount;
 
         const newStatLine = this.getStatInterruptLine();

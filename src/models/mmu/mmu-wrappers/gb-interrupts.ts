@@ -111,6 +111,6 @@ export class GbInterrupts {
         const oldValue = this.mmu.readByte(address);
         const oldBit = getBit(oldValue, bitId);
         const newValue = (oldValue ^ (oldBit << bitId)) | (value << bitId);
-        this.mmu.writeByte(address, newValue);
+        this.mmu.writeRegister(address, newValue);
     }
 }

@@ -1,0 +1,14 @@
+<nz-table #timerState [nzData]="rows" nzFrontPagination="false" nzShowPagination="false">
+    <thead>
+        <tr>
+            <th>Timer</th>
+            <th>Value</th>
+        </tr>
+    </thead>
+    <tbody class="monospace">
+        <tr *ngFor="let item of timerState.data">
+            <td>{{ item.title }}</td>
+            <td>{{ item.value() }}</td>
+        </tr>
+    </tbody>
+</nz-table>

@@ -31,6 +31,6 @@ export class GbPositionControl {
     }
 
     public setLy(ly: number): void {
-        this.mmu.writeByte(LY_ADDRESS, ly);
+        this.mmu.writeRegister(LY_ADDRESS, ly);
     }
 }

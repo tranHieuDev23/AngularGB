@@ -1,4 +1,5 @@
 import { GbMmu } from "src/models/mmu/gb-mmu";
+import { DIV_TIMER_REG_ADDRESS } from "src/models/mmu/gb-mmu-constants";
 import { GbRegisterSet } from "src/models/register/gb-registers";
 import { GbInstruction } from "../../gb-instruction";
 
@@ -24,6 +25,7 @@ export class StopInstruction implements GbInstruction {
     }
 
     run(rs: GbRegisterSet, mmu: GbMmu, args: number[]): number {
+        mmu.writeRegister(DIV_TIMER_REG_ADDRESS, 0);
         return 1;
     }
 }

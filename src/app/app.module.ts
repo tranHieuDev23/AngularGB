@@ -29,6 +29,7 @@ import { TileDataViewModule } from "./components/debug/tile-data-viewer/tile-dat
 import { OamViewerModule } from "./components/debug/oam-viewer/oam-viewer.module";
 import { InterruptsStateModule } from "./components/debug/interrupts-state/interrupts-state.module";
 import { WindowMapViewerModule } from "./components/debug/window-map-viewer/window-map-viewer.module";
+import { TimerModule } from "./components/debug/timer/timer.module";
 
 registerLocaleData(en);
 
@@ -60,7 +61,8 @@ registerLocaleData(en);
     TileDataViewModule,
     OamViewerModule,
     InterruptsStateModule,
-    WindowMapViewerModule
+    WindowMapViewerModule,
+    TimerModule
   ],
   providers: [
     { provide: NZ_I18N, useValue: en_US },
