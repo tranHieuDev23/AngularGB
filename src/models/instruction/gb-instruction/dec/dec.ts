@@ -1,7 +1,8 @@
 import { GbMmu } from "src/models/mmu/gb-mmu";
 import { GbRegisterSet } from "src/models/register/gb-registers";
 import { GbInstruction, GbMemArg, GbRegisterArg } from "../../gb-instruction";
-import { subtract16Bit, subtract8Bit } from "../../../../utils/arithmetic-utils";
+import { subtract8Bit } from "../../../../utils/arithmetic-utils";
+import { SIXTEEN_ONE_BITS } from "src/utils/constants";
 
 /**
  * DEC <r1>. Decrement the contents of r1 by 1. This class supports
@@ -65,9 +66,9 @@ export class Dec16BitInstruction implements GbInstruction {
     }
 
     run(rs: GbRegisterSet, mmu: GbMmu, args: number[]): number {
-        const b = this.r1.getValue(rs, mmu, args);
-        const addResult = subtract16Bit(b, 1);
-        this.r1.setValue(rs, mmu, args, addResult.result);
+        const r1 = this.r1.getValue(rs, mmu, args);
+        const result = (r1 - 1) & SIXTEEN_ONE_BITS;
+        this.r1.setValue(rs, mmu, args, result);
         return 2;
     }
 }

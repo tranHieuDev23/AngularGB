@@ -31,11 +31,11 @@ describe("ld", () => {
             ].map(item => {
                 return new GbMemArg(new GbRegisterArg(item));
             }),
-            new GbMemArg(new Gb8BitArg(0)),
-            new GbMemArg(new Gb16BitArg(0)),
+            new GbMemArg(new Gb8BitArg()),
+            new GbMemArg(new Gb16BitArg()),
             new GbMemArg(new GbRegisterArg(RegisterName.C))
         ];
-        const SIMPLE_R2S = [...SIMPLE_R1S, new Gb8BitArg(0)];
+        const SIMPLE_R2S = [...SIMPLE_R1S, new Gb8BitArg()];
 
         SIMPLE_R1S.forEach(r1 => {
             SIMPLE_R2S.forEach(r2 => {
@@ -176,7 +176,7 @@ describe("ld", () => {
         ].map(item => {
             return new GbRegisterArg(item);
         });
-        const SIMPLE_R2S = [...SIMPLE_R1S, new Gb16BitArg(0)];
+        const SIMPLE_R2S = [...SIMPLE_R1S, new Gb16BitArg()];
 
         SIMPLE_R1S.forEach(r1 => {
             SIMPLE_R2S.forEach(r2 => {

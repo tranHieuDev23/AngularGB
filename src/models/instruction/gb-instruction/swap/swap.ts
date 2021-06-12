@@ -3,7 +3,7 @@ import { GbRegisterSet } from "src/models/register/gb-registers";
 import { GbInstruction, GbMemArg, GbRegisterArg } from "../../gb-instruction";
 
 /**
- * SLA <r1>. Shift the contents of the lower-order four bits (0-3) of r1 to the
+ * SWAP <r1>. Shift the contents of the lower-order four bits (0-3) of r1 to the
  * higher-order four bits (4-7) of the register, and shift the higher-order
  * four bits to the lower-order four bits.
  *

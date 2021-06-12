@@ -48,7 +48,7 @@ export class GbF8Instruction implements GbInstruction {
     }
 
     getName(): string {
-        return "LD HL SP+8";
+        return "LD HL SP+s8";
     }
 
     getOpcode(): number {

@@ -48,7 +48,6 @@ const REG_ARG_F = new GbRegisterArg(RegisterName.F);
 const REG_ARG_H = new GbRegisterArg(RegisterName.H);
 const REG_ARG_L = new GbRegisterArg(RegisterName.L);
 const REG_ARG_SP = new GbRegisterArg(RegisterName.SP);
-const REG_ARG_PC = new GbRegisterArg(RegisterName.PC);
 const REG_ARG_AF = new GbRegisterArg(RegisterName.AF);
 const REG_ARG_BC = new GbRegisterArg(RegisterName.BC);
 const REG_ARG_DE = new GbRegisterArg(RegisterName.DE);
@@ -57,8 +56,8 @@ const REG_ARG_HL = new GbRegisterArg(RegisterName.HL);
 const REG_ARG_HL_INC = new Gb16BitIncArg(REG_ARG_HL);
 const REG_ARG_HL_DEC = new Gb16BitDecArg(REG_ARG_HL);
 
-const D8_ARG = new Gb8BitArg(0);
-const D16_ARG = new Gb16BitArg(0);
+const D8_ARG = new Gb8BitArg();
+const D16_ARG = new Gb16BitArg();
 
 const MEM_REG_ARG_C = new GbMemArg(REG_ARG_C);
 const MEM_REG_ARG_BC = new GbMemArg(REG_ARG_BC);
@@ -147,10 +146,10 @@ export const GB_INSTRUCTION_SET = [
     new LdInstruction(0x6e, 2, REG_ARG_L, MEM_REG_ARG_HL), new LdInstruction(0x6f, 1, REG_ARG_L, REG_ARG_A),
 
     // 0x7x
-    new LdInstruction(0x70, 1, MEM_REG_ARG_HL, REG_ARG_B), new LdInstruction(0x71, 1, MEM_REG_ARG_HL, REG_ARG_C),
-    new LdInstruction(0x72, 1, MEM_REG_ARG_HL, REG_ARG_D), new LdInstruction(0x73, 1, MEM_REG_ARG_HL, REG_ARG_E),
-    new LdInstruction(0x74, 1, MEM_REG_ARG_HL, REG_ARG_H), new LdInstruction(0x75, 1, MEM_REG_ARG_HL, REG_ARG_L),
-    new HaltInstruction(), new LdInstruction(0x77, 1, MEM_REG_ARG_HL, REG_ARG_A),
+    new LdInstruction(0x70, 2, MEM_REG_ARG_HL, REG_ARG_B), new LdInstruction(0x71, 2, MEM_REG_ARG_HL, REG_ARG_C),
+    new LdInstruction(0x72, 2, MEM_REG_ARG_HL, REG_ARG_D), new LdInstruction(0x73, 2, MEM_REG_ARG_HL, REG_ARG_E),
+    new LdInstruction(0x74, 2, MEM_REG_ARG_HL, REG_ARG_H), new LdInstruction(0x75, 2, MEM_REG_ARG_HL, REG_ARG_L),
+    new HaltInstruction(), new LdInstruction(0x77, 2, MEM_REG_ARG_HL, REG_ARG_A),
     new LdInstruction(0x78, 1, REG_ARG_A, REG_ARG_B), new LdInstruction(0x79, 1, REG_ARG_A, REG_ARG_C),
     new LdInstruction(0x7a, 1, REG_ARG_A, REG_ARG_D), new LdInstruction(0x7b, 1, REG_ARG_A, REG_ARG_E),
     new LdInstruction(0x7c, 1, REG_ARG_A, REG_ARG_H), new LdInstruction(0x7d, 1, REG_ARG_A, REG_ARG_L),

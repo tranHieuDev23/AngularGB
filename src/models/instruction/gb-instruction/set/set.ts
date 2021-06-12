@@ -3,7 +3,7 @@ import { GbRegisterSet } from "src/models/register/gb-registers";
 import { GbInstruction, GbMemArg, GbRegisterArg } from "../../gb-instruction";
 
 /**
- * SET <r1> <r2>. Reset bit 0 in r1 to 1.
+ * SET <r1> <r2>. Set bit r1 in r2 to 1.
  *
  * r1 can be a number from 0 to 7.
  * r2 can be a register or a memory argument.

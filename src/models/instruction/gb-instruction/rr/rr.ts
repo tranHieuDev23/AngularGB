@@ -1,5 +1,6 @@
 import { GbMmu } from "src/models/mmu/gb-mmu";
 import { GbRegisterSet } from "src/models/register/gb-registers";
+import { getBit } from "src/utils/arithmetic-utils";
 import { EIGHT_ONE_BITS } from "src/utils/constants";
 import { GbInstruction, GbMemArg, GbRegisterArg } from "../../gb-instruction";
 
@@ -37,7 +38,7 @@ export class RrInstruction implements GbInstruction {
 
     run(rs: GbRegisterSet, mmu: GbMmu, args: number[]): number {
         const r1 = this.r1.getValue(rs, mmu, args);
-        const r1Bit0 = r1 & 1;
+        const r1Bit0 = getBit(r1, 0);
         const newR1 = ((r1 >> 1) & EIGHT_ONE_BITS) | (rs.getCarryFlag() << 7);
         this.r1.setValue(rs, mmu, args, newR1);
         rs.setZeroFlag(newR1 === 0 ? 1 : 0);

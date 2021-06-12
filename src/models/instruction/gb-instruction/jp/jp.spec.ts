@@ -16,7 +16,7 @@ describe("jp", () => {
 
     it("should jump PC to 16-bit argument", () => {
         const R1S = [
-            new Gb16BitArg(0), new GbRegisterArg(RegisterName.HL)
+            new Gb16BitArg(), new GbRegisterArg(RegisterName.HL)
         ];
         R1S.forEach(r1 => {
             const opCode = randomInteger(0x0, 0x100);
@@ -56,7 +56,7 @@ describe("jp", () => {
             new GbFlagArg(Flag.Carry)
         ];
         const R1S = [...FLAG_ARGS, ...FLAG_ARGS.map(arg => new GbNotArg(arg))];
-        const r2 = new Gb16BitArg(0);
+        const r2 = new Gb16BitArg();
 
         R1S.forEach((r1) => {
             const opCode = randomInteger(0x0, 0x100);

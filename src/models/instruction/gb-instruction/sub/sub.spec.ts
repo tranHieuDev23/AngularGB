@@ -61,7 +61,7 @@ describe("sub", () => {
 
     it("should work with 8-bit value", () => {
         const opCode = randomInteger(0x00, 0x100);
-        const byteArg = new Gb8BitArg(0);
+        const byteArg = new Gb8BitArg();
         const byteValue = randomInteger(0, TWO_POW_EIGHT);
         const instruction = new SubInstruction(opCode, byteArg);
 

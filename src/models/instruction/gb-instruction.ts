@@ -45,10 +45,6 @@ export class GbRegisterArg implements GbInstructionWritableArg {
 }
 
 export class Gb8BitArg implements GbInstructionArg {
-    constructor(
-        private readonly argIndex: number
-    ) { }
-
     getName(): string {
         return "d8";
     }
@@ -62,15 +58,11 @@ export class Gb8BitArg implements GbInstructionArg {
     }
 
     getValue(rs: GbRegisterSet, mmu: GbMmu, args: number[]): number {
-        return args[this.argIndex];
+        return args[0];
     }
 }
 
 export class Gb16BitArg implements GbInstructionArg {
-    constructor(
-        private readonly argIndex: number
-    ) { }
-
     getName(): string {
         return "d16";
     }
@@ -84,7 +76,7 @@ export class Gb16BitArg implements GbInstructionArg {
     }
 
     getValue(rs: GbRegisterSet, mmu: GbMmu, args: number[]): number {
-        return (args[this.argIndex + 1] << 8) | args[this.argIndex];
+        return (args[1] << 8) | args[0];
     }
 }
 

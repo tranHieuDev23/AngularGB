@@ -1,5 +1,6 @@
 import { GbMmu } from "src/models/mmu/gb-mmu";
 import { GbRegisterSet } from "src/models/register/gb-registers";
+import { getBit } from "src/utils/arithmetic-utils";
 import { GbInstruction, GbMemArg, GbRegisterArg } from "../../gb-instruction";
 
 /**
@@ -34,7 +35,7 @@ export class BitInstruction implements GbInstruction {
 
     run(rs: GbRegisterSet, mmu: GbMmu, args: number[]): number {
         const r2 = this.r2.getValue(rs, mmu, args);
-        const bit = (r2 >> this.r1) & 1;
+        const bit = getBit(r2, this.r1);
         rs.setZeroFlag(bit ^ 1);
         rs.setOperationFlag(0);
         rs.setHalfCarryFlag(1);

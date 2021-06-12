@@ -1,4 +1,4 @@
-import { GbMmu, GbTestMmu } from "src/models/mmu/gb-mmu";
+import { GbTestMmu } from "src/models/mmu/gb-mmu";
 import { Flag, GbRegisterSet } from "src/models/register/gb-registers";
 import { SIXTEEN_ONE_BITS, TWO_POW_SIXTEEN } from "src/utils/constants";
 import { randomInteger } from "src/utils/random";
@@ -15,7 +15,7 @@ describe("call", () => {
     });
 
     it("should jump PC to 16-bit argument, stacking the old value", () => {
-        const r1 = new Gb16BitArg(0);
+        const r1 = new Gb16BitArg();;
         const instruction = new CallInstruction(r1);
 
         expect(instruction.getOpcode()).toEqual(0xcd);
@@ -48,7 +48,7 @@ describe("call", () => {
             new GbFlagArg(Flag.Carry)
         ];
         const R1S = [...FLAG_ARGS, ...FLAG_ARGS.map(arg => new GbNotArg(arg))];
-        const r2 = new Gb16BitArg(0);
+        const r2 = new Gb16BitArg();;
 
         R1S.forEach((r1) => {
             const opCode = randomInteger(0x0, 0x100);

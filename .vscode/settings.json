@@ -3,6 +3,7 @@
         "Gameboy",
         "Joypad",
         "LCDC",
+        "RETI",
         "RRCA",
         "Scanline",
         "tabset"
