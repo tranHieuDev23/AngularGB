@@ -1,6 +1,6 @@
-import { TWO_POW_EIGHT } from "src/utils/constants";
 import { EXT_RAM_START } from "../gb-mmu-constants";
 import { Mbc } from "./gb-mcb";
+import { KB } from "./gb-mcb-constants";
 
 export class RomMcb implements Mbc {
     private readonly extRam: number[];
@@ -10,7 +10,7 @@ export class RomMcb implements Mbc {
         private readonly hasRam: boolean,
         private readonly rom: number[]
     ) {
-        this.extRam = hasRam ? new Array<number>(TWO_POW_EIGHT) : [];
+        this.extRam = hasRam ? new Array<number>(8 * KB).fill(0) : [];
     }
 
     getCode(): number {

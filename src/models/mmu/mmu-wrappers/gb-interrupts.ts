@@ -7,6 +7,10 @@ export class GbInterrupts {
         private readonly mmu: GbMmu
     ) { }
 
+    public getIEByte(): number {
+        return this.mmu.readByte(INTERRUPT_ENABLE_ADDRESS);
+    }
+
     public getInterruptEnable(bitId: number): number {
         return this.getFlag(INTERRUPT_ENABLE_ADDRESS, bitId);
     }
@@ -53,6 +57,10 @@ export class GbInterrupts {
 
     public setJoypadInterruptEnable(value: number): void {
         this.setInterruptEnable(4, value)
+    }
+
+    public getIFByte(): number {
+        return this.mmu.readByte(INTERRUPT_FLAG_ADDRESS);
     }
 
     public getInterruptFlag(bitId: number): number {

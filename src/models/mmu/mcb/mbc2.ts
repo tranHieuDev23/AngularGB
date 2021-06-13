@@ -2,7 +2,7 @@ import { ROM_BANK_START } from "../gb-mmu-constants";
 import { Mbc } from "./gb-mcb";
 
 export class GbMcb2 implements Mbc {
-    private readonly extRam: number[] = new Array<number>(512);
+    private readonly extRam: number[] = new Array<number>(512).fill(0);
 
     private romBankOffset = 0x4000;
 
