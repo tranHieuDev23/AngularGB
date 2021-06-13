@@ -10,7 +10,7 @@ export function pushByteToStack(rs: GbRegisterSet, mmu: GbMmu, value: number): v
 }
 
 export function pushWordToStack(rs: GbRegisterSet, mmu: GbMmu, value: number): void {
-    const upperByte = value >> 8;
+    const upperByte = (value >> 8) & EIGHT_ONE_BITS;
     const lowerByte = value & EIGHT_ONE_BITS;
     pushByteToStack(rs, mmu, upperByte);
     pushByteToStack(rs, mmu, lowerByte);

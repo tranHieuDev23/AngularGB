@@ -40,6 +40,36 @@ export class LdInstruction implements GbInstruction {
 }
 
 /**
+ * LD (a16), SP. Store the lower byte of stack pointer SP at the address
+ * specified by the 16-bit immediate operand a16, and store the upper byte of
+ * SP at address a16 + 1.
+ */
+export class Gb08Instruction implements GbInstruction {
+    constructor(
+        private readonly r1: Gb16BitArg
+    ) { }
+
+    getLength(): number {
+        return 3;
+    }
+
+    getName(): string {
+        return "LD (a16) SP";
+    }
+
+    getOpcode(): number {
+        return 0x08;
+    }
+
+    run(rs: GbRegisterSet, mmu: GbMmu, args: number[]): number {
+        const sp = rs.sp.getValue();
+        const a16 = this.r1.getValue(rs, mmu, args);
+        mmu.writeWord(a16, sp);
+        return 5;
+    }
+}
+
+/**
  * LD HL, SP+s8. Add the 8-bit signed operand s8 (values -128 to +127)
  * to the stack pointer SP, and store the result in register pair HL.
  */

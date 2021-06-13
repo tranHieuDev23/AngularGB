@@ -35,30 +35,6 @@ export class GbInterrupts {
         return this.getInterruptEnable(4);
     }
 
-    public setInterruptEnable(bitId: number, value: number): void {
-        this.setFlag(INTERRUPT_ENABLE_ADDRESS, bitId, value);
-    }
-
-    public setVBlankInterruptEnable(value: number): void {
-        this.setInterruptEnable(0, value)
-    }
-
-    public setLcdStatInterruptEnable(value: number): void {
-        this.setInterruptEnable(1, value)
-    }
-
-    public setTimerInterruptEnable(value: number): void {
-        this.setInterruptEnable(2, value)
-    }
-
-    public setSerialInterruptEnable(value: number): void {
-        this.setInterruptEnable(3, value)
-    }
-
-    public setJoypadInterruptEnable(value: number): void {
-        this.setInterruptEnable(4, value)
-    }
-
     public getIFByte(): number {
         return this.mmu.readByte(INTERRUPT_FLAG_ADDRESS);
     }

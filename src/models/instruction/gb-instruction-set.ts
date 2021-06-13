@@ -16,7 +16,7 @@ import { HaltInstruction } from "./gb-instruction/halt/halt";
 import { Inc16BitInstruction, Inc8BitInstruction } from "./gb-instruction/inc/inc";
 import { JpFlagInstruction, JpInstruction } from "./gb-instruction/jp/jp";
 import { JrFlagInstruction, JrInstruction } from "./gb-instruction/jr/jr";
-import { GbF8Instruction, LdInstruction } from "./gb-instruction/ld/ld";
+import { Gb08Instruction, GbF8Instruction, LdInstruction } from "./gb-instruction/ld/ld";
 import { NopInstruction } from "./gb-instruction/nop/nop";
 import { OrInstruction } from "./gb-instruction/or/or";
 import { PopInstruction } from "./gb-instruction/pop/pop";
@@ -79,7 +79,7 @@ export const GB_INSTRUCTION_SET = [
     new LdInstruction(0x02, 2, MEM_REG_ARG_BC, REG_ARG_A), new Inc16BitInstruction(0x03, REG_ARG_BC),
     new Inc8BitInstruction(0x04, REG_ARG_B), new Dec8BitInstruction(0x05, REG_ARG_B),
     new LdInstruction(0x06, 2, REG_ARG_B, D8_ARG), new Gb07Instruction(),
-    new LdInstruction(0x08, 5, MEM_D16_ARG, REG_ARG_SP), new Add16BitRegisterInstruction(0x09, REG_ARG_HL, REG_ARG_BC),
+    new Gb08Instruction(D16_ARG), new Add16BitRegisterInstruction(0x09, REG_ARG_HL, REG_ARG_BC),
     new LdInstruction(0x0a, 2, REG_ARG_A, MEM_REG_ARG_BC), new Dec16BitInstruction(0x0b, REG_ARG_BC),
     new Inc8BitInstruction(0x0c, REG_ARG_C), new Dec8BitInstruction(0x0d, REG_ARG_C),
     new LdInstruction(0x0e, 2, REG_ARG_C, D8_ARG), new Gb0fInstruction(),
