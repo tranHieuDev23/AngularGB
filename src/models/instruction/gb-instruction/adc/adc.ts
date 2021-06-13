@@ -10,12 +10,14 @@ import { EIGHT_ONE_BITS } from "src/utils/constants";
  */
 export class AdcInstruction implements GbInstruction {
     private readonly length: number;
+    private readonly cycleCount: number;
 
     constructor(
         private readonly opCode: number,
         private readonly r1: GbRegisterArg | GbMemArg | Gb8BitArg
     ) {
         this.length = 1 + r1.getArgsTakenCount();
+        this.cycleCount = r1 instanceof GbRegisterArg ? 1 : 2;
     }
 
     getName(): string {
@@ -45,6 +47,6 @@ export class AdcInstruction implements GbInstruction {
         rs.setOperationFlag(0);
         rs.setHalfCarryFlag(halfCarried ? 1 : 0);
         rs.setCarryFlag(carried ? 1 : 0);
-        return 2;
+        return this.cycleCount;
     }
 }

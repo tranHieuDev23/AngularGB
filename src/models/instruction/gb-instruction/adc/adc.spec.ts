@@ -38,7 +38,7 @@ describe("adc", () => {
             expect(rs.getOperationFlag()).toEqual(0);
             expect(rs.getHalfCarryFlag()).toEqual(halfCarry ? 1 : 0);
             expect(rs.getCarryFlag()).toEqual(carry ? 1 : 0);
-            expect(cycleCount).toEqual(2);
+            expect(cycleCount).toEqual(1);
         });
     });
 

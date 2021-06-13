@@ -18,7 +18,7 @@ export class BitInstruction implements GbInstruction {
         private readonly r1: number,
         private readonly r2: GbRegisterArg | GbMemArg
     ) {
-        this.cycleCount = r2 instanceof GbRegisterArg ? 2 : 4;
+        this.cycleCount = r2 instanceof GbRegisterArg ? 2 : 3;
     }
 
     getName(): string {

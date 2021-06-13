@@ -42,7 +42,7 @@ describe("bit", () => {
                 expect(rs.getOperationFlag()).toEqual(0);
                 expect(rs.getHalfCarryFlag()).toEqual(1);
                 expect(rs.getCarryFlag()).toEqual(carryFlag);
-                expect(cycleCount).toEqual(r2 instanceof GbRegisterArg ? 2 : 4);
+                expect(cycleCount).toEqual(r2 instanceof GbRegisterArg ? 2 : 3);
             });
         });
     });
