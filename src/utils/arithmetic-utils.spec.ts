@@ -1,5 +1,5 @@
 import { TWO_POW_EIGHT, TWO_POW_SIXTEEN } from "src/utils/constants";
-import { add16Bit, add8Bit, ArithmeticResult, subtract8Bit, toSigned16Bit, toSigned8Bit } from "./arithmetic-utils";
+import { add16Bit, add8Bit, ArithmeticResult, subtract8Bit, toSigned8Bit } from "./arithmetic-utils";
 
 describe("arithmetic-utils", () => {
     describe("add8Bit()", () => {
@@ -115,17 +115,6 @@ describe("arithmetic-utils", () => {
             expect(result.zero).toBeTrue();
             expect(result.carry).toBeTrue();
             expect(result.halfCarry).toBeTrue();
-        });
-    });
-
-    describe("toSigned16Bit()", () => {
-        it("should convert 16-bit representation to correct value", () => {
-            for (let i = TWO_POW_SIXTEEN / 2 - 100; i < TWO_POW_SIXTEEN / 2; i++) {
-                expect(toSigned16Bit(i)).toEqual(i);
-            }
-            for (let i = TWO_POW_SIXTEEN / 2; i < TWO_POW_SIXTEEN / 2 + 100; i++) {
-                expect(toSigned16Bit(i)).toEqual(i - TWO_POW_SIXTEEN);
-            }
         });
     });
 });

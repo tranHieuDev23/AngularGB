@@ -1,6 +1,6 @@
 import { GbMmu, GbTestMmu } from "src/models/mmu/gb-mmu";
 import { GbRegisterSet, RegisterName, REGISTERS_16_BIT, REGISTERS_8_BIT } from "src/models/register/gb-registers";
-import { TWO_POW_EIGHT, TWO_POW_SIXTEEN } from "src/utils/constants";
+import { SIXTEEN_ONE_BITS, TWO_POW_EIGHT, TWO_POW_SIXTEEN } from "src/utils/constants";
 import { randomInteger } from "src/utils/random";
 import { GbRegisterArg, GbMemArg, Gb8BitArg } from "../../gb-instruction";
 import { Add16BitRegisterInstruction, Add8BitInstruction, GbE8Instruction } from "./add";
@@ -109,21 +109,25 @@ describe("add", () => {
     });
 
     it("0xe8", () => {
-        const spValue = rs.sp.getValue();
+        const sp = rs.sp.getValue();
         const byteValue = randomInteger(0, TWO_POW_EIGHT);
         const instruction = new GbE8Instruction();
 
         expect(instruction.getOpcode()).toEqual(0xe8);
         expect(instruction.getLength()).toEqual(2);
 
-        const expectedResult = add16Bit(spValue, toSigned8Bit(byteValue));
+        const s8 = toSigned8Bit(byteValue);
+        const fullResult = sp + s8;
+        const result = fullResult & SIXTEEN_ONE_BITS;
+        const halfCarried = ((sp ^ s8 ^ result) & 0x10) !== 0;
+        const carried = ((sp ^ s8 ^ result) & 0x100) !== 0;
         const cycleCount = instruction.run(rs, mmu, [byteValue]);
 
-        expect(rs.sp.getValue()).toEqual(expectedResult.result);
+        expect(rs.sp.getValue()).toEqual(result);
         expect(rs.getZeroFlag()).toEqual(0);
         expect(rs.getOperationFlag()).toEqual(0);
-        expect(rs.getHalfCarryFlag()).toEqual(expectedResult.halfCarry ? 1 : 0);
-        expect(rs.getCarryFlag()).toEqual(expectedResult.carry ? 1 : 0);
+        expect(rs.getHalfCarryFlag()).toEqual(halfCarried ? 1 : 0);
+        expect(rs.getCarryFlag()).toEqual(carried ? 1 : 0);
         expect(cycleCount).toEqual(4);
     });
 });

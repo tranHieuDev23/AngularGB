@@ -223,14 +223,18 @@ describe("ld", () => {
         expect(instruction.getOpcode()).toEqual(0xf8);
         expect(instruction.getLength()).toEqual(2);
 
-        const expectedResult = add16Bit(sp, toSigned8Bit(args[0]));
+        const s8 = toSigned8Bit(args[0]);
+        const fullResult = sp + s8;
+        const result = fullResult & SIXTEEN_ONE_BITS;
+        const halfCarried = ((sp ^ s8 ^ result) & 0x10) !== 0;
+        const carried = ((sp ^ s8 ^ result) & 0x100) !== 0;
         const cycleCount = instruction.run(rs, mmu, args);
 
-        expect(rs.hl.getValue()).toEqual(expectedResult.result);
+        expect(rs.hl.getValue()).toEqual(result);
         expect(rs.getZeroFlag()).toEqual(0);
         expect(rs.getOperationFlag()).toEqual(0);
-        expect(rs.getHalfCarryFlag()).toEqual(expectedResult.halfCarry ? 1 : 0);
-        expect(rs.getCarryFlag()).toEqual(expectedResult.carry ? 1 : 0);
+        expect(rs.getHalfCarryFlag()).toEqual(halfCarried ? 1 : 0);
+        expect(rs.getCarryFlag()).toEqual(carried ? 1 : 0);
         expect(cycleCount).toEqual(3);
     });
 });

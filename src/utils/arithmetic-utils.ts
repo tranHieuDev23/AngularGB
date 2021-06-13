@@ -36,7 +36,11 @@ export function subtract8Bit(a: number, b: number): ArithmeticResult {
 }
 
 export function toSigned8Bit(a: number): number {
-    return toSigned(a, 8);
+    a &= EIGHT_ONE_BITS;
+    if (getBit(a, 7) === 0) {
+        return a;
+    }
+    return a - TWO_POW_EIGHT;
 }
 
 export function add16Bit(a: number, b: number): ArithmeticResult {
@@ -46,10 +50,6 @@ export function add16Bit(a: number, b: number): ArithmeticResult {
     const halfCarry = ((a ^ b ^ croppedResult) & 0x1000) !== 0;
     const carry = fullResult >= TWO_POW_SIXTEEN;
     return new ArithmeticResult(croppedResult, zero, halfCarry, carry);
-}
-
-export function toSigned16Bit(a: number): number {
-    return toSigned(a, 16);
 }
 
 export function getBit(value: number, bitId: number): number {

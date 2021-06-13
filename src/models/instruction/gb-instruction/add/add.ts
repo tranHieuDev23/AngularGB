@@ -2,6 +2,7 @@ import { GbMmu } from "src/models/mmu/gb-mmu";
 import { GbRegisterSet } from "src/models/register/gb-registers";
 import { Gb8BitArg, GbInstruction, GbMemArg, GbRegisterArg } from "../../gb-instruction";
 import { add16Bit, add8Bit, toSigned8Bit } from "../../../../utils/arithmetic-utils";
+import { SIXTEEN_ONE_BITS } from "src/utils/constants";
 
 /**
  * ADD <r1> <r2>. Adds the value of r1 and r2, and store the result
@@ -74,10 +75,9 @@ export class Add16BitRegisterInstruction implements GbInstruction {
     }
 
     run(rs: GbRegisterSet, mmu: GbMmu, args: number[]): number {
-        const result = add16Bit(
-            this.r1.getValue(rs, mmu, args),
-            this.r2.getValue(rs, mmu, args)
-        );
+        const r1 = this.r1.getValue(rs, mmu, args);
+        const r2 = this.r2.getValue(rs, mmu, args);
+        const result = add16Bit(r1, r2);
         this.r1.setValue(rs, mmu, args, result.result);
         rs.setOperationFlag(0);
         rs.setHalfCarryFlag(result.halfCarry ? 1 : 0);
@@ -105,13 +105,19 @@ export class GbE8Instruction implements GbInstruction {
     }
 
     run(rs: GbRegisterSet, mmu: GbMmu, args: number[]): number {
+        const sp = rs.sp.getValue();
         const s8 = toSigned8Bit(args[0]);
-        const result = add16Bit(rs.sp.getValue(), s8);
-        rs.sp.setValue(result.result);
+
+        const fullResult = sp + s8;
+        const result = fullResult & SIXTEEN_ONE_BITS;
+        const halfCarried = ((sp ^ s8 ^ result) & 0x10) !== 0;
+        const carried = ((sp ^ s8 ^ result) & 0x100) !== 0;
+
+        rs.sp.setValue(result);
         rs.setZeroFlag(0);
         rs.setOperationFlag(0);
-        rs.setHalfCarryFlag(result.halfCarry ? 1 : 0);
-        rs.setCarryFlag(result.carry ? 1 : 0);
+        rs.setHalfCarryFlag(halfCarried ? 1 : 0);
+        rs.setCarryFlag(carried ? 1 : 0);
         return 4;
     }
 }

@@ -1,7 +1,8 @@
 import { GbMmu } from "src/models/mmu/gb-mmu";
 import { GbRegisterSet } from "src/models/register/gb-registers";
 import { Gb16BitArg, Gb8BitArg, GbInstruction, GbMemArg, GbRegisterArg } from "../../gb-instruction";
-import { add16Bit, toSigned8Bit } from "../../../../utils/arithmetic-utils";
+import { toSigned8Bit } from "../../../../utils/arithmetic-utils";
+import { EIGHT_ONE_BITS, SIXTEEN_ONE_BITS } from "src/utils/constants";
 
 /**
  * LD <r1> <r2>. Load the content of r2 into r1.
@@ -58,12 +59,17 @@ export class GbF8Instruction implements GbInstruction {
     run(rs: GbRegisterSet, mmu: GbMmu, args: number[]): number {
         const sp = rs.sp.getValue();
         const s8 = toSigned8Bit(args[0]);
-        const result = add16Bit(sp, s8);
-        rs.hl.setValue(result.result);
+
+        const fullResult = sp + s8;
+        const result = fullResult & SIXTEEN_ONE_BITS;
+        const halfCarried = ((sp ^ s8 ^ result) & 0x10) !== 0;
+        const carried = ((sp ^ s8 ^ result) & 0x100) !== 0;
+
+        rs.hl.setValue(result);
         rs.setZeroFlag(0);
         rs.setOperationFlag(0);
-        rs.setHalfCarryFlag(result.halfCarry ? 1 : 0);
-        rs.setCarryFlag(result.carry ? 1 : 0);
+        rs.setHalfCarryFlag(halfCarried ? 1 : 0);
+        rs.setCarryFlag(carried ? 1 : 0);
         return 3;
     }
 }

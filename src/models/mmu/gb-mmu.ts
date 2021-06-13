@@ -95,7 +95,8 @@ export class GbMmuImpl implements GbMmu {
     }
 
     readWord(address: number): number {
-        return (this.readByte((address + 1) & SIXTEEN_ONE_BITS) << 8) | this.readByte(address);
+        const nextAddress = (address + 1) & SIXTEEN_ONE_BITS;
+        return (this.readByte(nextAddress) << 8) | this.readByte(address);
     }
 
     writeByte(address: number, value: number): void {
@@ -127,8 +128,9 @@ export class GbMmuImpl implements GbMmu {
     writeWord(address: number, value: number): void {
         const lowerHalf = value & EIGHT_ONE_BITS;
         const upperHalf = (value >> 8) & EIGHT_ONE_BITS;
+        const nextAddress = (address + 1) & SIXTEEN_ONE_BITS;
         this.writeByte(address, lowerHalf);
-        this.writeByte((address + 1) & SIXTEEN_ONE_BITS, upperHalf);
+        this.writeByte(nextAddress, upperHalf);
     }
 
     writeRegister(address: number, value: number): void {
