@@ -2,9 +2,13 @@ export abstract class Register {
 
     constructor(
         protected readonly name: string
-    ) { }
+    ) {
+        this.fullOnes = (1 << this.bitCount()) - 1;
+    }
 
     private value = 0;
+    private readonly fullOnes: number;
+
     public abstract bitCount(): number;
 
     public getName(): string {
@@ -16,7 +20,7 @@ export abstract class Register {
     }
 
     public setValue(value: number): void {
-        this.value = value & this.getFullOnes();
+        this.value = value & this.fullOnes;
     }
 
     public getBit(index: number): number {
@@ -29,10 +33,6 @@ export abstract class Register {
             return;
         }
         this.value ^= (1 << index);
-    }
-
-    protected getFullOnes(): number {
-        return (1 << this.bitCount()) - 1;
     }
 }
 

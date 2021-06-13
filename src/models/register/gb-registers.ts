@@ -36,10 +36,6 @@ export class DualRegister extends Register16Bit {
         super(name);
     }
 
-    public getName(): string {
-        return this.name;
-    }
-
     getValue(): number {
         return (this.subRegister1.getValue() << 8) | this.subRegister2.getValue();
     }
