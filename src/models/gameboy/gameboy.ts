@@ -120,7 +120,7 @@ export class Gameboy {
 
         const oldStatLine = this.getStatInterruptLine();
 
-        if (this.rs.getHalting()) {
+        if (!this.rs.getHalting()) {
             deltaCycleCount += this.cpu.step().cycleCount;
         } else {
             deltaCycleCount++;
