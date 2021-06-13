@@ -1,7 +1,7 @@
 import { GbMmu } from "src/models/mmu/gb-mmu";
 import { GbRegisterSet } from "src/models/register/gb-registers";
-import { SIXTEEN_ONE_BITS } from "src/utils/constants";
 import { GbInstruction } from "../../gb-instruction";
+import { pushWordToStack } from "../utils/stack-manipulation";
 
 /**
  * RST <r1>. Push the current value of the program counter PC onto the memory
@@ -30,9 +30,8 @@ export class RstInstruction implements GbInstruction {
     }
 
     run(rs: GbRegisterSet, mmu: GbMmu, args: number[]): number {
-        rs.sp.setValue((rs.sp.getValue() - 2) & SIXTEEN_ONE_BITS);
-        const sp = rs.sp.getValue();
-        mmu.writeWord(sp, rs.pc.getValue());
+        const pc = rs.pc.getValue();
+        pushWordToStack(rs, mmu, pc);
         rs.pc.setValue(this.r1);
         return 4;
     }

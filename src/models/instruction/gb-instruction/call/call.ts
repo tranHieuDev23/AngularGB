@@ -1,7 +1,7 @@
 import { GbMmu } from "src/models/mmu/gb-mmu";
 import { GbRegisterSet } from "src/models/register/gb-registers";
-import { SIXTEEN_ONE_BITS } from "src/utils/constants";
 import { Gb16BitArg, GbFlagArg, GbInstruction, GbNotArg } from "../../gb-instruction";
+import { pushWordToStack } from "../utils/stack-manipulation";
 
 /**
  * CALL. In memory, push the program counter PC value corresponding to the
@@ -27,11 +27,9 @@ export class CallInstruction implements GbInstruction {
     }
 
     run(rs: GbRegisterSet, mmu: GbMmu, args: number[]): number {
-        const sp = rs.sp.getValue();
         const pc = rs.pc.getValue();
         const a16 = this.r1.getValue(rs, mmu, args);
-        rs.sp.setValue((sp - 2) & SIXTEEN_ONE_BITS);
-        mmu.writeWord(rs.sp.getValue(), pc);
+        pushWordToStack(rs, mmu, pc);
         rs.pc.setValue(a16);
         return 6;
     }
@@ -71,11 +69,9 @@ export class CallFlagInstruction implements GbInstruction {
         if (flag === 0) {
             return 3;
         }
-        const sp = rs.sp.getValue();
         const pc = rs.pc.getValue();
         const a16 = this.r2.getValue(rs, mmu, args);
-        rs.sp.setValue((sp - 2) & SIXTEEN_ONE_BITS);
-        mmu.writeWord(rs.sp.getValue(), pc);
+        pushWordToStack(rs, mmu, pc);
         rs.pc.setValue(a16);
         return 6;
     }

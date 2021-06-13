@@ -1,6 +1,7 @@
-import { SIXTEEN_ONE_BITS } from "src/utils/constants";
+import { getBit } from "src/utils/arithmetic-utils";
 import { GbCpu } from "../cpu/gb-cpu";
 import { GbGpu } from "../gpu/gb-gpu";
+import { pushWordToStack } from "../instruction/gb-instruction/utils/stack-manipulation";
 import { Lcd } from "../lcd/lcd";
 import { GbMmu } from "../mmu/gb-mmu";
 import { GbInterrupts } from "../mmu/mmu-wrappers/gb-interrupts";
@@ -67,14 +68,24 @@ export class Gameboy {
         }
 
         let deltaCycleCount = 0;
+
         const interruptId = this.checkForInterrupt();
         if (interruptId !== null) {
-            this.transferToIsr(interruptId);
-            deltaCycleCount = 5;
+            this.rs.setHalting(false);
+            if (this.rs.getIme()) {
+                this.transferToIsr(interruptId);
+                deltaCycleCount = 5;
+            }
         }
+
         const oldStatLine = this.getStatInterruptLine();
 
-        deltaCycleCount += this.cpu.step().cycleCount;
+        if (!this.rs.getHalting()) {
+            deltaCycleCount += this.cpu.step().cycleCount;
+        } else {
+            deltaCycleCount++;
+        }
+
         this.gpu.step(deltaCycleCount);
         this.timer.step(deltaCycleCount);
         this.currentFrameCycleCount += deltaCycleCount;
@@ -92,10 +103,14 @@ export class Gameboy {
         }
 
         let deltaCycleCount = 0;
+
         const interruptId = this.checkForInterrupt();
         if (interruptId !== null) {
-            this.transferToIsr(interruptId);
-            deltaCycleCount = 5;
+            this.rs.setHalting(false);
+            if (this.rs.getIme()) {
+                this.transferToIsr(interruptId);
+                deltaCycleCount = 5;
+            }
         }
 
         const pc = this.rs.pc.getValue();
@@ -105,7 +120,12 @@ export class Gameboy {
 
         const oldStatLine = this.getStatInterruptLine();
 
-        deltaCycleCount += this.cpu.step().cycleCount;
+        if (this.rs.getHalting()) {
+            deltaCycleCount += this.cpu.step().cycleCount;
+        } else {
+            deltaCycleCount++;
+        }
+
         this.gpu.step(deltaCycleCount);
         this.timer.step(deltaCycleCount);
         this.currentFrameCycleCount += deltaCycleCount;
@@ -137,19 +157,11 @@ export class Gameboy {
     }
 
     private checkForInterrupt(): number {
-        if (!this.rs.getIme()) {
-            return null;
-        }
+        const interruptByte = this.interrupts.getIEByte() & this.interrupts.getIFByte();
         for (let i = 0; i < 5; i++) {
-            const enabled = this.interrupts.getInterruptEnable(i);
-            if (enabled === 0) {
-                continue;
+            if (getBit(interruptByte, i) === 1) {
+                return i;
             }
-            const flag = this.interrupts.getInterruptFlag(i);
-            if (flag === 0) {
-                continue;
-            }
-            return i;
         }
         return null;
     }
@@ -157,9 +169,8 @@ export class Gameboy {
     private transferToIsr(interruptId: number): void {
         this.interrupts.setInterruptFlag(interruptId, 0);
         this.rs.setIme(false);
-        this.rs.sp.setValue((this.rs.sp.getValue() - 2) & SIXTEEN_ONE_BITS);
-        const sp = this.rs.sp.getValue();
-        this.mmu.writeWord(sp, this.rs.pc.getValue());
+        const pc = this.rs.pc.getValue();
+        pushWordToStack(this.rs, this.mmu, pc);
         this.rs.pc.setValue(ISR_ADDRESSES[interruptId]);
     }
 

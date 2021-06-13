@@ -1,5 +1,4 @@
 import { GbMmu } from "src/models/mmu/gb-mmu";
-import { GbInterrupts } from "src/models/mmu/mmu-wrappers/gb-interrupts";
 import { GbRegisterSet } from "src/models/register/gb-registers";
 import { GbInstruction } from "../../gb-instruction";
 
@@ -25,13 +24,7 @@ export class HaltInstruction implements GbInstruction {
     }
 
     run(rs: GbRegisterSet, mmu: GbMmu, args: number[]): number {
-        const interrupts = new GbInterrupts(mmu);
-        const iE = interrupts.getIEByte();
-        const iF = interrupts.getIFByte();
-        const ime = rs.getIme();
-        if ((iE & iF & 0x1f) === 0 || ime) {
-            rs.pc.setValue(rs.pc.getValue() - 1);
-        }
+        rs.setHalting(true);
         return 1;
     }
 }
