@@ -15,19 +15,23 @@ describe("pop", () => {
     });
 
     it("should stack the current PC, and apply new value to PC", () => {
-        const R1S = [
-            new GbRegisterArg(RegisterName.BC), new GbRegisterArg(RegisterName.DE),
-            new GbRegisterArg(RegisterName.HL), new GbRegisterArg(RegisterName.AF),
+        const REGISTERS = [
+            RegisterName.BC, RegisterName.DE,
+            RegisterName.HL, RegisterName.AF,
         ];
 
-        R1S.forEach((r1) => {
+        REGISTERS.forEach((register) => {
+            const r1 = new GbRegisterArg(register);
             const opcode = randomInteger(0x0, 0x100);
             const instruction = new PopInstruction(opcode, r1);
 
             expect(instruction.getOpcode()).toEqual(opcode);
             expect(instruction.getLength()).toEqual(1);
 
-            const r1Value = randomInteger(0, TWO_POW_SIXTEEN - 2);
+            let r1Value = randomInteger(0, TWO_POW_SIXTEEN - 2);
+            if (register === RegisterName.AF) {
+                r1Value &= 0xfff0;
+            }
             const sp = rs.sp.getValue();
             mmu.writeWord(sp, r1Value);
             const expectedSp = (sp + 2) & SIXTEEN_ONE_BITS;

@@ -13,6 +13,20 @@ export class Register16Bit extends Register {
     }
 }
 
+export class GbFlagRegister extends Register8Bit {
+    public setValue(value: number): void {
+        value &= 0xf0;
+        super.setValue(value);
+    }
+
+    public setBit(index: number, value: number): void {
+        if (index < 4) {
+            return;
+        }
+        super.setBit(index, value);
+    }
+}
+
 export class DualRegister extends Register16Bit {
     constructor(
         protected readonly name: string,
@@ -44,7 +58,7 @@ export class GbRegisterSet implements RegisterSet {
     public readonly c = new Register8Bit("C");
     public readonly d = new Register8Bit("D");
     public readonly e = new Register8Bit("E");
-    public readonly f = new Register8Bit("F");
+    public readonly f = new GbFlagRegister("F");
     public readonly h = new Register8Bit("H");
     public readonly l = new Register8Bit("L");
     public readonly sp = new Register16Bit("SP");

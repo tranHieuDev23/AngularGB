@@ -1,4 +1,4 @@
-import { GbMmu, GbTestMmu } from "src/models/mmu/gb-mmu";
+import { GbTestMmu } from "src/models/mmu/gb-mmu";
 import { GbRegisterSet, RegisterName, REGISTERS_8_BIT } from "src/models/register/gb-registers";
 import { TWO_POW_EIGHT } from "src/utils/constants";
 import { randomInteger } from "src/utils/random";
@@ -15,7 +15,7 @@ describe("xor", () => {
     });
 
     it("should work with 8-bit registers", () => {
-        REGISTERS_8_BIT.forEach(registerName => {
+        REGISTERS_8_BIT.filter(item => item !== RegisterName.F).forEach(registerName => {
             const opCode = randomInteger(0x00, 0x100);
             const registerArg = new GbRegisterArg(registerName);
             const registerValue = randomInteger(0, TWO_POW_EIGHT);

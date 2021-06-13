@@ -1,4 +1,4 @@
-import { GbMmu, GbTestMmu } from "src/models/mmu/gb-mmu";
+import { GbTestMmu } from "src/models/mmu/gb-mmu";
 import { GbRegisterSet, RegisterName } from "src/models/register/gb-registers";
 import { SIXTEEN_ONE_BITS, TWO_POW_SIXTEEN } from "src/utils/constants";
 import { randomInteger } from "src/utils/random";
@@ -27,9 +27,8 @@ describe("push", () => {
             expect(instruction.getOpcode()).toEqual(opcode);
             expect(instruction.getLength()).toEqual(1);
 
-            const r1Value = randomInteger(0, TWO_POW_SIXTEEN - 2);
+            const r1Value = r1.getValue(rs, mmu, []);
             const sp = rs.sp.getValue();
-            r1.setValue(rs, mmu, [], r1Value);
             const expectedSp = (sp - 2) & SIXTEEN_ONE_BITS;
 
             const zeroFlag = rs.getZeroFlag();
