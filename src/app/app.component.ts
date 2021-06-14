@@ -58,7 +58,7 @@ export class AppComponent {
 
   public fileList: NzUploadFile[] = [];
 
-  public currentDebugWidget: DebugWidget = environment.production ? null : DEBUG_WIDGETS[0];
+  public currentDebugWidget: DebugWidget = null;
   public skipStepCnt = 1;
   public skipFrameCnt = 1;
 

@@ -45,7 +45,7 @@ export class TileDataViewerComponent implements AfterViewInit, OnDestroy {
     const { tileData, palettes } = this.gameboy.gameboy;
     let tileX = 0;
     let tileY = 0;
-    for (let address = 0x8000; address < 0x9800; address += 16) {
+    for (let address = 0; address < 0x1800; address += 16) {
       const tile = tileData.getTile(address);
       for (let x = 0; x < 8; x++) {
         for (let y = 0; y < 8; y++) {

@@ -6,7 +6,7 @@ import { Lcd } from "../lcd/lcd";
 import { GbMmu, GbMmuImpl } from "../mmu/gb-mmu";
 import { Mbc } from "../mmu/mcb/gb-mcb";
 import { GbInterrupts } from "../mmu/mmu-wrappers/gb-interrupts";
-import { GbJoypad } from "../mmu/mmu-wrappers/gb-joypad";
+import { ActionButton, DirectionButton, GbJoypad } from "../mmu/mmu-wrappers/gb-joypad";
 import { GbLcdc } from "../mmu/mmu-wrappers/gb-lcdc";
 import { GbOam } from "../mmu/mmu-wrappers/gb-oam";
 import { GbPalettes } from "../mmu/mmu-wrappers/gb-palettes";
@@ -148,6 +148,24 @@ export class Gameboy {
         while (this.currentFrameCycleCount < CYCLE_PER_FRAME);
         return false;
     }
+
+    public pressRight(): void { this.joypad.pressDirectionButton(DirectionButton.RIGHT); }
+    public pressLeft(): void { this.joypad.pressDirectionButton(DirectionButton.LEFT); }
+    public pressUp(): void { this.joypad.pressDirectionButton(DirectionButton.UP); }
+    public pressDown(): void { this.joypad.pressDirectionButton(DirectionButton.DOWN); }
+    public pressA(): void { this.joypad.pressActionButton(ActionButton.A); }
+    public pressB(): void { this.joypad.pressActionButton(ActionButton.B); }
+    public pressSelect(): void { this.joypad.pressActionButton(ActionButton.SELECT); }
+    public pressStart(): void { this.joypad.pressActionButton(ActionButton.START); }
+
+    public releaseRight(): void { this.joypad.releaseDirectionButton(DirectionButton.RIGHT); }
+    public releaseLeft(): void { this.joypad.releaseDirectionButton(DirectionButton.LEFT); }
+    public releaseUp(): void { this.joypad.releaseDirectionButton(DirectionButton.UP); }
+    public releaseDown(): void { this.joypad.releaseDirectionButton(DirectionButton.DOWN); }
+    public releaseA(): void { this.joypad.releaseActionButton(ActionButton.A); }
+    public releaseB(): void { this.joypad.releaseActionButton(ActionButton.B); }
+    public releaseSelect(): void { this.joypad.releaseActionButton(ActionButton.SELECT); }
+    public releaseStart(): void { this.joypad.releaseActionButton(ActionButton.START); }
 
     private checkForInterrupt(): number {
         const interruptByte = this.interrupts.getIEByte() & this.interrupts.getIFByte() & 0x1f;

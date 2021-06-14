@@ -17,7 +17,7 @@ export class GbTileMap {
         if (address < TILE_MAP_1_ADDRESS) {
             return this.tileMaps[0][address - TILE_MAP_0_ADDRESS];
         }
-        return this.tileMaps[1][address - TILE_MAP_0_ADDRESS];
+        return this.tileMaps[1][address - TILE_MAP_1_ADDRESS];
     }
 
     public getBgTile(index: number): GbTile {
@@ -34,6 +34,6 @@ export class GbTileMap {
         if (address < TILE_MAP_1_ADDRESS) {
             this.tileMaps[0][address - TILE_MAP_0_ADDRESS] = value;
         }
-        this.tileMaps[1][address - TILE_MAP_0_ADDRESS] = value;
+        this.tileMaps[1][address - TILE_MAP_1_ADDRESS] = value;
     }
 }

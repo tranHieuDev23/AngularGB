@@ -1,7 +1,6 @@
-import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from "@angular/core";
+import { Component, ElementRef, EventEmitter, HostListener, Input, OnInit, Output, ViewChild } from "@angular/core";
 import { Gameboy } from "src/models/gameboy/gameboy";
 import { CanvasLcd } from "src/models/lcd/canvas-lcd";
-import { GbMmuImpl } from "src/models/mmu/gb-mmu";
 import { getMbc } from "src/models/mmu/mcb/mbc-factory";
 
 const ONE_SECOND = 1000;
@@ -116,6 +115,72 @@ export class GameboyComponent implements OnInit {
     this.rom = null;
     this.gameboy = null;
     this.stopped.emit();
+  }
+
+  @HostListener('document:keydown', ['$event'])
+  public handleKeyDownEvent(event: KeyboardEvent): void {
+    if (this.gameboy === null) {
+      return;
+    }
+    switch (event.code) {
+      case "KeyX":
+        this.gameboy.pressA();
+        break;
+      case "KeyZ":
+        this.gameboy.pressB();
+        break;
+      case "Enter":
+        this.gameboy.pressStart();
+        break;
+      case "Space":
+        this.gameboy.pressSelect();
+        break;
+      case "ArrowRight":
+        this.gameboy.pressRight();
+        break;
+      case "ArrowLeft":
+        this.gameboy.pressLeft();
+        break;
+      case "ArrowUp":
+        this.gameboy.pressUp();
+        break;
+      case "ArrowDown":
+        this.gameboy.pressDown();
+        break;
+    }
+  }
+
+  @HostListener('document:keyup', ['$event'])
+  public handleKeyUpEvent(event: KeyboardEvent): void {
+    if (this.gameboy === null) {
+      return;
+    }
+    switch (event.code) {
+      case "KeyX":
+        this.gameboy.releaseA();
+        break;
+      case "KeyZ":
+        this.gameboy.releaseB();
+        break;
+      case "Enter":
+        this.gameboy.releaseStart();
+        break;
+      case "Space":
+        this.gameboy.releaseSelect();
+        break;
+      case "ArrowRight":
+        this.gameboy.releaseRight();
+        break;
+      case "ArrowLeft":
+        this.gameboy.releaseLeft();
+        break;
+      case "ArrowUp":
+        this.gameboy.releaseUp();
+        break;
+      case "ArrowDown":
+        this.gameboy.releaseDown();
+        break;
+    }
   }
 
   private setGameboyIntervalId(id: any): void {
