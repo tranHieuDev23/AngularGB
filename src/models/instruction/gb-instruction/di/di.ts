@@ -21,6 +21,7 @@ export class DiInstruction implements GbInstruction {
 
     run(rs: GbRegisterSet, mmu: GbMmu, args: number[]): number {
         rs.setIme(false);
+        rs.setNextIme(false);
         return 1;
     }
 }

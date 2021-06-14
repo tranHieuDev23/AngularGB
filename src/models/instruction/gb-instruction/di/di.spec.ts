@@ -18,7 +18,7 @@ describe("di", () => {
         expect(instruction.getLength()).toEqual(1);
     });
 
-    it("should flip the carry flag", () => {
+    it("should set IME to false immediately", () => {
         const zeroFlag = rs.getZeroFlag();
         const operationFlag = rs.getOperationFlag();
         const halfCarryFlag = rs.getHalfCarryFlag();
@@ -26,6 +26,7 @@ describe("di", () => {
         const cycleCount = instruction.run(rs, mmu, []);
 
         expect(rs.getIme()).toBeFalse();
+        expect(rs.getNextIme()).toBeFalse();
         expect(rs.getZeroFlag()).toEqual(zeroFlag);
         expect(rs.getOperationFlag()).toEqual(operationFlag);
         expect(rs.getHalfCarryFlag()).toEqual(halfCarryFlag);

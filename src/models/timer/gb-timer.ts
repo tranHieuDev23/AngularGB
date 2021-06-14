@@ -37,7 +37,7 @@ export class GbTimer {
                 this.counterUpdateCycleCount++;
                 const mode = this.timerWrappers.getTimerMode();
                 const counterUpdateThreshold = COUNTER_UPDATE_CYCLES[mode];
-                if (this.counterUpdateCycleCount >= counterUpdateThreshold) {
+                while (this.counterUpdateCycleCount >= counterUpdateThreshold) {
                     this.counterUpdateCycleCount -= counterUpdateThreshold;
                     this.counterTimerTick();
                 }

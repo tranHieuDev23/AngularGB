@@ -20,7 +20,7 @@ export class EiInstruction implements GbInstruction {
     }
 
     run(rs: GbRegisterSet, mmu: GbMmu, args: number[]): number {
-        rs.setIme(true);
+        rs.setNextIme(true);
         return 1;
     }
 }

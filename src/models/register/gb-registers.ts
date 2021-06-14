@@ -66,6 +66,7 @@ export class GbRegisterSet implements RegisterSet {
     public readonly hl = new DualRegister("HL", this.h, this.l);
 
     private ime = false;
+    private nextIme = false;
     private halting = false;
 
     private readonly allRegisters = [
@@ -101,6 +102,10 @@ export class GbRegisterSet implements RegisterSet {
         return this.ime;
     }
 
+    public getNextIme(): boolean {
+        return this.nextIme;
+    }
+
     public getHalting(): boolean {
         return this.halting;
     }
@@ -127,6 +132,10 @@ export class GbRegisterSet implements RegisterSet {
 
     public setHalting(value: boolean): void {
         this.halting = value;
+    }
+
+    public setNextIme(value: boolean): void {
+        this.nextIme = value;
     }
 }
 

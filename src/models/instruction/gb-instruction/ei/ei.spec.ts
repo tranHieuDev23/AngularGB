@@ -18,14 +18,15 @@ describe("ei", () => {
         expect(instruction.getLength()).toEqual(1);
     });
 
-    it("should flip the carry flag", () => {
+    it("should make a request to set IME to True", () => {
         const zeroFlag = rs.getZeroFlag();
         const operationFlag = rs.getOperationFlag();
         const halfCarryFlag = rs.getHalfCarryFlag();
         const carryFlag = rs.getCarryFlag();
         const cycleCount = instruction.run(rs, mmu, []);
 
-        expect(rs.getIme()).toBeTrue();
+        expect(rs.getIme()).toBeFalse();
+        expect(rs.getNextIme()).toBeTrue();
         expect(rs.getZeroFlag()).toEqual(zeroFlag);
         expect(rs.getOperationFlag()).toEqual(operationFlag);
         expect(rs.getHalfCarryFlag()).toEqual(halfCarryFlag);

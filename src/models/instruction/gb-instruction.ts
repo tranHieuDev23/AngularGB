@@ -109,7 +109,7 @@ export class GbMemArg implements GbInstructionWritableArg {
         const addressValue = this.addressArg.getValue(rs, mmu, args);
         const bitCount = this.addressArg.getValueBitCount();
         const address = bitCount === 8 ? (0xff00 | addressValue) : addressValue;
-        return address & SIXTEEN_ONE_BITS;
+        return address;
     }
 }
 

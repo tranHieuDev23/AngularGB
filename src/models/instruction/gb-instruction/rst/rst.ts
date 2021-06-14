@@ -12,13 +12,17 @@ import { pushWordToStack } from "../utils/stack-manipulation";
  * r1 can be a number.
  */
 export class RstInstruction implements GbInstruction {
+    private readonly name: string;
+
     constructor(
         private readonly opcode: number,
         private readonly r1: number
-    ) { }
+    ) {
+        this.name = `RST 0x${this.r1.toString(16).padStart(2)}`;
+    }
 
     getName(): string {
-        return `RST ${this.r1}`;
+        return this.name;
     }
 
     getLength(): number {

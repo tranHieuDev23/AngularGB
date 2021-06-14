@@ -17,6 +17,7 @@ import { GbRegisterSet } from "../register/gb-registers";
 import { GbTimer } from "../timer/gb-timer";
 
 const CYCLE_PER_FRAME = 70224;
+const ISR_TRANSFER_CYCLE_COUNT = 5;
 
 const ISR_ADDRESSES = [
     0x40, 0x48, 0x50, 0x58, 0x60
@@ -67,24 +68,28 @@ export class Gameboy {
             this.currentFrameCycleCount = 0;
         }
 
-        let deltaCycleCount = 0;
+        const oldStatLine = this.getStatInterruptLine();
 
         const interruptId = this.checkForInterrupt();
         if (interruptId !== null) {
             this.rs.setHalting(false);
-            if (this.rs.getIme()) {
-                this.transferToIsr(interruptId);
-                deltaCycleCount = 5;
+        }
+
+        const shouldTransferToIsr = interruptId !== null && this.rs.getIme();
+        let deltaCycleCount: number;
+        if (shouldTransferToIsr) {
+            this.transferToIsr(interruptId);
+            deltaCycleCount = ISR_TRANSFER_CYCLE_COUNT;
+        } else {
+            if (this.rs.getHalting()) {
+                deltaCycleCount = 1;
+            } else {
+                deltaCycleCount = this.cpu.step().cycleCount;
             }
         }
 
-        const oldStatLine = this.getStatInterruptLine();
-
-        if (!this.rs.getHalting()) {
-            deltaCycleCount += this.cpu.step().cycleCount;
-        } else {
-            deltaCycleCount++;
-        }
+        // The effect of IE is delayed by one instruction
+        this.rs.setIme(this.rs.getNextIme());
 
         this.gpu.step(deltaCycleCount);
         this.timer.step(deltaCycleCount);
@@ -95,48 +100,6 @@ export class Gameboy {
         if (oldStatLine === 0 && newStatLine === 1) {
             this.interrupts.setLcdStatInterruptFlag(1);
         }
-    }
-
-    public stepWithBreakpoint(breakpointAddress: number): boolean {
-        if (this.currentFrameCycleCount >= CYCLE_PER_FRAME) {
-            this.currentFrameCycleCount = 0;
-        }
-
-        let deltaCycleCount = 0;
-
-        const interruptId = this.checkForInterrupt();
-        if (interruptId !== null) {
-            this.rs.setHalting(false);
-            if (this.rs.getIme()) {
-                this.transferToIsr(interruptId);
-                deltaCycleCount = 5;
-            }
-        }
-
-        const pc = this.rs.pc.getValue();
-        if (pc === breakpointAddress) {
-            return true;
-        }
-
-        const oldStatLine = this.getStatInterruptLine();
-
-        if (!this.rs.getHalting()) {
-            deltaCycleCount += this.cpu.step().cycleCount;
-        } else {
-            deltaCycleCount++;
-        }
-
-        this.gpu.step(deltaCycleCount);
-        this.timer.step(deltaCycleCount);
-        this.currentFrameCycleCount += deltaCycleCount;
-
-        const newStatLine = this.getStatInterruptLine();
-        // STAT interrupt is only triggered by a rising edge
-        if (oldStatLine === 0 && newStatLine === 1) {
-            this.interrupts.setLcdStatInterruptFlag(1);
-        }
-
-        return false;
     }
 
     public frame(): void {
@@ -148,7 +111,8 @@ export class Gameboy {
 
     public frameWithBreakpoint(breakpointAddress: number): boolean {
         do {
-            if (this.stepWithBreakpoint(breakpointAddress)) {
+            this.step();
+            if (this.rs.pc.getValue() === breakpointAddress) {
                 return true;
             }
         }
@@ -169,6 +133,7 @@ export class Gameboy {
     private transferToIsr(interruptId: number): void {
         this.interrupts.setInterruptFlag(interruptId, 0);
         this.rs.setIme(false);
+        this.rs.setNextIme(false);
         const pc = this.rs.pc.getValue();
         pushWordToStack(this.rs, this.mmu, pc);
         this.rs.pc.setValue(ISR_ADDRESSES[interruptId]);
