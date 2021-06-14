@@ -29,7 +29,7 @@ export class StopInstruction implements GbInstruction {
     }
 
     run(rs: GbRegisterSet, mmu: GbMmu, args: number[]): number {
-        mmu.writeRegister(DIV_TIMER_REG_ADDRESS, 0);
+        mmu.writeByte(DIV_TIMER_REG_ADDRESS, 0);
         return 1;
     }
 }

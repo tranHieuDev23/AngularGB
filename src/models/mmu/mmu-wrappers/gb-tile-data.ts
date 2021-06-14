@@ -1,6 +1,5 @@
 import { getBit, toSigned8Bit } from "src/utils/arithmetic-utils";
-import { GbMmu } from "../gb-mmu";
-import { TILE_DATA_BLOCK_0_ADDRESS, TILE_DATA_BLOCK_2_ADDRESS } from "../gb-mmu-constants";
+import { TILE_DATA_BLOCK_0_ADDRESS, TILE_DATA_BLOCK_2_ADDRESS, TILE_MAP_0_ADDRESS } from "../gb-mmu-constants";
 import { GbLcdc } from "./gb-lcdc";
 
 export interface GbTile {
@@ -53,32 +52,40 @@ export class Gb8x16Tile implements GbTile {
     }
 }
 
+const TILE_DATA_BLOCK_2_START = TILE_DATA_BLOCK_2_ADDRESS - TILE_DATA_BLOCK_0_ADDRESS;
+
 export class GbTileData {
-    private readonly lcdc: GbLcdc;
+    private readonly tileDataTable: number[] = new Array<number>(TILE_MAP_0_ADDRESS - TILE_DATA_BLOCK_0_ADDRESS).fill(0);
 
     constructor(
-        private readonly mmu: GbMmu
-    ) {
-        this.lcdc = new GbLcdc(mmu);
+        private readonly lcdc: GbLcdc
+    ) { }
+
+    public getTileDataValue(address: number): number {
+        return this.tileDataTable[address - TILE_DATA_BLOCK_0_ADDRESS];
     }
 
     public getObjTile(index: number): Gb8x8Tile {
-        return this.getTile(TILE_DATA_BLOCK_0_ADDRESS + (index * 16));
+        return this.getTile(index * 16);
     }
 
     public getBgAndWindowTile(index: number): Gb8x8Tile {
         if (this.lcdc.getBgAndWindowTileDataArea() === 1) {
-            return this.getTile(TILE_DATA_BLOCK_0_ADDRESS + (index * 16));
+            return this.getTile(index * 16);
         } else {
-            return this.getTile(TILE_DATA_BLOCK_2_ADDRESS + (toSigned8Bit(index) * 16));
+            return this.getTile(TILE_DATA_BLOCK_2_START + (toSigned8Bit(index) * 16));
         }
     }
 
     public getTile(address: number): Gb8x8Tile {
         const dataBytes: number[] = [];
         for (let i = address; i < address + 16; i++) {
-            dataBytes.push(this.mmu.readByte(i));
+            dataBytes.push(this.tileDataTable[i]);
         }
         return new Gb8x8Tile(dataBytes);
+    }
+
+    public setTileDataValue(address: number, value: number): void {
+        this.tileDataTable[address - TILE_DATA_BLOCK_0_ADDRESS] = value;
     }
 }

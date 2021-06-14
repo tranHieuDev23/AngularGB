@@ -1,24 +1,28 @@
-import { GbMmu } from "../gb-mmu";
-import { BG_PALETTE_DATA_ADDRESS, OBJ_PALETTE_0_DATA_ADDRESS } from "../gb-mmu-constants";
-
 export class GbPalettes {
-    constructor(
-        private readonly mmu: GbMmu
-    ) { }
+    private bgPalette: number = 0;
+    private objPalette: number[] = [0, 0];
 
     public getBgPalette() {
-        return this.mmu.readByte(BG_PALETTE_DATA_ADDRESS);
+        return this.bgPalette;
     }
 
     public getBgPaletteColor(index: number) {
-        return (this.getBgPalette() >> (index << 1)) & 3;
+        return (this.bgPalette >> (index << 1)) & 3;
+    }
+
+    public setBgPalette(value: number): void {
+        this.bgPalette = value;
     }
 
     public getObjPalette(paletteNumber: number) {
-        return this.mmu.readByte(OBJ_PALETTE_0_DATA_ADDRESS | paletteNumber);
+        return this.objPalette[paletteNumber];
     }
 
     public getObjPaletteColor(paletteNumber: number, index: number) {
-        return (this.getObjPalette(paletteNumber) >> (index << 1)) & 3;
+        return (this.objPalette[paletteNumber] >> (index << 1)) & 3;
+    }
+
+    public setObjPalette(paletteNumber: number, value: number): void {
+        this.objPalette[paletteNumber] = value;
     }
 }

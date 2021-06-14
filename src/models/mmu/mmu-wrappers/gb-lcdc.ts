@@ -1,45 +1,46 @@
 import { getBit } from "src/utils/arithmetic-utils";
-import { GbMmu } from "../gb-mmu";
-import { LCDC_REG_ADDRESS } from "../gb-mmu-constants";
 
 export class GbLcdc {
-    constructor(
-        private readonly mmu: GbMmu
-    ) { }
+    private lcdc = 0;
+    constructor() { }
 
     public getValue(): number {
-        return this.mmu.readByte(LCDC_REG_ADDRESS);
+        return this.lcdc;
+    }
+
+    public setValue(value: number): void {
+        this.lcdc = value;
     }
 
     public getLcdAndPpuEnable(): number {
-        return getBit(this.getValue(), 7);
+        return getBit(this.lcdc, 7);
     }
 
     public getWindowTitleMap(): number {
-        return getBit(this.getValue(), 6);
+        return getBit(this.lcdc, 6);
     }
 
     public getWindowEnable(): number {
-        return getBit(this.getValue(), 5);
+        return getBit(this.lcdc, 5);
     }
 
     public getBgAndWindowTileDataArea(): number {
-        return getBit(this.getValue(), 4);
+        return getBit(this.lcdc, 4);
     }
 
     public getBgTitleMap(): number {
-        return getBit(this.getValue(), 3);
+        return getBit(this.lcdc, 3);
     }
 
     public getObjSize(): number {
-        return getBit(this.getValue(), 2);
+        return getBit(this.lcdc, 2);
     }
 
     public getObjEnable(): number {
-        return getBit(this.getValue(), 1);
+        return getBit(this.lcdc, 1);
     }
 
     public getBgAndWindowEnable(): number {
-        return getBit(this.getValue(), 0);
+        return getBit(this.lcdc, 0);
     }
 }

@@ -1,36 +1,47 @@
-import { GbMmu } from "../gb-mmu";
-import { SCROLL_Y_ADDRESS, SCROLL_X_ADDRESS, LY_ADDRESS, LYC_ADDRESS, WINDOW_Y_ADDRESS, WINDOW_X_ADDRESS } from "../gb-mmu-constants";
-
 export class GbPositionControl {
-    constructor(
-        private readonly mmu: GbMmu
-    ) { }
+    private scrollY = 0;
+    private scrollX = 0;
+    private lyc = 0;
+    private windowY = 0;
+    private windowX = 0;
 
     public getScrollY(): number {
-        return this.mmu.readByte(SCROLL_Y_ADDRESS);
+        return this.scrollY;
     }
 
     public getScrollX(): number {
-        return this.mmu.readByte(SCROLL_X_ADDRESS);
-    }
-
-    public getLy(): number {
-        return this.mmu.readByte(LY_ADDRESS);
+        return this.scrollX;
     }
 
     public getLyc(): number {
-        return this.mmu.readByte(LYC_ADDRESS);
+        return this.lyc;
     }
 
     public getWindowY(): number {
-        return this.mmu.readByte(WINDOW_Y_ADDRESS);
+        return this.windowY;
     }
 
     public getWindowX(): number {
-        return this.mmu.readByte(WINDOW_X_ADDRESS);
+        return this.windowX;
     }
 
-    public setLy(ly: number): void {
-        this.mmu.writeRegister(LY_ADDRESS, ly);
+    public setScrollY(value: number): void {
+        this.scrollY = value;
+    }
+
+    public setScrollX(value: number): void {
+        this.scrollX = value;
+    }
+
+    public setLyc(value: number): void {
+        this.lyc = value;
+    }
+
+    public setWindowY(value: number): void {
+        this.windowY = value;
+    }
+
+    public setWindowX(value: number): void {
+        this.windowX = value;
     }
 }

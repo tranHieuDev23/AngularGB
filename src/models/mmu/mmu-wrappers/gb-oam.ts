@@ -1,6 +1,5 @@
 import { getBit } from "src/utils/arithmetic-utils";
-import { GbMmu } from "../gb-mmu";
-import { OAM_ADDRESS } from "../gb-mmu-constants";
+import { FORBIDDEN_RAM_START, OAM_RAM_START } from "../gb-mmu-constants";
 import { GbLcdc } from "./gb-lcdc";
 import { Gb8x16Tile, GbTile, GbTileData } from "./gb-tile-data";
 
@@ -21,29 +20,31 @@ export class GbOamFlags {
 }
 
 export class GbOam {
-    private readonly tileData: GbTileData;
-    private readonly lcdc: GbLcdc;
+    private readonly oamTable: number[] = new Array<number>(FORBIDDEN_RAM_START - OAM_RAM_START).fill(0);
+    private oamRegisterValue: number = 0;
 
     constructor(
-        private readonly mmu: GbMmu,
-    ) {
-        this.tileData = new GbTileData(mmu);
-        this.lcdc = new GbLcdc(mmu);
+        private readonly tileData: GbTileData,
+        private readonly lcdc: GbLcdc
+    ) { }
+
+    public getOamTableValue(address: number): number {
+        return this.oamTable[address - OAM_RAM_START];
     }
 
     public getSpriteY(index: number): number {
         const yAddress = this.getSpriteStartIndex(index);
-        return this.mmu.readByte(yAddress);
+        return this.oamTable[yAddress];
     }
 
     public getSpriteX(index: number): number {
         const xAddress = this.getSpriteStartIndex(index) | 1;
-        return this.mmu.readByte(xAddress);
+        return this.oamTable[xAddress];
     }
 
     public getSpriteTile(index: number): GbTile {
         const tileAddress = this.getSpriteStartIndex(index) | 2;
-        const tileIndex = this.mmu.readByte(tileAddress);
+        const tileIndex = this.oamTable[tileAddress];
         if (this.lcdc.getObjSize() === 0) {
             return this.tileData.getObjTile(tileIndex);
         } else {
@@ -57,11 +58,23 @@ export class GbOam {
     }
 
     public getSpriteFlags(index: number): GbOamFlags {
-        const flagAddress = this.getSpriteStartIndex(index) | 3;
-        return new GbOamFlags(this.mmu.readByte(flagAddress));
+        const flagsAddress = this.getSpriteStartIndex(index) | 3;
+        return new GbOamFlags(this.oamTable[flagsAddress]);
+    }
+
+    public getDmaRegisterValue(): number {
+        return this.oamRegisterValue;
+    }
+
+    public setOamTableValue(address: number, value: number): void {
+        this.oamTable[address - OAM_RAM_START] = value;
+    }
+
+    public setDmaRegisterValue(value: number): void {
+        this.oamRegisterValue = value;
     }
 
     private getSpriteStartIndex(index: number): number {
-        return OAM_ADDRESS + index * 4;
+        return index * 4;
     }
 }

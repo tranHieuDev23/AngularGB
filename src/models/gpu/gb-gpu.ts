@@ -1,57 +1,57 @@
 import { EIGHT_ONE_BITS } from "src/utils/constants";
 import { Lcd } from "../lcd/lcd";
-import { GbMmu } from "../mmu/gb-mmu";
 import { GbInterrupts } from "../mmu/mmu-wrappers/gb-interrupts";
 import { GbLcdc } from "../mmu/mmu-wrappers/gb-lcdc";
 import { GbOam } from "../mmu/mmu-wrappers/gb-oam";
 import { GbPalettes } from "../mmu/mmu-wrappers/gb-palettes";
 import { GbPositionControl } from "../mmu/mmu-wrappers/gb-position-control";
-import { GbStat } from "../mmu/mmu-wrappers/gb-stat";
 import { GbTileMap } from "../mmu/mmu-wrappers/gb-tile-map";
 
 export class GbGpu {
     private modeCycleCount = 0;
-
-    private readonly interrupts: GbInterrupts;
-    private readonly lcdc: GbLcdc;
-    private readonly palettes: GbPalettes;
-    private readonly positionControl: GbPositionControl;
-    private readonly oam: GbOam;
-    private readonly stat: GbStat;
-    private readonly tileMap: GbTileMap;
+    private ly = 0;
+    private mode = 0;
 
     // Window layer keeps an internal line count, independent from LY
     private windowLy: number;
 
     constructor(
-        readonly mmu: GbMmu,
-        private readonly lcd: Lcd
+        private readonly lcd: Lcd,
+        private readonly interrupts: GbInterrupts,
+        private readonly lcdc: GbLcdc,
+        private readonly palettes: GbPalettes,
+        private readonly positionControl: GbPositionControl,
+        private readonly oam: GbOam,
+        private readonly tileMap: GbTileMap
     ) {
-        this.interrupts = new GbInterrupts(mmu);
-        this.lcdc = new GbLcdc(mmu);
-        this.palettes = new GbPalettes(mmu);
-        this.positionControl = new GbPositionControl(mmu);
-        this.oam = new GbOam(mmu);
-        this.stat = new GbStat(mmu);
-        this.tileMap = new GbTileMap(mmu);
         this.windowLy = null;
+    }
+
+    public getLy(): number {
+        return this.ly;
+    }
+
+    public setLy(value: number): void {
+        this.ly = value;
+    }
+
+    public getMode(): number {
+        return this.mode;
     }
 
     public step(deltaCycleCount: number): void {
         // Check Window layer render condition, this only runs in the beginning of mode 2
         // Read here: https://gbdev.io/pandocs/Scrolling.html#ff4a---wy-window-y-position-rw-ff4b---wx-window-x-position--7-rw
-        const mode = this.stat.getModeFlag();
-        if (mode === 2 && this.modeCycleCount === 0) {
+        if (this.mode === 2 && this.modeCycleCount === 0) {
             const windowY = this.positionControl.getWindowY();
-            const ly = this.positionControl.getLy();
-            if (windowY === ly) {
+            if (windowY === this.ly) {
                 // Start rendering window
                 this.windowLy = 0;
             }
         }
 
         this.modeCycleCount += deltaCycleCount;
-        switch (mode) {
+        switch (this.mode) {
             case 0:
                 this.stepMode0();
                 break;
@@ -72,13 +72,13 @@ export class GbGpu {
             return;
         }
         this.modeCycleCount = 0;
-        this.positionControl.setLy(this.positionControl.getLy() + 1);
-        if (this.positionControl.getLy() > 144) {
+        this.ly++;
+        if (this.ly > 144) {
             this.lcd.draw();
-            this.stat.setModeFlag(1);
+            this.mode = 1;
             this.interrupts.setVBlankInterruptFlag(1);
         } else {
-            this.stat.setModeFlag(2);
+            this.mode = 2;
         }
     }
 
@@ -87,11 +87,11 @@ export class GbGpu {
             return;
         }
         this.modeCycleCount = 0;
-        this.positionControl.setLy(this.positionControl.getLy() + 1);
-        if (this.positionControl.getLy() > 153) {
-            this.positionControl.setLy(0);
+        this.ly++;
+        if (this.ly > 153) {
+            this.ly = 0;
             this.windowLy = null;
-            this.stat.setModeFlag(2);
+            this.mode = 2;
         }
     }
 
@@ -99,8 +99,8 @@ export class GbGpu {
         if (this.modeCycleCount < 80) {
             return;
         }
+        this.mode = 3;
         this.modeCycleCount = 0;
-        this.stat.setModeFlag(3);
     }
 
     private stepMode3(): void {
@@ -108,20 +108,19 @@ export class GbGpu {
             return;
         }
         this.updateLine();
+        this.mode = 0;
         this.modeCycleCount = 0;
-        this.stat.setModeFlag(0);
     }
 
     private updateLine(): void {
-        const scanLine = this.positionControl.getLy();
         const lineColor = new Array<number>(160).fill(0);
 
         // Fetch background and window layer color
         if (this.lcdc.getBgAndWindowEnable() === 1) {
-            const bgTileRow = ((scanLine + this.positionControl.getScrollY()) & EIGHT_ONE_BITS) >> 3;
+            const bgTileRow = ((this.ly + this.positionControl.getScrollY()) & EIGHT_ONE_BITS) >> 3;
             let bgTileCol = this.positionControl.getScrollX() >> 3;
             let bgTile = this.tileMap.getBgTile((bgTileRow << 5) + bgTileCol);
-            const bgTileY = (scanLine + this.positionControl.getScrollY()) & 7;
+            const bgTileY = (this.ly + this.positionControl.getScrollY()) & 7;
             let bgTileX = this.positionControl.getScrollX() & 7;
             for (let lineX = 0; lineX < 160; lineX++) {
                 const color = this.palettes.getBgPaletteColor(bgTile.getColorIndex(bgTileX, bgTileY));
@@ -165,14 +164,14 @@ export class GbGpu {
             for (let i = 0; i < 40 && drawnSpriteCnt < 10; i++) {
                 const spriteY = this.oam.getSpriteY(i) - 16;
                 const spriteYBottom = spriteY + spriteHeight;
-                if (scanLine < spriteY || spriteYBottom <= scanLine) {
+                if (this.ly < spriteY || spriteYBottom <= this.ly) {
                     continue;
                 }
 
                 const spriteX = this.oam.getSpriteX(i) - 8;
                 const spriteTile = this.oam.getSpriteTile(i);
                 const spriteFlags = this.oam.getSpriteFlags(i);
-                const tileY = scanLine - spriteY;
+                const tileY = this.ly - spriteY;
                 for (let tileX = 0, lineX = spriteX; tileX < 8 && lineX < 160; tileX++, lineX++) {
                     const drawOverBg = spriteFlags.bgAndWindowOverObj === 0 || lineColor[lineX] === 0;
                     if (!drawOverBg) {
@@ -194,7 +193,7 @@ export class GbGpu {
 
         // Actually drawing
         for (let x = 0; x < 160; x++) {
-            this.lcd.updatePixel(x, scanLine, lineColor[x]);
+            this.lcd.updatePixel(x, this.ly, lineColor[x]);
         }
     }
 }

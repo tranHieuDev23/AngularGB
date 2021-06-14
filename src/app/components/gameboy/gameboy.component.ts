@@ -52,7 +52,7 @@ export class GameboyComponent implements OnInit {
     }
     this.rom = rom;
     const mbc = getMbc(rom);
-    this.gameboy = new Gameboy(new GbMmuImpl(mbc), this.lcd);
+    this.gameboy = new Gameboy(mbc, this.lcd);
     this.resume();
   }
 

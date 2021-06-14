@@ -3,8 +3,10 @@ import { GbCpu } from "../cpu/gb-cpu";
 import { GbGpu } from "../gpu/gb-gpu";
 import { pushWordToStack } from "../instruction/gb-instruction/utils/stack-manipulation";
 import { Lcd } from "../lcd/lcd";
-import { GbMmu } from "../mmu/gb-mmu";
+import { GbMmu, GbMmuImpl } from "../mmu/gb-mmu";
+import { Mbc } from "../mmu/mcb/gb-mcb";
 import { GbInterrupts } from "../mmu/mmu-wrappers/gb-interrupts";
+import { GbJoypad } from "../mmu/mmu-wrappers/gb-joypad";
 import { GbLcdc } from "../mmu/mmu-wrappers/gb-lcdc";
 import { GbOam } from "../mmu/mmu-wrappers/gb-oam";
 import { GbPalettes } from "../mmu/mmu-wrappers/gb-palettes";
@@ -12,7 +14,6 @@ import { GbPositionControl } from "../mmu/mmu-wrappers/gb-position-control";
 import { GbStat } from "../mmu/mmu-wrappers/gb-stat";
 import { GbTileData } from "../mmu/mmu-wrappers/gb-tile-data";
 import { GbTileMap } from "../mmu/mmu-wrappers/gb-tile-map";
-import { GbTimerWrappers } from "../mmu/mmu-wrappers/gb-timer-wrappers";
 import { GbRegisterSet } from "../register/gb-registers";
 import { GbTimer } from "../timer/gb-timer";
 
@@ -26,39 +27,53 @@ const ISR_ADDRESSES = [
 export class Gameboy {
     public readonly rs: GbRegisterSet;
 
-    public readonly interrupts: GbInterrupts;
-    public readonly lcdc: GbLcdc;
-    public readonly palettes: GbPalettes;
-    public readonly positionControl: GbPositionControl;
-    public readonly oam: GbOam;
-    public readonly stat: GbStat;
     public readonly tileData: GbTileData;
     public readonly tileMap: GbTileMap;
-    public readonly timerWrappers: GbTimerWrappers;
+    public readonly oam: GbOam;
+    public readonly joypad: GbJoypad;
+    public readonly interrupts: GbInterrupts;
+    public readonly lcdc: GbLcdc;
+    public readonly stat: GbStat;
+    public readonly positionControl: GbPositionControl;
+    public readonly palettes: GbPalettes;
 
-    private readonly cpu: GbCpu;
-    private readonly gpu: GbGpu;
-    private readonly timer: GbTimer;
+    public readonly gpu: GbGpu;
+    public readonly timer: GbTimer;
+    public readonly mmu: GbMmu;
+    public readonly cpu: GbCpu;
+
     private currentFrameCycleCount: number;
 
     constructor(
-        public readonly mmu: GbMmu,
+        readonly mbc: Mbc,
         readonly lcd: Lcd
     ) {
         this.rs = new GbRegisterSet();
-        this.cpu = new GbCpu(this.rs, mmu);
-        this.gpu = new GbGpu(mmu, lcd);
-        this.timer = new GbTimer(mmu);
 
-        this.interrupts = new GbInterrupts(mmu);
-        this.lcdc = new GbLcdc(mmu);
-        this.palettes = new GbPalettes(mmu);
-        this.positionControl = new GbPositionControl(mmu);
-        this.oam = new GbOam(mmu);
-        this.stat = new GbStat(mmu);
-        this.tileData = new GbTileData(mmu);
-        this.tileMap = new GbTileMap(mmu);
-        this.timerWrappers = new GbTimerWrappers(mmu);
+        this.lcdc = new GbLcdc();
+        this.tileData = new GbTileData(this.lcdc);
+        this.tileMap = new GbTileMap(this.tileData, this.lcdc);
+        this.oam = new GbOam(this.tileData, this.lcdc);
+        this.joypad = new GbJoypad();
+        this.interrupts = new GbInterrupts();
+        this.positionControl = new GbPositionControl();
+        this.palettes = new GbPalettes();
+
+        this.gpu = new GbGpu(
+            lcd, this.interrupts, this.lcdc, this.palettes,
+            this.positionControl, this.oam, this.tileMap
+        );
+        this.stat = new GbStat(this.gpu, this.positionControl);
+
+        this.timer = new GbTimer(this.interrupts);
+
+        this.mmu = new GbMmuImpl(
+            mbc, this.tileData, this.tileMap, this.oam, this.joypad,
+            this.timer, this.interrupts, this.lcdc, this.stat,
+            this.positionControl, this.gpu, this.palettes
+        );
+
+        this.cpu = new GbCpu(this.rs, this.mmu);
 
         this.currentFrameCycleCount = 0;
     }
@@ -157,20 +172,14 @@ export class Gameboy {
     }
 
     private getStatInterruptLine(): number {
-        const statValue = this.stat.getValue();
-        const lycEqualLyEnable = getBit(statValue, 6);
-        const lycEqualLy = getBit(statValue, 2);
+        const lycEqualLyEnable = this.stat.getLycEqualLyInterruptEnable();
+        const lycEqualLy = this.stat.getLycEqualLy();
         if (lycEqualLyEnable & lycEqualLy) {
             return 1;
         }
-        const mode = statValue & 0x03;
-        switch (mode) {
-            case 0:
-                return getBit(statValue, 3);
-            case 1:
-                return getBit(statValue, 4);
-            case 2:
-                return getBit(statValue, 5);
+        const mode = this.gpu.getMode();
+        if (mode !== 3) {
+            return this.stat.getModeInterruptEnable(mode);
         }
         return 0;
     }

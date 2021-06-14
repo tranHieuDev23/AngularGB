@@ -1,43 +1,41 @@
+import { GbGpu } from "src/models/gpu/gb-gpu";
 import { getBit } from "src/utils/arithmetic-utils";
-import { GbMmu } from "../gb-mmu";
-import { STAT_REG_ADDRESS } from "../gb-mmu-constants";
+import { GbPositionControl } from "./gb-position-control";
 
 export class GbStat {
+    private lyEqualLycInterruptEnable: number = 0;
+    private modeInterruptEnable: number[] = [0, 0, 0];
+
     constructor(
-        private readonly mmu: GbMmu
+        private readonly gpu: GbGpu,
+        private readonly positionControl: GbPositionControl
     ) { }
 
     public getValue(): number {
-        return this.mmu.readByte(STAT_REG_ADDRESS);
+        return (this.lyEqualLycInterruptEnable << 6)
+            | (this.modeInterruptEnable[2] << 5)
+            | (this.modeInterruptEnable[1] << 4)
+            | (this.modeInterruptEnable[0] << 3)
+            | (this.getLycEqualLy() << 2)
+            | this.gpu.getMode();
     }
 
     public getLycEqualLyInterruptEnable(): number {
-        return getBit(this.getValue(), 6);
+        return this.lyEqualLycInterruptEnable;
     }
 
-    public getMode2InterruptEnable(): number {
-        return getBit(this.getValue(), 5);
-    }
-
-    public getMode1InterruptEnable(): number {
-        return getBit(this.getValue(), 4);
-    }
-
-    public getMode0InterruptEnable(): number {
-        return getBit(this.getValue(), 3);
+    public getModeInterruptEnable(mode: number): number {
+        return this.modeInterruptEnable[mode];
     }
 
     public getLycEqualLy(): number {
-        return getBit(this.getValue(), 2);
+        return this.gpu.getLy() === this.positionControl.getLyc() ? 1 : 0;
     }
 
-    public getModeFlag(): number {
-        return this.getValue() & 3;
-    }
-
-    public setModeFlag(mode: number): void {
-        const oldValue = this.getValue();
-        const newValue = (oldValue & 0xfc) | (mode & 3);
-        this.mmu.writeRegister(STAT_REG_ADDRESS, newValue);
+    public setValue(value: number): void {
+        this.lyEqualLycInterruptEnable = getBit(value, 6);
+        this.modeInterruptEnable[2] = getBit(value, 5);
+        this.modeInterruptEnable[1] = getBit(value, 4);
+        this.modeInterruptEnable[0] = getBit(value, 3);
     }
 }

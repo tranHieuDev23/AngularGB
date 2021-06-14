@@ -1,18 +1,19 @@
-import { GbMmu } from "src/models/mmu/gb-mmu";
 import { getBit } from "src/utils/arithmetic-utils";
-import { INTERRUPT_ENABLE_ADDRESS, INTERRUPT_FLAG_ADDRESS } from "../gb-mmu-constants";
 
 export class GbInterrupts {
-    constructor(
-        private readonly mmu: GbMmu
-    ) { }
+    private iE = 0;
+    private iF = 0;
 
     public getIEByte(): number {
-        return this.mmu.readByte(INTERRUPT_ENABLE_ADDRESS);
+        return this.iE;
+    }
+
+    public setIEByte(value: number) {
+        this.iE = value;
     }
 
     public getInterruptEnable(bitId: number): number {
-        return this.getFlag(INTERRUPT_ENABLE_ADDRESS, bitId);
+        return getBit(this.iE, bitId);
     }
 
     public getVBlankInterruptEnable(): number {
@@ -36,11 +37,15 @@ export class GbInterrupts {
     }
 
     public getIFByte(): number {
-        return this.mmu.readByte(INTERRUPT_FLAG_ADDRESS);
+        return this.iF;
+    }
+
+    public setIFByte(value: number) {
+        this.iF = value;
     }
 
     public getInterruptFlag(bitId: number): number {
-        return this.getFlag(INTERRUPT_FLAG_ADDRESS, bitId);
+        return getBit(this.iF, bitId);
     }
 
     public getVBlankInterruptFlag(): number {
@@ -64,7 +69,8 @@ export class GbInterrupts {
     }
 
     public setInterruptFlag(bitId: number, value: number): void {
-        this.setFlag(INTERRUPT_FLAG_ADDRESS, bitId, value);
+        const oldBit = getBit(this.iF, bitId);
+        this.iF = (this.iF ^ (oldBit << bitId)) | (value << bitId);
     }
 
     public setVBlankInterruptFlag(value: number): void {
@@ -85,16 +91,5 @@ export class GbInterrupts {
 
     public setJoypadInterruptFlag(value: number): void {
         this.setInterruptFlag(4, value)
-    }
-
-    private getFlag(address: number, bitId: number): number {
-        return getBit(this.mmu.readByte(address), bitId);
-    }
-
-    private setFlag(address: number, bitId: number, value: number): void {
-        const oldValue = this.mmu.readByte(address);
-        const oldBit = getBit(oldValue, bitId);
-        const newValue = (oldValue ^ (oldBit << bitId)) | (value << bitId);
-        this.mmu.writeRegister(address, newValue);
     }
 }
