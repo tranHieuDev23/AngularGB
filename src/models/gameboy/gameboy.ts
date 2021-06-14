@@ -93,11 +93,8 @@ export class Gameboy {
 
                 // GPU cannot change mode more than 1 after one instruction, so we only need to run 1 step
                 this.gpu.step(deltaCycleCount);
-
-                // Timer updates after 4 cycle each
-                for (let i = deltaCycleCount; i > 0; i -= 4) {
-                    this.timer.step(Math.min(i, 4));
-                }
+                // Timer will handle update steps inside
+                this.timer.step(deltaCycleCount);
 
                 // Run the disassembled instruction
                 this.cpu.runInstruction(disassembled);
