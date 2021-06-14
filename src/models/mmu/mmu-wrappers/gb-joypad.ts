@@ -1,3 +1,5 @@
+import { GbInterrupts } from "./gb-interrupts";
+
 export enum DirectionButton {
     RIGHT = 0,
     LEFT = 1,
@@ -17,7 +19,9 @@ export class GbJoypad {
     private actionButtonState = 0xf;
     private selectedRow = 0;
 
-    constructor() { }
+    constructor(
+        private readonly interrupts: GbInterrupts
+    ) { }
 
     public getValue(): number {
         switch (this.selectedRow) {
@@ -36,10 +40,12 @@ export class GbJoypad {
 
     public pressDirectionButton(button: DirectionButton): void {
         this.directionButtonState &= 0xf ^ (1 << button.valueOf());
+        this.interrupts.setJoypadInterruptFlag(1);
     }
 
     public pressActionButton(button: ActionButton): void {
         this.actionButtonState &= 0xf ^ (1 << button.valueOf());
+        this.interrupts.setJoypadInterruptFlag(1);
     }
 
     public releaseDirectionButton(button: DirectionButton): void {

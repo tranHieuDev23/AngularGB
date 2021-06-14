@@ -54,8 +54,8 @@ export class Gameboy {
         this.tileData = new GbTileData(this.lcdc);
         this.tileMap = new GbTileMap(this.tileData, this.lcdc);
         this.oam = new GbOam(this.tileData, this.lcdc);
-        this.joypad = new GbJoypad();
         this.interrupts = new GbInterrupts();
+        this.joypad = new GbJoypad(this.interrupts);
         this.positionControl = new GbPositionControl();
         this.palettes = new GbPalettes();
 
