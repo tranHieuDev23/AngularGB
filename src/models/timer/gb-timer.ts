@@ -63,38 +63,41 @@ export class GbTimer {
     public step(deltaCycleCount: number): void {
         this.totalCycleCount += deltaCycleCount;
 
-        // Div update timer increases at 1/4 the speed of main timer
-        this.divUpdateCycleCount += this.totalCycleCount >> 2;
-        // Once Div update timer counts 16, increase Div timer by 1
-        const divUpdateCount = this.divUpdateCycleCount >> 4;
-        this.divTimerTick(divUpdateCount);
-        this.divUpdateCycleCount &= 0xf;
+        const timerEnable = this.getTimerEnable() === 1;
+        const mode = this.getTimerMode();
+        const counterUpdateThreshold = COUNTER_UPDATE_CYCLES[mode];
+        while (this.totalCycleCount >= 4) {
+            // Div update timer increases at 1/4 the speed of main timer
+            this.divUpdateCycleCount++;
+            // Once Div update timer counts 16, increase Div timer by 1
+            if (this.divUpdateCycleCount >= 16) {
+                this.divTimerTick();
+                this.divUpdateCycleCount -= 16;
+            }
 
-        if (this.getTimerEnable() === 1) {
-            const mode = this.getTimerMode();
-            const counterUpdateThreshold = COUNTER_UPDATE_CYCLES[mode];
-            // Counter update timer increase at 1/4 the speed of main timer
-            this.counterUpdateCycleCount += this.totalCycleCount >> 2;
-            // Once Counter update time catches up with update threshold, increase Counter by 1
-            const counterUpdateCount = this.counterUpdateCycleCount / counterUpdateThreshold;
-            this.counterTimerTick(counterUpdateCount);
-            this.counterUpdateCycleCount %= counterUpdateThreshold;
+            if (timerEnable) {
+                // Counter update timer increase at 1/4 the speed of main timer
+                this.counterUpdateCycleCount++;
+                while (this.counterUpdateCycleCount >= counterUpdateThreshold) {
+                    this.counterTimerTick();
+                    this.counterUpdateCycleCount -= counterUpdateThreshold;
+                }
+            }
+
+            this.totalCycleCount -= 4;
         }
-
-        this.totalCycleCount &= 0x3;
     }
 
-    private divTimerTick(updateCount: number): void {
-        this.divTimer = (this.divTimer + updateCount) & EIGHT_ONE_BITS;
+    private divTimerTick(): void {
+        this.divTimer = (this.divTimer + 1) & EIGHT_ONE_BITS;
     }
 
-    private counterTimerTick(updateCount: number): void {
-        const nextCounterTimer = this.counterTimer + updateCount;
-        if (nextCounterTimer > 0xff) {
-            this.counterTimer = this.moduloTimer + (nextCounterTimer & EIGHT_ONE_BITS);
+    private counterTimerTick(): void {
+        if (this.counterTimer === 0xff) {
+            this.counterTimer = this.moduloTimer;
             this.interrupts.setTimerInterruptFlag(1);
         } else {
-            this.counterTimer = nextCounterTimer;
+            this.counterTimer++;
         }
     }
 }
