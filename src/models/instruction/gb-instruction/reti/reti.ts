@@ -29,6 +29,7 @@ export class RetiInstruction implements GbInstruction {
         const newPc = popWordFromStack(rs, mmu);
         rs.pc.setValue(newPc);
         rs.setIme(true);
+        rs.setNextIme(true);
         return 4;
     }
 }
