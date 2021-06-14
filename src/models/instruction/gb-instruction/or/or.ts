@@ -31,6 +31,10 @@ export class OrInstruction implements GbInstruction {
         return this.opCode;
     }
 
+    getCycleCount(rs: GbRegisterSet, mmu: GbMmu, args: number[]): number {
+        return this.cycleCount;
+    }
+
     run(rs: GbRegisterSet, mmu: GbMmu, args: number[]): number {
         const result = rs.a.getValue() | this.r1.getValue(rs, mmu, args);
         rs.a.setValue(result);

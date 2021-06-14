@@ -26,6 +26,10 @@ export class CallInstruction implements GbInstruction {
         return 0xcd;
     }
 
+    getCycleCount(rs: GbRegisterSet, mmu: GbMmu, args: number[]): number {
+        return 6;
+    }
+
     run(rs: GbRegisterSet, mmu: GbMmu, args: number[]): number {
         const pc = rs.pc.getValue();
         const a16 = this.r1.getValue(rs, mmu, args);
@@ -62,6 +66,14 @@ export class CallFlagInstruction implements GbInstruction {
 
     getOpcode(): number {
         return this.opcode;
+    }
+
+    getCycleCount(rs: GbRegisterSet, mmu: GbMmu, args: number[]): number {
+        const flag = this.r1.getValue(rs, mmu, args);
+        if (flag === 0) {
+            return 3;
+        }
+        return 6;
     }
 
     run(rs: GbRegisterSet, mmu: GbMmu, args: number[]): number {

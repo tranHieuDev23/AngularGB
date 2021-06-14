@@ -31,6 +31,10 @@ export class SetInstruction implements GbInstruction {
         return this.opcode;
     }
 
+    getCycleCount(rs: GbRegisterSet, mmu: GbMmu, args: number[]): number {
+        return this.cycleCount;
+    }
+
     run(rs: GbRegisterSet, mmu: GbMmu, args: number[]): number {
         const r2 = this.r2.getValue(rs, mmu, args);
         const newR2 = r2 | (1 << this.r1);

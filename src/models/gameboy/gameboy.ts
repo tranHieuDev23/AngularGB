@@ -76,24 +76,38 @@ export class Gameboy {
         }
 
         const shouldTransferToIsr = interruptId !== null && this.rs.getIme();
-        let deltaCycleCount: number;
         if (shouldTransferToIsr) {
             this.transferToIsr(interruptId);
-            deltaCycleCount = ISR_TRANSFER_CYCLE_COUNT;
+            this.gpu.step(ISR_TRANSFER_CYCLE_COUNT);
+            this.timer.step(ISR_TRANSFER_CYCLE_COUNT);
+            this.currentFrameCycleCount += ISR_TRANSFER_CYCLE_COUNT;
         } else {
+            // In HALT mode, CPU clock stops but GPU and Timer keep running
             if (this.rs.getHalting()) {
-                deltaCycleCount = 1;
+                this.gpu.step(1);
+                this.timer.step(1);
             } else {
-                deltaCycleCount = this.cpu.step().cycleCount;
+                const disassembled = this.cpu.disassembleInstruction(this.rs.pc.getValue());
+                const { instruction, args } = disassembled;
+                const deltaCycleCount = instruction.getCycleCount(this.rs, this.mmu, args);
+
+                // GPU cannot change mode more than 1 after one instruction, so we only need to run 1 step
+                this.gpu.step(deltaCycleCount);
+
+                // Timer updates after 4 cycle each
+                for (let i = deltaCycleCount; i > 0; i -= 4) {
+                    this.timer.step(Math.min(i, 4));
+                }
+
+                // Run the disassembled instruction
+                this.cpu.runInstruction(disassembled);
+
+                // The effect of IE is delayed by one instruction
+                this.rs.setIme(this.rs.getNextIme());
+
+                this.currentFrameCycleCount += deltaCycleCount;
             }
         }
-
-        // The effect of IE is delayed by one instruction
-        this.rs.setIme(this.rs.getNextIme());
-
-        this.gpu.step(deltaCycleCount);
-        this.timer.step(deltaCycleCount);
-        this.currentFrameCycleCount += deltaCycleCount;
 
         const newStatLine = this.getStatInterruptLine();
         // STAT interrupt is only triggered by a rising edge

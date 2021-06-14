@@ -32,6 +32,10 @@ export class ResInstruction implements GbInstruction {
         return this.opcode;
     }
 
+    getCycleCount(rs: GbRegisterSet, mmu: GbMmu, args: number[]): number {
+        return this.cycleCount;
+    }
+
     run(rs: GbRegisterSet, mmu: GbMmu, args: number[]): number {
         const r2 = this.r2.getValue(rs, mmu, args);
         const bitsToKeep = EIGHT_ONE_BITS ^ (1 << this.r1);

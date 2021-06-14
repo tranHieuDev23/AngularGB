@@ -18,6 +18,10 @@ export class ScfInstruction implements GbInstruction {
         return 0x37;
     }
 
+    getCycleCount(rs: GbRegisterSet, mmu: GbMmu, args: number[]): number {
+        return 1;
+    }
+
     run(rs: GbRegisterSet, mmu: GbMmu, args: number[]): number {
         rs.setOperationFlag(0);
         rs.setHalfCarryFlag(0);

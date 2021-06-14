@@ -20,6 +20,10 @@ export class RetInstruction implements GbInstruction {
         return 0xc9;
     }
 
+    getCycleCount(rs: GbRegisterSet, mmu: GbMmu, args: number[]): number {
+        return 4;
+    }
+
     run(rs: GbRegisterSet, mmu: GbMmu, args: number[]): number {
         const newPc = popWordFromStack(rs, mmu);
         rs.pc.setValue(newPc);
@@ -51,6 +55,14 @@ export class RetFlagInstruction implements GbInstruction {
 
     getOpcode(): number {
         return this.opcode;
+    }
+
+    getCycleCount(rs: GbRegisterSet, mmu: GbMmu, args: number[]): number {
+        const flag = this.r1.getValue(rs, mmu, args);
+        if (flag === 0) {
+            return 2;
+        }
+        return 5;
     }
 
     run(rs: GbRegisterSet, mmu: GbMmu, args: number[]): number {

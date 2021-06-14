@@ -21,6 +21,10 @@ export class RetiInstruction implements GbInstruction {
         return 0xd9;
     }
 
+    getCycleCount(rs: GbRegisterSet, mmu: GbMmu, args: number[]): number {
+        return 4;
+    }
+
     run(rs: GbRegisterSet, mmu: GbMmu, args: number[]): number {
         const newPc = popWordFromStack(rs, mmu);
         rs.pc.setValue(newPc);

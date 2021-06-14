@@ -34,6 +34,10 @@ export class CpInstruction implements GbInstruction {
         return this.opCode;
     }
 
+    getCycleCount(rs: GbRegisterSet, mmu: GbMmu, args: number[]): number {
+        return this.cycleCount;
+    }
+
     run(rs: GbRegisterSet, mmu: GbMmu, args: number[]): number {
         const result = subtract8Bit(
             rs.a.getValue(),

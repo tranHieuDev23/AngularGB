@@ -33,6 +33,10 @@ export class SbcInstruction implements GbInstruction {
         return this.opCode;
     }
 
+    getCycleCount(rs: GbRegisterSet, mmu: GbMmu, args: number[]): number {
+        return this.cycleCount;
+    }
+
     run(rs: GbRegisterSet, mmu: GbMmu, args: number[]): number {
         const a = rs.a.getValue();
         const r1 = this.r1.getValue(rs, mmu, args);

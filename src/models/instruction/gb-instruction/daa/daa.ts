@@ -20,6 +20,10 @@ export class DaaInstruction implements GbInstruction {
         return `DAA`;
     }
 
+    getCycleCount(rs: GbRegisterSet, mmu: GbMmu, args: number[]): number {
+        return 1;
+    }
+
     run(rs: GbRegisterSet, mmu: GbMmu, args: number[]): number {
         let a = rs.a.getValue();
         if (rs.getOperationFlag() === 1) {

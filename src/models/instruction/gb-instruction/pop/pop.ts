@@ -26,6 +26,10 @@ export class PopInstruction implements GbInstruction {
         return this.opcode;
     }
 
+    getCycleCount(rs: GbRegisterSet, mmu: GbMmu, args: number[]): number {
+        return 3;
+    }
+
     run(rs: GbRegisterSet, mmu: GbMmu, args: number[]): number {
         const value = popWordFromStack(rs, mmu);
         this.r1.setValue(rs, mmu, args, value);

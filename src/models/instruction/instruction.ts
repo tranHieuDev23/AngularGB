@@ -5,6 +5,7 @@ export interface Instruction<RS extends RegisterSet, MMU extends Mmu> {
     getName(): string;
     getLength(): number;
     getOpcode(): number;
+    getCycleCount(rs: RS, mmu: MMU, args: number[]): number;
     run(rs: RS, mmu: MMU, args: number[]): number;
 }
 

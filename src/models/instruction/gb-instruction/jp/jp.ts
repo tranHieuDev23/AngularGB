@@ -32,6 +32,10 @@ export class JpInstruction implements GbInstruction {
         return this.opcode;
     }
 
+    getCycleCount(rs: GbRegisterSet, mmu: GbMmu, args: number[]): number {
+        return this.cycleCount;
+    }
+
     run(rs: GbRegisterSet, mmu: GbMmu, args: number[]): number {
         const a16 = this.r1.getValue(rs, mmu, args);
         rs.pc.setValue(a16);
@@ -63,6 +67,14 @@ export class JpFlagInstruction implements GbInstruction {
 
     getOpcode(): number {
         return this.opcode;
+    }
+
+    getCycleCount(rs: GbRegisterSet, mmu: GbMmu, args: number[]): number {
+        const flag = this.r1.getValue(rs, mmu, args);
+        if (flag === 0) {
+            return 3;
+        }
+        return 4;
     }
 
     run(rs: GbRegisterSet, mmu: GbMmu, args: number[]): number {

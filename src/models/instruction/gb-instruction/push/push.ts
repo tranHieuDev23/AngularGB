@@ -26,6 +26,10 @@ export class PushInstruction implements GbInstruction {
         return this.opcode;
     }
 
+    getCycleCount(rs: GbRegisterSet, mmu: GbMmu, args: number[]): number {
+        return 4;
+    }
+
     run(rs: GbRegisterSet, mmu: GbMmu, args: number[]): number {
         const r1 = this.r1.getValue(rs, mmu, args);
         pushWordToStack(rs, mmu, r1);

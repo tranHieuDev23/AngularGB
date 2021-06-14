@@ -31,6 +31,10 @@ export class Inc8BitInstruction implements GbInstruction {
         return this.opCode;
     }
 
+    getCycleCount(rs: GbRegisterSet, mmu: GbMmu, args: number[]): number {
+        return this.cycleCount;
+    }
+
     run(rs: GbRegisterSet, mmu: GbMmu, args: number[]): number {
         const b = this.r1.getValue(rs, mmu, args);
         const addResult = add8Bit(b, 1);
@@ -63,6 +67,10 @@ export class Inc16BitInstruction implements GbInstruction {
 
     getOpcode(): number {
         return this.opCode;
+    }
+
+    getCycleCount(rs: GbRegisterSet, mmu: GbMmu, args: number[]): number {
+        return 2;
     }
 
     run(rs: GbRegisterSet, mmu: GbMmu, args: number[]): number {

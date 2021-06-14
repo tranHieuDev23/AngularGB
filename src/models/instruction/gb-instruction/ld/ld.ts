@@ -33,6 +33,10 @@ export class LdInstruction implements GbInstruction {
         return this.opCode;
     }
 
+    getCycleCount(rs: GbRegisterSet, mmu: GbMmu, args: number[]): number {
+        return this.cycleCount;
+    }
+
     run(rs: GbRegisterSet, mmu: GbMmu, args: number[]): number {
         this.r1.setValue(rs, mmu, args, this.r2.getValue(rs, mmu, args));
         return this.cycleCount;
@@ -61,6 +65,10 @@ export class Gb08Instruction implements GbInstruction {
         return 0x08;
     }
 
+    getCycleCount(rs: GbRegisterSet, mmu: GbMmu, args: number[]): number {
+        return 5;
+    }
+
     run(rs: GbRegisterSet, mmu: GbMmu, args: number[]): number {
         const sp = rs.sp.getValue();
         const a16 = this.r1.getValue(rs, mmu, args);
@@ -84,6 +92,10 @@ export class GbF8Instruction implements GbInstruction {
 
     getOpcode(): number {
         return 0xf8;
+    }
+
+    getCycleCount(rs: GbRegisterSet, mmu: GbMmu, args: number[]): number {
+        return 3;
     }
 
     run(rs: GbRegisterSet, mmu: GbMmu, args: number[]): number {

@@ -36,6 +36,10 @@ export class RlInstruction implements GbInstruction {
         return this.opcode;
     }
 
+    getCycleCount(rs: GbRegisterSet, mmu: GbMmu, args: number[]): number {
+        return this.cycleCount;
+    }
+
     run(rs: GbRegisterSet, mmu: GbMmu, args: number[]): number {
         const r1 = this.r1.getValue(rs, mmu, args);
         const r1Bit7 = getBit(r1, 7);
@@ -68,6 +72,10 @@ export class Gb17Instruction implements GbInstruction {
 
     getOpcode(): number {
         return 0x17;
+    }
+
+    getCycleCount(rs: GbRegisterSet, mmu: GbMmu, args: number[]): number {
+        return 1;
     }
 
     run(rs: GbRegisterSet, mmu: GbMmu, args: number[]): number {

@@ -23,6 +23,10 @@ export class HaltInstruction implements GbInstruction {
         return 0x76;
     }
 
+    getCycleCount(rs: GbRegisterSet, mmu: GbMmu, args: number[]): number {
+        return 1;
+    }
+
     run(rs: GbRegisterSet, mmu: GbMmu, args: number[]): number {
         rs.setHalting(true);
         return 1;

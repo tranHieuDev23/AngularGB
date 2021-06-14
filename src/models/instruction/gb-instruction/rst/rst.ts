@@ -33,6 +33,10 @@ export class RstInstruction implements GbInstruction {
         return this.opcode;
     }
 
+    getCycleCount(rs: GbRegisterSet, mmu: GbMmu, args: number[]): number {
+        return 4;
+    }
+
     run(rs: GbRegisterSet, mmu: GbMmu, args: number[]): number {
         const pc = rs.pc.getValue();
         pushWordToStack(rs, mmu, pc);

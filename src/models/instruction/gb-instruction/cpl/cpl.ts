@@ -20,6 +20,10 @@ export class CplInstruction implements GbInstruction {
         return 0x2f;
     }
 
+    getCycleCount(rs: GbRegisterSet, mmu: GbMmu, args: number[]): number {
+        return 1;
+    }
+
     run(rs: GbRegisterSet, mmu: GbMmu, args: number[]): number {
         rs.a.setValue(rs.a.getValue() ^ EIGHT_ONE_BITS);
         rs.setOperationFlag(1);

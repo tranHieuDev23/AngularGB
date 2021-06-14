@@ -65,13 +65,10 @@ export class GbCpu {
         );
     }
 
-    public step(): GbCpuStepInfo {
+    public runInstruction(disassembled: GbDisassembledInstruction): void {
         const pc = this.rs.pc.getValue();
-        const disassembled = this.disassembleInstruction(pc);
-        this.rs.pc.setValue(pc + disassembled.instruction.getLength());
-        const cycleCount = disassembled.instruction.run(this.rs, this.mmu, disassembled.args);
-        return new GbCpuStepInfo(
-            disassembled, cycleCount
-        );
+        const { instruction, args } = disassembled;
+        this.rs.pc.setValue(pc + instruction.getLength());
+        instruction.run(this.rs, this.mmu, args);
     }
 }

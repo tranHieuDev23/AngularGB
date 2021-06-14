@@ -24,6 +24,10 @@ export class StopInstruction implements GbInstruction {
         return 0x10;
     }
 
+    getCycleCount(rs: GbRegisterSet, mmu: GbMmu, args: number[]): number {
+        return 1;
+    }
+
     run(rs: GbRegisterSet, mmu: GbMmu, args: number[]): number {
         mmu.writeRegister(DIV_TIMER_REG_ADDRESS, 0);
         return 1;

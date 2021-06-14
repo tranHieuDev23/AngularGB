@@ -19,6 +19,10 @@ export class EiInstruction implements GbInstruction {
         return 0xfb;
     }
 
+    getCycleCount(rs: GbRegisterSet, mmu: GbMmu, args: number[]): number {
+        return 1;
+    }
+
     run(rs: GbRegisterSet, mmu: GbMmu, args: number[]): number {
         rs.setNextIme(true);
         return 1;

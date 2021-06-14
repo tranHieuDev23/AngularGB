@@ -20,6 +20,10 @@ export class JrInstruction implements GbInstruction {
         return 0x18;
     }
 
+    getCycleCount(rs: GbRegisterSet, mmu: GbMmu, args: number[]): number {
+        return 3;
+    }
+
     run(rs: GbRegisterSet, mmu: GbMmu, args: number[]): number {
         const pc = rs.pc.getValue();
         const s8 = toSigned8Bit(args[0]);
@@ -50,6 +54,14 @@ export class JrFlagInstruction implements GbInstruction {
 
     getOpcode(): number {
         return this.opcode;
+    }
+
+    getCycleCount(rs: GbRegisterSet, mmu: GbMmu, args: number[]): number {
+        const flag = this.r1.getValue(rs, mmu, args);
+        if (flag === 0) {
+            return 2;
+        }
+        return 3;
     }
 
     run(rs: GbRegisterSet, mmu: GbMmu, args: number[]): number {

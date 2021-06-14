@@ -19,6 +19,10 @@ export class DiInstruction implements GbInstruction {
         return 0xf3;
     }
 
+    getCycleCount(rs: GbRegisterSet, mmu: GbMmu, args: number[]): number {
+        return 1;
+    }
+
     run(rs: GbRegisterSet, mmu: GbMmu, args: number[]): number {
         rs.setIme(false);
         rs.setNextIme(false);
