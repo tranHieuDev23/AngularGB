@@ -76,7 +76,6 @@ export class Dec16BitInstruction implements GbInstruction {
     run(rs: GbRegisterSet, mmu: GbMmu, args: number[]): number {
         const r1 = this.r1.getValue(rs, mmu, args);
         const result = (r1 - 1) & SIXTEEN_ONE_BITS;
-        // console.log(this.getName(), r1, result)
         this.r1.setValue(rs, mmu, args, result);
         return 2;
     }

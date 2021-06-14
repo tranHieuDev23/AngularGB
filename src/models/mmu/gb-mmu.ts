@@ -91,6 +91,9 @@ export class GbMmuImpl implements GbMmu {
         if (0x10000 <= address) {
             throw new Error(`Trying to read invalid address: ${address}`);
         }
+        if (address === 0xff00) {
+            return 0xff;
+        }
         return this.ram[address];
     }
 

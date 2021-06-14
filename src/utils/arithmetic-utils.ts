@@ -9,14 +9,6 @@ export class ArithmeticResult {
     ) { }
 }
 
-function toSigned(a: number, bitCount: number): number {
-    const twoPower = 1 << bitCount;
-    if (a < twoPower / 2) {
-        return a;
-    }
-    return - (((~a) + 1) & (twoPower - 1));
-}
-
 export function add8Bit(a: number, b: number): ArithmeticResult {
     const fullResult = a + b;
     const croppedResult = fullResult & EIGHT_ONE_BITS;
