@@ -86,6 +86,7 @@ export class Gameboy {
             if (this.rs.getHalting()) {
                 this.gpu.step(1);
                 this.timer.step(1);
+                this.currentFrameCycleCount++;
             } else {
                 const disassembled = this.cpu.disassembleInstruction(this.rs.pc.getValue());
                 const { instruction, args } = disassembled;
@@ -106,10 +107,12 @@ export class Gameboy {
             }
         }
 
-        const newStatLine = this.getStatInterruptLine();
-        // STAT interrupt is only triggered by a rising edge
-        if (oldStatLine === 0 && newStatLine === 1) {
-            this.interrupts.setLcdStatInterruptFlag(1);
+        if (oldStatLine === 0) {
+            const newStatLine = this.getStatInterruptLine();
+            // STAT interrupt is only triggered by a rising edge
+            if (newStatLine === 1) {
+                this.interrupts.setLcdStatInterruptFlag(1);
+            }
         }
     }
 
@@ -132,7 +135,10 @@ export class Gameboy {
     }
 
     private checkForInterrupt(): number {
-        const interruptByte = this.interrupts.getIEByte() & this.interrupts.getIFByte();
+        const interruptByte = this.interrupts.getIEByte() & this.interrupts.getIFByte() & 0x1f;
+        if (interruptByte === 0) {
+            return null;
+        }
         for (let i = 0; i < 5; i++) {
             if (getBit(interruptByte, i) === 1) {
                 return i;
@@ -151,11 +157,21 @@ export class Gameboy {
     }
 
     private getStatInterruptLine(): number {
-        const lycEqualLySource = this.stat.getLycEqualLyInterruptEnable() & this.stat.getLycEqualLy();
-        const mode = this.stat.getModeFlag();
-        const mode2Source = this.stat.getMode2InterruptEnable() === 1 && mode === 2 ? 1 : 0;
-        const mode1Source = this.stat.getMode1InterruptEnable() === 1 && mode === 1 ? 1 : 0;
-        const mode0Source = this.stat.getMode0InterruptEnable() === 1 && mode === 0 ? 1 : 0;
-        return lycEqualLySource | mode2Source | mode1Source | mode0Source;
+        const statValue = this.stat.getValue();
+        const lycEqualLyEnable = getBit(statValue, 6);
+        const lycEqualLy = getBit(statValue, 2);
+        if (lycEqualLyEnable & lycEqualLy) {
+            return 1;
+        }
+        const mode = statValue & 0x03;
+        switch (mode) {
+            case 0:
+                return getBit(statValue, 3);
+            case 1:
+                return getBit(statValue, 4);
+            case 2:
+                return getBit(statValue, 5);
+        }
+        return 0;
     }
 }

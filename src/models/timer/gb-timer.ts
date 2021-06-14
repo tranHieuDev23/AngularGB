@@ -1,3 +1,4 @@
+import { getBit } from "src/utils/arithmetic-utils";
 import { EIGHT_ONE_BITS } from "src/utils/constants";
 import { GbMmu } from "../mmu/gb-mmu";
 import { GbInterrupts } from "../mmu/mmu-wrappers/gb-interrupts";
@@ -24,43 +25,45 @@ export class GbTimer {
 
     public step(deltaCycleCount: number): void {
         this.totalCycleCount += deltaCycleCount;
-        const isTimerEnabled = this.timerWrappers.getTimerEnable() === 1;
 
-        while (this.totalCycleCount >= 4) {
-            this.divUpdateCycleCount++;
-            if (this.divUpdateCycleCount === 16) {
-                this.divTimerTick();
-                this.divUpdateCycleCount = 0;
-            }
+        // Div update timer increases at 1/4 the speed of main timer
+        this.divUpdateCycleCount += this.totalCycleCount >> 2;
+        // Once Div update timer counts 16, increase Div timer by 1
+        const divUpdateCount = this.divUpdateCycleCount >> 4;
+        this.divTimerTick(divUpdateCount);
+        this.divUpdateCycleCount &= 0xf;
 
-            if (isTimerEnabled) {
-                this.counterUpdateCycleCount++;
-                const mode = this.timerWrappers.getTimerMode();
-                const counterUpdateThreshold = COUNTER_UPDATE_CYCLES[mode];
-                while (this.counterUpdateCycleCount >= counterUpdateThreshold) {
-                    this.counterUpdateCycleCount -= counterUpdateThreshold;
-                    this.counterTimerTick();
-                }
-            }
-
-            this.totalCycleCount -= 4;
+        const timerControl = this.timerWrappers.getControlTimer();
+        const isTimerEnabled = getBit(timerControl, 2) === 1;
+        if (isTimerEnabled) {
+            const mode = timerControl & 0x3;
+            const counterUpdateThreshold = COUNTER_UPDATE_CYCLES[mode];
+            // Counter update timer increase at 1/4 the speed of main timer
+            this.counterUpdateCycleCount += this.totalCycleCount >> 2;
+            // Once Counter update time catches up with update threshold, increase Counter by 1
+            const counterUpdateCount = this.counterUpdateCycleCount / counterUpdateThreshold;
+            this.counterTimerTick(counterUpdateCount);
+            this.counterUpdateCycleCount %= counterUpdateThreshold;
         }
+
+        this.totalCycleCount &= 0x3;
     }
 
-    private divTimerTick(): void {
+    private divTimerTick(updateCount: number): void {
         const divTimer = this.timerWrappers.getDivTimer();
-        const newDivTimer = (divTimer + 1) & EIGHT_ONE_BITS;
+        const newDivTimer = (divTimer + updateCount) & EIGHT_ONE_BITS;
         this.timerWrappers.setDivTimer(newDivTimer);
     }
 
-    private counterTimerTick(): void {
+    private counterTimerTick(updateCount: number): void {
         const counterTimer = this.timerWrappers.getCounterTimer();
-        if (counterTimer === 0xff) {
-            this.timerWrappers.setCounterTimer(this.timerWrappers.getModuloTimer());
+        const nextCounterTimer = counterTimer + updateCount;
+        if (nextCounterTimer > 0xff) {
+            const resetCounterTimer = this.timerWrappers.getModuloTimer() + (nextCounterTimer & EIGHT_ONE_BITS);
+            this.timerWrappers.setCounterTimer(resetCounterTimer);
             this.interrupts.setTimerInterruptFlag(1);
         } else {
-            const newCounterTimer = (counterTimer + 1) & EIGHT_ONE_BITS;
-            this.timerWrappers.setCounterTimer(newCounterTimer);
+            this.timerWrappers.setCounterTimer(nextCounterTimer);
         }
     }
 }
