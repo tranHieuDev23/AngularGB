@@ -4,6 +4,8 @@ import { CanvasLcd } from "src/models/lcd/canvas-lcd";
 import { GbMmuImpl } from "src/models/mmu/gb-mmu";
 import { getMbc } from "src/models/mmu/mcb/mbc-factory";
 
+const ONE_SECOND = 1000;
+
 @Component({
   selector: "app-gameboy",
   templateUrl: "./gameboy.component.html",
@@ -62,7 +64,7 @@ export class GameboyComponent implements OnInit {
       this.setGameboyIntervalId(setInterval(() => {
         this.gameboy.frame();
         this.frameEnded.emit();
-      }, 1.0 / 60));
+      }, ONE_SECOND / 60));
     } else {
       this.setGameboyIntervalId(setInterval(() => {
         const metBreakpoint = this.gameboy.frameWithBreakpoint(breakpointAddress);
@@ -70,7 +72,7 @@ export class GameboyComponent implements OnInit {
         if (metBreakpoint) {
           this.pause();
         }
-      }, 1.0 / 60));
+      }, ONE_SECOND / 60));
     }
     this.resumed.emit();
   }
