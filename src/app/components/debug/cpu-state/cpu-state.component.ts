@@ -7,5 +7,5 @@ import { GameboyComponent } from "../../gameboy/gameboy.component";
   styleUrls: ["./cpu-state.component.scss"]
 })
 export class CpuStateComponent {
-  @Input("gameboy") gameboy: GameboyComponent;
+  @Input() gameboy: GameboyComponent;
 }

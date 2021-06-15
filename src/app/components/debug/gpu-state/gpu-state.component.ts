@@ -14,7 +14,7 @@ export class GpuStateRow {
   styleUrls: ["./gpu-state.component.scss"]
 })
 export class GpuStateComponent {
-  @Input("gameboy") gameboy: GameboyComponent;
+  @Input() gameboy: GameboyComponent;
 
   public rows: GpuStateRow[] = [
     new GpuStateRow("Scroll Y - 0XFF42", () => this.gameboy.gameboy.positionControl.getScrollY()),

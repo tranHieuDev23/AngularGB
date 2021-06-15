@@ -11,8 +11,8 @@ import { GameboyComponent } from "../../gameboy/gameboy.component";
 export class BgMapViewerComponent implements AfterViewInit, OnDestroy {
   @ViewChild("canvas") canvas: ElementRef<HTMLCanvasElement>;
 
-  @Input("gameboy") gameboy: GameboyComponent;
-  @Input("palettes") palettes: string[] = [
+  @Input() gameboy: GameboyComponent;
+  @Input() palettes: string[] = [
     "#9bbc0f",
     "#8bac0f",
     "#306230",

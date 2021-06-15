@@ -3,7 +3,7 @@ import { getBit } from "src/utils/arithmetic-utils";
 import { GbPositionControl } from "./gb-position-control";
 
 export class GbStat {
-    private lyEqualLycInterruptEnable: number = 0;
+    private lyEqualLycInterruptEnable = 0;
     private modeInterruptEnable: number[] = [0, 0, 0];
 
     constructor(

@@ -7,14 +7,14 @@ const COUNTER_UPDATE_CYCLES = [
 ];
 
 export class GbTimer {
-    private divTimer: number = 0;
-    private counterTimer: number = 0;
-    private moduloTimer: number = 0;
-    private timerControl: number = 0;
+    private divTimer = 0;
+    private counterTimer = 0;
+    private moduloTimer = 0;
+    private timerControl = 0;
 
-    private totalCycleCount: number = 0;
-    private divUpdateCycleCount: number = 0;
-    private counterUpdateCycleCount: number = 0;
+    private totalCycleCount = 0;
+    private divUpdateCycleCount = 0;
+    private counterUpdateCycleCount = 0;
 
     constructor(
         private readonly interrupts: GbInterrupts

@@ -8,7 +8,7 @@ export class GbInterrupts {
         return this.iE;
     }
 
-    public setIEByte(value: number) {
+    public setIEByte(value: number): void {
         this.iE = value;
     }
 
@@ -40,7 +40,7 @@ export class GbInterrupts {
         return this.iF;
     }
 
-    public setIFByte(value: number) {
+    public setIFByte(value: number): void {
         this.iF = value;
     }
 
@@ -74,22 +74,22 @@ export class GbInterrupts {
     }
 
     public setVBlankInterruptFlag(value: number): void {
-        this.setInterruptFlag(0, value)
+        this.setInterruptFlag(0, value);
     }
 
     public setLcdStatInterruptFlag(value: number): void {
-        this.setInterruptFlag(1, value)
+        this.setInterruptFlag(1, value);
     }
 
     public setTimerInterruptFlag(value: number): void {
-        this.setInterruptFlag(2, value)
+        this.setInterruptFlag(2, value);
     }
 
     public setSerialInterruptFlag(value: number): void {
-        this.setInterruptFlag(3, value)
+        this.setInterruptFlag(3, value);
     }
 
     public setJoypadInterruptFlag(value: number): void {
-        this.setInterruptFlag(4, value)
+        this.setInterruptFlag(4, value);
     }
 }

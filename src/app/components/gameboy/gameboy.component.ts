@@ -33,7 +33,7 @@ export class GameboyComponent implements OnInit {
   private lcd: CanvasLcd = null;
   private gameboyIntervalId = null;
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.lcd = new CanvasLcd(this.canvas.nativeElement, 160, 144, 1, this.palettes);
     this.lcd.clear();
   }
@@ -117,7 +117,7 @@ export class GameboyComponent implements OnInit {
     this.stopped.emit();
   }
 
-  @HostListener('document:keydown', ['$event'])
+  @HostListener("document:keydown", ["$event"])
   public handleKeyDownEvent(event: KeyboardEvent): void {
     if (this.gameboy === null) {
       return;
@@ -150,7 +150,7 @@ export class GameboyComponent implements OnInit {
     }
   }
 
-  @HostListener('document:keyup', ['$event'])
+  @HostListener("document:keyup", ["$event"])
   public handleKeyUpEvent(event: KeyboardEvent): void {
     if (this.gameboy === null) {
       return;

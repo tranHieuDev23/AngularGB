@@ -1,18 +1,18 @@
-import { AfterViewInit, Component, ElementRef, Input, OnDestroy, ViewChild } from '@angular/core';
-import { Subscription } from 'rxjs';
-import { CanvasLcd } from 'src/models/lcd/canvas-lcd';
-import { GameboyComponent } from '../../gameboy/gameboy.component';
+import { AfterViewInit, Component, ElementRef, Input, OnDestroy, ViewChild } from "@angular/core";
+import { Subscription } from "rxjs";
+import { CanvasLcd } from "src/models/lcd/canvas-lcd";
+import { GameboyComponent } from "../../gameboy/gameboy.component";
 
 @Component({
-  selector: 'app-window-map-viewer',
-  templateUrl: './window-map-viewer.component.html',
-  styleUrls: ['./window-map-viewer.component.scss']
+  selector: "app-window-map-viewer",
+  templateUrl: "./window-map-viewer.component.html",
+  styleUrls: ["./window-map-viewer.component.scss"]
 })
 export class WindowMapViewerComponent implements AfterViewInit, OnDestroy {
   @ViewChild("canvas") canvas: ElementRef<HTMLCanvasElement>;
 
-  @Input("gameboy") gameboy: GameboyComponent;
-  @Input("palettes") palettes: string[] = [
+  @Input() gameboy: GameboyComponent;
+  @Input() palettes: string[] = [
     "#9bbc0f",
     "#8bac0f",
     "#306230",

@@ -1,5 +1,5 @@
-import { Component, Input } from '@angular/core';
-import { GameboyComponent } from '../../gameboy/gameboy.component';
+import { Component, Input } from "@angular/core";
+import { GameboyComponent } from "../../gameboy/gameboy.component";
 
 export class TimerStateRow {
   constructor(
@@ -9,12 +9,12 @@ export class TimerStateRow {
 }
 
 @Component({
-  selector: 'app-timer',
-  templateUrl: './timer.component.html',
-  styleUrls: ['./timer.component.scss']
+  selector: "app-timer",
+  templateUrl: "./timer.component.html",
+  styleUrls: ["./timer.component.scss"]
 })
 export class TimerComponent {
-  @Input("gameboy") gameboy: GameboyComponent;
+  @Input() gameboy: GameboyComponent;
 
   public rows: TimerStateRow[] = [
     new TimerStateRow("Divide Timer - 0xFF05", () => this.gameboy.gameboy.timer.getDivTimer()),

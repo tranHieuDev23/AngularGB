@@ -34,7 +34,7 @@ describe("sbc", () => {
             const cycleCount = instruction.run(rs, mmu, [registerValue]);
 
             expect(rs.a.getValue()).toEqual(expectedResult);
-            expect(rs.getZeroFlag()).toEqual(expectedResult == 0 ? 1 : 0);
+            expect(rs.getZeroFlag()).toEqual(expectedResult === 0 ? 1 : 0);
             expect(rs.getOperationFlag()).toEqual(1);
             expect(rs.getHalfCarryFlag()).toEqual(halfCarry ? 1 : 0);
             expect(rs.getCarryFlag()).toEqual(carry ? 1 : 0);
@@ -61,7 +61,7 @@ describe("sbc", () => {
         const cycleCount = instruction.run(rs, mmu, [memValue]);
 
         expect(rs.a.getValue()).toEqual(expectedResult);
-        expect(rs.getZeroFlag()).toEqual(expectedResult == 0 ? 1 : 0);
+        expect(rs.getZeroFlag()).toEqual(expectedResult === 0 ? 1 : 0);
         expect(rs.getOperationFlag()).toEqual(1);
         expect(rs.getHalfCarryFlag()).toEqual(halfCarry ? 1 : 0);
         expect(rs.getCarryFlag()).toEqual(carry ? 1 : 0);
@@ -86,7 +86,7 @@ describe("sbc", () => {
         const cycleCount = instruction.run(rs, mmu, [byteValue]);
 
         expect(rs.a.getValue()).toEqual(expectedResult);
-        expect(rs.getZeroFlag()).toEqual(expectedResult == 0 ? 1 : 0);
+        expect(rs.getZeroFlag()).toEqual(expectedResult === 0 ? 1 : 0);
         expect(rs.getOperationFlag()).toEqual(1);
         expect(rs.getHalfCarryFlag()).toEqual(halfCarry ? 1 : 0);
         expect(rs.getCarryFlag()).toEqual(carry ? 1 : 0);

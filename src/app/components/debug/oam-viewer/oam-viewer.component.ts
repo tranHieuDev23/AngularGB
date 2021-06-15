@@ -22,8 +22,8 @@ export class OamViewerItem {
 export class OamViewerComponent implements AfterViewInit, OnDestroy {
   @ViewChild("oamTable") oamTable: NzTableComponent;
 
-  @Input("gameboy") gameboy: GameboyComponent;
-  @Input("palettes") palettes: string[] = [
+  @Input() gameboy: GameboyComponent;
+  @Input() palettes: string[] = [
     "#9bbc0f",
     "#8bac0f",
     "#306230",

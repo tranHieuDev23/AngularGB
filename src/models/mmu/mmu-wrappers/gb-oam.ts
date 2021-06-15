@@ -21,7 +21,7 @@ export class GbOamFlags {
 
 export class GbOam {
     private readonly oamTable: number[] = new Array<number>(FORBIDDEN_RAM_START - OAM_RAM_START).fill(0);
-    private oamRegisterValue: number = 0;
+    private oamRegisterValue = 0;
 
     constructor(
         private readonly tileData: GbTileData,

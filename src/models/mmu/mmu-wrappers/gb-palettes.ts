@@ -1,12 +1,12 @@
 export class GbPalettes {
-    private bgPalette: number = 0;
+    private bgPalette = 0;
     private objPalette: number[] = [0, 0];
 
-    public getBgPalette() {
+    public getBgPalette(): number {
         return this.bgPalette;
     }
 
-    public getBgPaletteColor(index: number) {
+    public getBgPaletteColor(index: number): number {
         return (this.bgPalette >> (index << 1)) & 3;
     }
 
@@ -14,11 +14,11 @@ export class GbPalettes {
         this.bgPalette = value;
     }
 
-    public getObjPalette(paletteNumber: number) {
+    public getObjPalette(paletteNumber: number): number {
         return this.objPalette[paletteNumber];
     }
 
-    public getObjPaletteColor(paletteNumber: number, index: number) {
+    public getObjPaletteColor(paletteNumber: number, index: number): number {
         return (this.objPalette[paletteNumber] >> (index << 1)) & 3;
     }
 

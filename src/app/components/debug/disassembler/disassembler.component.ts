@@ -13,7 +13,7 @@ import { GameboyComponent } from "../../gameboy/gameboy.component";
 export class DisassemblerComponent implements OnInit, OnDestroy {
   @ViewChild("disassembled") disassembledTable: NzTableComponent;
 
-  @Input("gameboy") gameboy: GameboyComponent;
+  @Input() gameboy: GameboyComponent;
 
   public disassembledInstructions: GbDisassembledInstruction[];
   private breakpointIndex: number;

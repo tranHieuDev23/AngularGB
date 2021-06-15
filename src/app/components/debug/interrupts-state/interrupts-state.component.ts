@@ -1,5 +1,5 @@
-import { Component, Input } from '@angular/core';
-import { GameboyComponent } from '../../gameboy/gameboy.component';
+import { Component, Input } from "@angular/core";
+import { GameboyComponent } from "../../gameboy/gameboy.component";
 
 export class InterruptStateRow {
   constructor(
@@ -9,12 +9,12 @@ export class InterruptStateRow {
 }
 
 @Component({
-  selector: 'app-interrupts-state',
-  templateUrl: './interrupts-state.component.html',
-  styleUrls: ['./interrupts-state.component.scss']
+  selector: "app-interrupts-state",
+  templateUrl: "./interrupts-state.component.html",
+  styleUrls: ["./interrupts-state.component.scss"]
 })
 export class InterruptsStateComponent {
-  @Input("gameboy") gameboy: GameboyComponent;
+  @Input() gameboy: GameboyComponent;
 
   public rows: InterruptStateRow[] = [
     new InterruptStateRow("IME", () => this.gameboy.gameboy.rs.getIme() ? 1 : 0),
