@@ -160,17 +160,31 @@ export class GbGpu {
         // Fetch sprites
         if (this.lcdc.getObjEnable() === 1) {
             const spriteHeight = this.lcdc.getObjSize() === 0 ? 8 : 16;
-            let drawnSpriteCnt = 0;
-            for (let i = 0; i < 40 && drawnSpriteCnt < 10; i++) {
-                const spriteY = this.oam.getSpriteY(i) - 16;
+            const indicesToDraw: { index: number, spriteY: number, spriteX: number }[] = [];
+            for (let index = 0; index < 40; index++) {
+                const spriteY = this.oam.getSpriteY(index) - 16;
                 const spriteYBottom = spriteY + spriteHeight;
                 if (this.ly < spriteY || spriteYBottom <= this.ly) {
                     continue;
                 }
+                const spriteX = this.oam.getSpriteX(index) - 8;
+                indicesToDraw.push({ index, spriteY, spriteX });
+                if (indicesToDraw.length === 10) {
+                    break;
+                }
+            }
 
-                const spriteX = this.oam.getSpriteX(i) - 8;
-                const spriteTile = this.oam.getSpriteTile(i);
-                const spriteFlags = this.oam.getSpriteFlags(i);
+            indicesToDraw.sort((a, b) => {
+                if (a.spriteX != b.spriteX) {
+                    return b.spriteX - a.spriteX;
+                }
+                return b.index - a.index;
+            });
+
+            for (const item of indicesToDraw) {
+                const { index, spriteY, spriteX } = item;
+                const spriteTile = this.oam.getSpriteTile(index);
+                const spriteFlags = this.oam.getSpriteFlags(index);
                 const tileY = this.ly - spriteY;
                 for (let tileX = 0, lineX = spriteX; tileX < 8 && lineX < 160; tileX++, lineX++) {
                     const drawOverBg = spriteFlags.bgAndWindowOverObj === 0 || lineColor[lineX] === 0;
@@ -186,8 +200,6 @@ export class GbGpu {
                     }
                     lineColor[lineX] = this.palettes.getObjPaletteColor(spriteFlags.paletteNumber, colorIndex);
                 }
-
-                drawnSpriteCnt++;
             }
         }
 
