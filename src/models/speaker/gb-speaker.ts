@@ -28,7 +28,7 @@ class HighPassFilter {
 
     public filter(input: number): number {
         const output = input - this.capacitor;
-        this.capacitor = input - output * HPF_CHARGE_FACTOR;
+        this.capacitor = input - output * this.chargeFactor;
         return Math.fround(output);
     }
 }
