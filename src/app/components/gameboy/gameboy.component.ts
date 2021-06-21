@@ -1,7 +1,8 @@
-import { Component, ElementRef, EventEmitter, HostListener, Input, OnInit, Output, ViewChild } from "@angular/core";
+import { Component, ElementRef, EventEmitter, HostListener, OnInit, Output, ViewChild } from "@angular/core";
 import { Gameboy } from "src/models/gameboy/gameboy";
 import { CanvasLcd } from "src/models/lcd/canvas-lcd";
 import { getMbc } from "src/models/mmu/mcb/mbc-factory";
+import { GbSpeaker } from "src/models/speaker/gb-speaker";
 
 const ONE_SECOND = 1000;
 
@@ -51,7 +52,8 @@ export class GameboyComponent implements OnInit {
     }
     this.rom = rom;
     const mbc = getMbc(rom);
-    this.gameboy = new Gameboy(mbc, this.lcd);
+    const speaker = new GbSpeaker(48000);
+    this.gameboy = new Gameboy(mbc, this.lcd, speaker);
     this.resume();
   }
 

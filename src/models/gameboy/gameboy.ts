@@ -1,9 +1,11 @@
 import { getBit } from "src/utils/arithmetic-utils";
+import { GbApu } from "../apu/gb-apu";
 import { GbCpu } from "../cpu/gb-cpu";
 import { GbGpu } from "../gpu/gb-gpu";
 import { pushWordToStack } from "../instruction/gb-instruction/utils/stack-manipulation";
 import { Lcd } from "../lcd/lcd";
-import { GbMmu, GbMmuImpl } from "../mmu/gb-mmu";
+import { GbMmu } from "../mmu/gb-mmu";
+import { GbMmuImpl } from "../mmu/gb-mmu-impl";
 import { Mbc } from "../mmu/mcb/gb-mcb";
 import { GbInterrupts } from "../mmu/mmu-wrappers/gb-interrupts";
 import { ActionButton, DirectionButton, GbJoypad } from "../mmu/mmu-wrappers/gb-joypad";
@@ -15,6 +17,7 @@ import { GbStat } from "../mmu/mmu-wrappers/gb-stat";
 import { GbTileData } from "../mmu/mmu-wrappers/gb-tile-data";
 import { GbTileMap } from "../mmu/mmu-wrappers/gb-tile-map";
 import { GbRegisterSet } from "../register/gb-registers";
+import { GbSpeaker } from "../speaker/gb-speaker";
 import { GbTimer } from "../timer/gb-timer";
 
 const CYCLE_PER_FRAME = 70224;
@@ -39,6 +42,7 @@ export class Gameboy {
 
     public readonly gpu: GbGpu;
     public readonly timer: GbTimer;
+    public readonly apu: GbApu;
     public readonly mmu: GbMmu;
     public readonly cpu: GbCpu;
 
@@ -46,7 +50,8 @@ export class Gameboy {
 
     constructor(
         readonly mbc: Mbc,
-        readonly lcd: Lcd
+        readonly lcd: Lcd,
+        readonly speaker: GbSpeaker
     ) {
         this.rs = new GbRegisterSet();
 
@@ -67,9 +72,11 @@ export class Gameboy {
 
         this.timer = new GbTimer(this.interrupts);
 
+        this.apu = new GbApu(speaker);
+
         this.mmu = new GbMmuImpl(
             mbc, this.tileData, this.tileMap, this.oam, this.joypad,
-            this.timer, this.interrupts, this.lcdc, this.stat,
+            this.timer, this.interrupts, this.apu, this.lcdc, this.stat,
             this.positionControl, this.gpu, this.palettes
         );
 
@@ -101,16 +108,16 @@ export class Gameboy {
             if (this.rs.getHalting()) {
                 this.gpu.step(1);
                 this.timer.step(1);
+                this.apu.step(1);
                 this.currentFrameCycleCount++;
             } else {
                 const disassembled = this.cpu.disassembleInstruction(this.rs.pc.getValue());
                 const { instruction, args } = disassembled;
                 const deltaCycleCount = instruction.getCycleCount(this.rs, this.mmu, args);
 
-                // GPU cannot change mode more than 1 after one instruction, so we only need to run 1 step
                 this.gpu.step(deltaCycleCount);
-                // Timer will handle update steps inside
                 this.timer.step(deltaCycleCount);
+                this.apu.step(deltaCycleCount);
 
                 // Run the disassembled instruction
                 this.cpu.runInstruction(disassembled);
