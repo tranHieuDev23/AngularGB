@@ -32,6 +32,7 @@ export class GameboyComponent implements OnInit {
   ];
 
   private lcd: CanvasLcd = null;
+  private speaker: GbSpeaker = null;
   private gameboyIntervalId = null;
 
   ngOnInit(): void {
@@ -52,8 +53,8 @@ export class GameboyComponent implements OnInit {
     }
     this.rom = rom;
     const mbc = getMbc(rom);
-    const speaker = new GbSpeaker(48000);
-    this.gameboy = new Gameboy(mbc, this.lcd, speaker);
+    this.speaker = new GbSpeaker(48000);
+    this.gameboy = new Gameboy(mbc, this.lcd, this.speaker);
     this.resume();
   }
 
@@ -114,6 +115,8 @@ export class GameboyComponent implements OnInit {
       this.pause();
     }
     this.lcd.clear();
+    this.speaker.release();
+    this.speaker = null;
     this.rom = null;
     this.gameboy = null;
     this.stopped.emit();

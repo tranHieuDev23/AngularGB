@@ -1,5 +1,5 @@
 import { Speaker, SpeakerInput } from "./speaker";
-import { AudioContext, AudioBuffer } from "standardized-audio-context";
+import { PcmPlayer, PcmPlayerOptions } from "./pcm-player";
 
 export class GbSpeakerInput implements SpeakerInput {
     constructor(
@@ -13,7 +13,6 @@ export class GbSpeakerInput implements SpeakerInput {
 }
 
 const CYCLE_PER_SECOND = 4213440;
-const PLAY_RATE = 10;
 const HPF_CHARGE_FACTOR = 0.999958;
 
 class HighPassFilter {
@@ -34,17 +33,12 @@ class HighPassFilter {
 }
 
 export class GbSpeaker implements Speaker<GbSpeakerInput> {
-    private readonly audioCtx = new AudioContext();
-
     private readonly leftHpf: HighPassFilter;
     private readonly rightHpf: HighPassFilter;
     private readonly cyclePerSample: number;
-    private readonly bufferSize: number;
-    private readonly buffer: AudioBuffer;
+    private readonly player: PcmPlayer;
 
-    private lastAudioSources = null;
     private totalCycleCount = 0;
-    private currentBufferId = 0;
 
     constructor(
         readonly sampleRate: number,
@@ -52,8 +46,9 @@ export class GbSpeaker implements Speaker<GbSpeakerInput> {
         this.leftHpf = new HighPassFilter(sampleRate);
         this.rightHpf = new HighPassFilter(sampleRate);
         this.cyclePerSample = Math.floor(CYCLE_PER_SECOND / sampleRate);
-        this.bufferSize = sampleRate / PLAY_RATE;
-        this.buffer = this.audioCtx.createBuffer(2, this.bufferSize, sampleRate);
+        this.player = new PcmPlayer(new PcmPlayerOptions(
+            2, sampleRate
+        ));
     }
 
     step(deltaCycleCount: number, input: GbSpeakerInput): void {
@@ -62,22 +57,18 @@ export class GbSpeaker implements Speaker<GbSpeakerInput> {
             return;
         }
         this.totalCycleCount -= this.cyclePerSample;
-        this.buffer.getChannelData(0)[this.currentBufferId] = this.leftHpf.filter(input.left);
-        this.buffer.getChannelData(1)[this.currentBufferId] = this.rightHpf.filter(input.right);
-        this.currentBufferId++;
-        if (this.currentBufferId === this.bufferSize) {
-            this.playCurrentBuffer();
-            this.currentBufferId = 0;
-        }
+        const samples = [
+            this.leftHpf.filter(input.left),
+            this.rightHpf.filter(input.right)
+        ];
+        this.player.feed(samples);
     }
 
-    private playCurrentBuffer(): void {
-        if (this.lastAudioSources !== null) {
-            this.lastAudioSources.stop();
-        }
-        this.lastAudioSources = this.audioCtx.createBufferSource();
-        this.lastAudioSources.buffer = this.buffer;
-        this.lastAudioSources.connect(this.audioCtx.destination);
-        this.lastAudioSources.start();
+    public toggleAudio(isMute: boolean): void {
+        this.player.toggleAudio(isMute);
+    }
+
+    public release(): void {
+        this.player.release();
     }
 }
