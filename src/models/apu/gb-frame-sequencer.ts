@@ -9,7 +9,6 @@ export class GbFrameSequencer {
 
     public reset(): void {
         // Setting this value like this allow the following step to become step 0
-        this.totalCycleCount = CYCLE_PER_FS_STEP;
         this.currentStep = 7;
     }
 
@@ -28,6 +27,10 @@ export class GbFrameSequencer {
             this.shouldClockSweep = (this.currentStep & 3) === 2;
             this.totalCycleCount &= 0x7ff;
         }
+    }
+
+    public shouldNextStepClockLength(): boolean {
+        return (this.currentStep & 1) === 1;
     }
 
     public getShouldClockLength(): boolean {

@@ -52,6 +52,7 @@ export class GbChannel2 {
     }
 
     public setNr24(value: number): void {
+        const wasLengthDisabled = !this.shouldStopWhenLengthExpire() || this.nr21.shouldDisableChannel();
         this.nr24 = value & 0xc7;
         if (getBit(this.nr24, 7) === 1) {
             this.nr21.onTriggerEvent();
@@ -60,6 +61,12 @@ export class GbChannel2 {
             this.frequencyPosition = 0;
             this.isChannelDisabled = this.nr21.shouldDisableChannel()
                 || this.nr22.isDacDisabled();;
+        }
+        // Extra length clocking occurs when writing to NRx4 when the frame
+        // sequencer's next step is one that doesn't clock the length counter.
+        if (wasLengthDisabled && this.shouldStopWhenLengthExpire() && !this.fs.shouldNextStepClockLength()) {
+            this.nr21.onClock();
+            this.isChannelDisabled ||= this.nr21.shouldDisableChannel();
         }
     }
 

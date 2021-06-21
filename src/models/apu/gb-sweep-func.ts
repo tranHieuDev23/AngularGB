@@ -40,7 +40,7 @@ export class GbSweepFunction {
         if (sweepShift !== 0) {
             // Overflow check
             const newFrequency = this.calculateNewFrequency(sweepShift);
-            if (newFrequency < 0 || newFrequency > 2047) {
+            if (newFrequency > 2047) {
                 this.sweepEnabled = false;
                 this.shouldDisableChannel = true;
             } else {
@@ -70,7 +70,7 @@ export class GbSweepFunction {
         const sweepShift = this.getSweepShift();
         const newFrequency = this.calculateNewFrequency(sweepShift);
         // Overflow check
-        if (newFrequency < 0 || newFrequency > 2047) {
+        if (newFrequency > 2047) {
             this.sweepEnabled = false;
             this.shouldDisableChannel = true;
             return false;
@@ -81,7 +81,7 @@ export class GbSweepFunction {
         this.shadowFrequency = newFrequency;
         const laterFrequency = this.calculateNewFrequency(sweepShift);
         // Overflow check again
-        if (laterFrequency < 0 || laterFrequency > 2047) {
+        if (laterFrequency > 2047) {
             this.sweepEnabled = false;
             this.shouldDisableChannel = true;
         }
@@ -99,7 +99,7 @@ export class GbSweepFunction {
     private calculateNewFrequency(sweepShift: number): number {
         // This is used to trigger negate mode's obscure behavior
         const isIncreasing = this.isIncreasing();
-        this.decreasingDone = !isIncreasing;
+        this.decreasingDone ||= !isIncreasing;
         const delta = this.shadowFrequency >> sweepShift;
         return isIncreasing ? this.shadowFrequency + delta : this.shadowFrequency - delta;
     }
