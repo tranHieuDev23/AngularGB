@@ -114,7 +114,7 @@ export class GbChannel2 {
     }
 
     private getInitialFrequencyTimer(): number {
-        return 2048 - this.getCurrentFrequency();
+        return (2048 - this.getCurrentFrequency()) * 8;
     }
 
     private shouldStopWhenLengthExpire(): boolean {

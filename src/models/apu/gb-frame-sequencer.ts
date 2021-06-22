@@ -1,8 +1,8 @@
 const CYCLE_PER_FS_STEP = 2048;
 
 export class GbFrameSequencer {
-    private totalCycleCount = CYCLE_PER_FS_STEP;
-    private currentStep = 7;
+    private totalCycleCount = 0;
+    private currentStep = 0;
     private shouldClockLength = false;
     private shouldClockEnvelop = false;
     private shouldClockSweep = false;
@@ -18,6 +18,7 @@ export class GbFrameSequencer {
         this.shouldClockEnvelop = false;
         this.shouldClockSweep = false;
         if (this.totalCycleCount >= CYCLE_PER_FS_STEP) {
+            this.totalCycleCount -= CYCLE_PER_FS_STEP;
             this.currentStep = (this.currentStep + 1) & 0x7;
             // Step 0, 2, 4, 6
             this.shouldClockLength = (this.currentStep & 1) === 0;
@@ -25,7 +26,6 @@ export class GbFrameSequencer {
             this.shouldClockEnvelop = this.currentStep === 7;
             // Step 2, 6
             this.shouldClockSweep = (this.currentStep & 3) === 2;
-            this.totalCycleCount &= 0x7ff;
         }
     }
 
