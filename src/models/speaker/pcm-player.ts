@@ -1,5 +1,3 @@
-import { AudioContext, IAudioBuffer } from "standardized-audio-context";
-
 export class PcmPlayerOptions {
     constructor(
         public readonly channels = 1,
@@ -13,7 +11,7 @@ export class PcmPlayer {
     private readonly audioContext: AudioContext;
     private readonly flushInterval: any;
 
-    private audioBuffers: IAudioBuffer[] = [];
+    private audioBuffers: AudioBuffer[] = [];
     private isMuted: boolean = false;
 
     private currentBufferIter: number;
@@ -31,7 +29,7 @@ export class PcmPlayer {
     }
 
     public feed(samples: number[]): void {
-        let currentBuffer: IAudioBuffer;
+        let currentBuffer: AudioBuffer;
         if (this.currentBufferIter === this.samplePerFlush) {
             currentBuffer = this.createNewBuffer();
             this.audioBuffers.push(currentBuffer);
@@ -54,7 +52,7 @@ export class PcmPlayer {
         this.audioContext.close().then();
     }
 
-    private createNewBuffer(): IAudioBuffer {
+    private createNewBuffer(): AudioBuffer {
         return this.audioContext.createBuffer(
             this.options.channels, this.samplePerFlush, this.options.sampleRate
         );
