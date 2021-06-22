@@ -12,7 +12,7 @@ export class GbSpeakerInput implements SpeakerInput {
     }
 }
 
-const CYCLE_PER_SECOND = 4213440;
+const CYCLE_PER_SECOND = 4194304;
 const HPF_CHARGE_FACTOR = 0.999958;
 
 class HighPassFilter {

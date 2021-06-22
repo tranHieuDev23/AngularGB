@@ -20,7 +20,7 @@ import { GbRegisterSet } from "../register/gb-registers";
 import { GbSpeaker } from "../speaker/gb-speaker";
 import { GbTimer } from "../timer/gb-timer";
 
-const CYCLE_PER_FRAME = 70224;
+const CYCLE_PER_FRAME = 69905;
 const ISR_TRANSFER_CYCLE_COUNT = 5;
 
 const ISR_ADDRESSES = [
