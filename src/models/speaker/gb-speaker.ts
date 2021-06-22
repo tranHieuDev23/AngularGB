@@ -38,6 +38,7 @@ export class GbSpeaker implements Speaker<GbSpeakerInput> {
     private readonly cyclePerSample: number;
     private readonly player: PcmPlayer;
 
+    private isMute = false;
     private totalCycleCount = 0;
 
     constructor(
@@ -64,8 +65,9 @@ export class GbSpeaker implements Speaker<GbSpeakerInput> {
         this.player.feed(samples);
     }
 
-    public toggleAudio(isMute: boolean): void {
-        this.player.toggleAudio(isMute);
+    public toggleAudio(): void {
+        this.isMute = !this.isMute;
+        this.player.toggleAudio(this.isMute);
     }
 
     public release(): void {

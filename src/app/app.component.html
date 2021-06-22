@@ -1,21 +1,43 @@
-<div>
-    <app-gameboy #gameboy></app-gameboy>
-</div>
-<div>
-    <button (click)="openSelectRomDialog()">Select ROM
-        <input #fileInput type="file" style="display:none" (change)="handleChange($event)">
-    </button>
+<div class="container">
+    <div class="jumbotron mb-0">
+        <h1 class="display-4">AngularGB</h1>
+        <p class="lead">Just another Gameboy emulator for the browser</p>
+    </div>
+    <div class="row justify-content-around">
+        <div class="col-lg-6 text-center">
+            <div class="mb-3">
+                <app-gameboy #gameboy></app-gameboy>
+            </div>
 
-    <button *ngIf="gameboy.isRomLoaded()" (click)="gameboy.reset()">
-        Stop
-    </button> <br />
+            <div class="btn-group mb-2">
+                <button type="button" class="btn btn-sm btn-outline-primary" (click)="openSelectRomDialog()">
+                    <i class="bi bi-folder-fill"></i> Select ROM
+                    <input #fileInput type="file" style="display:none" (change)="handleChange($event)">
+                </button>
+                <button type="button" class="btn btn-sm btn-outline-danger" *ngIf="gameboy.isRomLoaded()"
+                    (click)="gameboy.reset()">
+                    <i class="bi bi-stop-fill"></i>
+                </button>
+            </div> <br />
 
-    <div *ngIf="gameboy.isRomLoaded()">
-        <button [disabled]="!gameboy.isPaused()" (click)="gameboy.resume()">
-            Resume
-        </button>
-        <button [disabled]="!gameboy.isPlaying()" (click)="gameboy.pause()">
-            Pause
-        </button>
+            <div class="btn-group mb-3" *ngIf="gameboy.isRomLoaded()">
+                <button type="button" class="btn btn-sm btn-outline-primary" (click)="gameboy.toggleAudio()">
+                    <i class="bi bi-volume-mute-fill"></i>
+                </button>
+                <button type="button" class="btn btn-sm btn-outline-primary" [disabled]="!gameboy.isPaused()"
+                    (click)="gameboy.resume()">
+                    <i class="bi bi-play-fill"></i>
+                </button>
+                <button type="button" class="btn btn-sm btn-outline-primary" [disabled]="!gameboy.isPlaying()"
+                    (click)="gameboy.pause()">
+                    <i class="bi bi-pause-fill"></i>
+                </button>
+            </div>
+        </div>
+        <div class="col-lg-6 text-center">
+            Lorem ipsum dolor sit amet consectetur, adipisicing elit. Quod error ex praesentium perferendis, autem
+            voluptatum nobis non magni temporibus placeat alias explicabo expedita veniam soluta repellendus? Expedita
+            natus ea ipsam.
+        </div>
     </div>
 </div>

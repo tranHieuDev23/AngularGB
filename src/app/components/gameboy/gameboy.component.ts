@@ -35,7 +35,7 @@ export class GameboyComponent implements OnInit {
   private gameboyIntervalId = null;
 
   ngOnInit(): void {
-    this.lcd = new CanvasLcd(this.canvas.nativeElement, 160, 144, 3, this.palettes);
+    this.lcd = new CanvasLcd(this.canvas.nativeElement, 160, 144, 2, this.palettes);
     this.lcd.clear();
   }
 
@@ -76,6 +76,13 @@ export class GameboyComponent implements OnInit {
       }, ONE_SECOND / 60));
     }
     this.resumed.emit();
+  }
+
+  public toggleAudio(): void {
+    if (!this.isRomLoaded()) {
+      return;
+    }
+    this.speaker.toggleAudio();
   }
 
   public pause(): void {
