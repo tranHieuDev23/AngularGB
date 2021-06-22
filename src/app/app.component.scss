@@ -1,3 +1,18 @@
 .jumbotron {
   padding: 2rem 1rem;
+  margin-bottom: 2rem;
+  border-radius: 0.3rem;
+}
+
+.shortcut {
+  display: inline-block;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 0.1em 0.5em;
+  margin: 0 0.2em;
+  background-color: #f7f7f7;
+}
+
+.heart {
+  color: #dc3545;
 }
