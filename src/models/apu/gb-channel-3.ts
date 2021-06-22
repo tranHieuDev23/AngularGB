@@ -104,7 +104,6 @@ export class GbChannel3 {
         this.nr32 = 0;
         this.nr33 = 0;
         this.nr34 = 0;
-        // this.waveRam.fill(0);
         this.isChannelDisabled = true;
         this.outputLevelShift = 4;
         this.frequencyTimer = 0;
@@ -131,17 +130,12 @@ export class GbChannel3 {
     }
 
     public getCurrentOutput(): number {
-        const currentWaveByte = this.getCurrentWaveByte();
+        const currentWaveByte = this.waveRam[this.frequencyPosition >> 1];
         const shouldPlayUpper = (this.frequencyPosition & 1) === 0;
         const waveValue = shouldPlayUpper
             ? currentWaveByte >> 4
             : currentWaveByte & 0xf;
         return waveValue >> this.outputLevelShift;
-    }
-
-    public getCurrentWaveByte(): number {
-        const waveIndex = this.frequencyPosition >> 1;
-        return this.waveRam[waveIndex];
     }
 
     private getCurrentFrequency(): number {
@@ -150,7 +144,7 @@ export class GbChannel3 {
     }
 
     private getInitialFrequencyTimer(): number {
-        return 2048 - this.getCurrentFrequency();
+        return (2048 - this.getCurrentFrequency()) * 2;
     }
 
     private shouldStopWhenLengthExpire(): boolean {
