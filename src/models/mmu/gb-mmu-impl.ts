@@ -84,18 +84,18 @@ export class GbMmuImpl implements GbMmu {
         [NR10_ADDRESS, () => this.apu.channel1.getNr10() | 0x80],
         [NR11_ADDRESS, () => this.apu.channel1.getNr11() | 0x3f],
         [NR12_ADDRESS, () => this.apu.channel1.getNr12()],
-        [NR13_ADDRESS, () => this.apu.channel1.getNr13() | 0xff],
+        [NR13_ADDRESS, () => 0xff],
         [NR14_ADDRESS, () => this.apu.channel1.getNr14() | 0xbf],
         [NR21_ADDRESS, () => this.apu.channel2.getNr21() | 0x3f],
         [NR22_ADDRESS, () => this.apu.channel2.getNr22()],
-        [NR23_ADDRESS, () => this.apu.channel2.getNr23() | 0xff],
+        [NR23_ADDRESS, () => 0xff],
         [NR24_ADDRESS, () => this.apu.channel2.getNr24() | 0xbf],
         [NR30_ADDRESS, () => this.apu.channel3.getNr30() | 0x7f],
-        [NR31_ADDRESS, () => this.apu.channel3.getNr31() | 0xff],
+        [NR31_ADDRESS, () => 0xff],
         [NR32_ADDRESS, () => this.apu.channel3.getNr32() | 0x9f],
-        [NR33_ADDRESS, () => this.apu.channel3.getNr33() | 0xff],
+        [NR33_ADDRESS, () => 0xff],
         [NR34_ADDRESS, () => this.apu.channel3.getNr34() | 0xbf],
-        [NR41_ADDRESS, () => this.apu.channel4.getNr41() | 0xff],
+        [NR41_ADDRESS, () => 0xff],
         [NR42_ADDRESS, () => this.apu.channel4.getNr42()],
         [NR43_ADDRESS, () => this.apu.channel4.getNr43()],
         [NR44_ADDRESS, () => this.apu.channel4.getNr44() | 0xbf],
@@ -125,26 +125,46 @@ export class GbMmuImpl implements GbMmu {
         [MODULO_TIMER_REG_ADDRESS, (value: number) => this.timer.setModuloTimer(value)],
         [CONTROL_TIMER_REG_ADDRESS, (value: number) => this.timer.setTimerControl(value)],
         [NR10_ADDRESS, (value: number) => { if (this.apu.isOn()) this.apu.channel1.setNr10(value); }],
-        [NR11_ADDRESS, (value: number) => { if (this.apu.isOn()) this.apu.channel1.setNr11(value); }],
+        [NR11_ADDRESS, (value: number) => {
+            if (this.apu.isOn()) {
+                this.apu.channel1.setNr11(value);
+            } else {
+                const nr11 = this.apu.channel1.getNr11();
+                this.apu.channel1.setNr11((nr11 & 0xc0) || (value & 0x3f));
+            }
+        }],
         [NR12_ADDRESS, (value: number) => { if (this.apu.isOn()) this.apu.channel1.setNr12(value); }],
         [NR13_ADDRESS, (value: number) => { if (this.apu.isOn()) this.apu.channel1.setNr13(value); }],
         [NR14_ADDRESS, (value: number) => { if (this.apu.isOn()) this.apu.channel1.setNr14(value); }],
-        [NR21_ADDRESS, (value: number) => { if (this.apu.isOn()) this.apu.channel2.setNr21(value); }],
+        [NR21_ADDRESS, (value: number) => {
+            if (this.apu.isOn()) {
+                this.apu.channel2.setNr21(value);
+            } else {
+                const nr21 = this.apu.channel2.getNr21();
+                this.apu.channel2.setNr21((nr21 & 0xc0) || (value & 0x3f));
+            }
+        }],
         [NR22_ADDRESS, (value: number) => { if (this.apu.isOn()) this.apu.channel2.setNr22(value); }],
         [NR23_ADDRESS, (value: number) => { if (this.apu.isOn()) this.apu.channel2.setNr23(value); }],
         [NR24_ADDRESS, (value: number) => { if (this.apu.isOn()) this.apu.channel2.setNr24(value); }],
         [NR30_ADDRESS, (value: number) => { if (this.apu.isOn()) this.apu.channel3.setNr30(value); }],
-        [NR31_ADDRESS, (value: number) => { if (this.apu.isOn()) this.apu.channel3.setNr31(value); }],
+        [NR31_ADDRESS, (value: number) => {
+            this.apu.channel3.setNr31(value);
+        }],
         [NR32_ADDRESS, (value: number) => { if (this.apu.isOn()) this.apu.channel3.setNr32(value); }],
         [NR33_ADDRESS, (value: number) => { if (this.apu.isOn()) this.apu.channel3.setNr33(value); }],
         [NR34_ADDRESS, (value: number) => { if (this.apu.isOn()) this.apu.channel3.setNr34(value); }],
-        [NR41_ADDRESS, (value: number) => this.apu.channel4.setNr41(value)],
+        [NR41_ADDRESS, (value: number) => {
+            this.apu.channel4.setNr41(value);
+        }],
         [NR42_ADDRESS, (value: number) => { if (this.apu.isOn()) this.apu.channel4.setNr42(value); }],
         [NR43_ADDRESS, (value: number) => { if (this.apu.isOn()) this.apu.channel4.setNr43(value); }],
         [NR44_ADDRESS, (value: number) => { if (this.apu.isOn()) this.apu.channel4.setNr44(value); }],
         [NR50_ADDRESS, (value: number) => { if (this.apu.isOn()) this.apu.setNr50(value); }],
         [NR51_ADDRESS, (value: number) => { if (this.apu.isOn()) this.apu.setNr51(value); }],
-        [NR52_ADDRESS, (value: number) => this.apu.setNr52(value)],
+        [NR52_ADDRESS, (value: number) => {
+            this.apu.setNr52(value);
+        }],
         [LCDC_REG_ADDRESS, (value: number) => {
             const oldLcdEnable = this.lcdc.getLcdAndPpuEnable();
             this.lcdc.setValue(value);

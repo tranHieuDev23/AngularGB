@@ -52,7 +52,7 @@ export class GbChannel4 {
 
     public setNr44(value: number): void {
         const wasLengthDisabled = !this.shouldStopWhenLengthExpire() || this.nr41.shouldDisableChannel();
-        this.nr44 = value & 0xc7;
+        this.nr44 = value & 0xc0;
         if (getBit(this.nr44, 7) === 1) {
             this.nr41.onTriggerEvent();
             this.lfsr = 0xffff;
