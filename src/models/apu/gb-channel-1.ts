@@ -134,7 +134,7 @@ export class GbChannel1 {
     }
 
     private getInitialFrequencyTimer(): number {
-        return (2048 - this.getCurrentFrequency()) * 8;
+        return (2048 - this.getCurrentFrequency()) * 4;
     }
 
     private setCurrentFrequency(value: number) {
