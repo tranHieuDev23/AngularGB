@@ -1,35 +1,12 @@
 import { NgModule } from "@angular/core";
 import { BrowserModule } from "@angular/platform-browser";
-import { AppRoutingModule } from "./app-routing.module";
 import { AppComponent } from "./app.component";
-import { NZ_I18N } from "ng-zorro-antd/i18n";
-import { en_US } from "ng-zorro-antd/i18n";
 import { registerLocaleData } from "@angular/common";
 import en from "@angular/common/locales/en";
 import { FormsModule } from "@angular/forms";
-import { HttpClientModule, HTTP_INTERCEPTORS } from "@angular/common/http";
+import { HttpClientModule } from "@angular/common/http";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { GameboyModule } from "./components/gameboy/gameboy.module";
-import { NzLayoutModule } from "ng-zorro-antd/layout";
-import { NzMenuModule } from "ng-zorro-antd/menu";
-import { NzUploadModule } from "ng-zorro-antd/upload";
-import { NzButtonModule } from "ng-zorro-antd/button";
-import { NzIconModule } from "ng-zorro-antd/icon";
-import { NzGridModule } from "ng-zorro-antd/grid";
-import { NzInputNumberModule } from "ng-zorro-antd/input-number";
-import { NzInputModule } from "ng-zorro-antd/input";
-import { StringOnMobileModule } from "./pipes/string-on-mobile/string-on-mobile.module";
-import { InterceptorService } from "./services/interceptor/interceptor.service";
-import { CpuStateModule } from "./components/debug/cpu-state/cpu-state.module";
-import { DisassemblerModule } from "./components/debug/disassembler/disassembler.module";
-import { MemorySamplerModule } from "./components/debug/memory-sampler/memory-sampler.module";
-import { GpuStateModule } from "./components/debug/gpu-state/gpu-state.module";
-import { BgMapViewerModule } from "./components/debug/bg-map-viewer/bg-map-viewer.module";
-import { TileDataViewModule } from "./components/debug/tile-data-viewer/tile-data-viewer.module";
-import { OamViewerModule } from "./components/debug/oam-viewer/oam-viewer.module";
-import { InterruptsStateModule } from "./components/debug/interrupts-state/interrupts-state.module";
-import { WindowMapViewerModule } from "./components/debug/window-map-viewer/window-map-viewer.module";
-import { TimerModule } from "./components/debug/timer/timer.module";
 
 registerLocaleData(en);
 
@@ -39,35 +16,12 @@ registerLocaleData(en);
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule,
     FormsModule,
     HttpClientModule,
     BrowserAnimationsModule,
-    GameboyModule,
-    NzLayoutModule,
-    NzMenuModule,
-    NzUploadModule,
-    NzButtonModule,
-    NzIconModule,
-    NzGridModule,
-    StringOnMobileModule,
-    NzInputNumberModule,
-    NzInputModule,
-    CpuStateModule,
-    DisassemblerModule,
-    MemorySamplerModule,
-    GpuStateModule,
-    BgMapViewerModule,
-    TileDataViewModule,
-    OamViewerModule,
-    InterruptsStateModule,
-    WindowMapViewerModule,
-    TimerModule
+    GameboyModule
   ],
-  providers: [
-    { provide: NZ_I18N, useValue: en_US },
-    { provide: HTTP_INTERCEPTORS, useClass: InterceptorService, multi: true }
-  ],
+  providers: [],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

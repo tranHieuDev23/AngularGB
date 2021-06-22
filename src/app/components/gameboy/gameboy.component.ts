@@ -12,7 +12,6 @@ const ONE_SECOND = 1000;
   styleUrls: ["./gameboy.component.scss"]
 })
 export class GameboyComponent implements OnInit {
-  @ViewChild("battery", { static: true }) batter: ElementRef<HTMLElement>;
   @ViewChild("canvas", { static: true }) canvas: ElementRef<HTMLCanvasElement>;
 
   @Output("frameEnded") public frameEnded = new EventEmitter<void>();
@@ -36,7 +35,7 @@ export class GameboyComponent implements OnInit {
   private gameboyIntervalId = null;
 
   ngOnInit(): void {
-    this.lcd = new CanvasLcd(this.canvas.nativeElement, 160, 144, 1, this.palettes);
+    this.lcd = new CanvasLcd(this.canvas.nativeElement, 160, 144, 3, this.palettes);
     this.lcd.clear();
   }
 

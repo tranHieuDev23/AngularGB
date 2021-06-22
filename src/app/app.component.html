@@ -1,111 +1,21 @@
-<nz-layout>
-    <nz-header>
-        <ul nz-menu nzTheme="dark" nzMode="horizontal" nzSelectable="false">
-            <li nz-menu-item class="logo">
-                <i>{{ "AngularGB" | stringOnMobile: "AGB" }}</i>
-            </li>
-            <li nz-submenu [nzTitle]="'Debug' | stringOnMobile" nzIcon="bug">
-                <ul>
-                    <li *ngFor="let subMenu of DEBUG_MENU_ITEMS" nz-submenu [nzTitle]="subMenu.subMenu">
-                        <ul>
-                            <li *ngFor="let item of subMenu.items" nz-menu-item (click)="openDebugWidget(item)">
-                                {{ item.title }}
-                            </li>
-                        </ul>
-                    </li>
-                </ul>
-            </li>
-            <li nz-menu-item>
-                <i nz-icon nzType="github" nzTheme="outline"></i> {{ "About" | stringOnMobile }}
-            </li>
-        </ul>
-    </nz-header>
+<div>
+    <app-gameboy #gameboy></app-gameboy>
+</div>
+<div>
+    <button (click)="openSelectRomDialog()">Select ROM
+        <input #fileInput type="file" style="display:none" (change)="handleChange($event)">
+    </button>
 
-    <nz-content>
-        <div class="inner-content">
-            <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" nzJustify="space-around">
-                <div nz-col [nzSpan]="24" [nzLg]="12">
-                    <app-gameboy #gameboy></app-gameboy> <br />
+    <button *ngIf="gameboy.isRomLoaded()" (click)="gameboy.reset()">
+        Stop
+    </button> <br />
 
-                    <nz-upload class="gb-control rom-select" nzAction="/intercepted" nzShowUploadList="false"
-                        [(nzFileList)]="fileList" (nzChange)="handleChange($event)">
-                        <button nz-button>
-                            <i nz-icon nzType="upload"></i>Select ROM
-                        </button>
-                    </nz-upload>
-                    <button class="stop-button" nz-button nzDanger *ngIf="gameboy.isRomLoaded()"
-                        (click)="gameboy.reset()">
-                        <i nz-icon nzType="close" nzTheme="outline"></i>
-                    </button> <br />
-
-                    <nz-button-group *ngIf="gameboy.isRomLoaded()" class="gb-control">
-                        <button nz-button [disabled]="!gameboy.isPaused()" (click)="gameboy.resume()">
-                            <i nz-icon nzType="caret-right" nzTheme="outline"></i>
-                        </button>
-                        <button nz-button [disabled]="!gameboy.isPlaying()" (click)="gameboy.pause()">
-                            <i nz-icon nzType="pause" nzTheme="outline"></i>
-                        </button>
-                    </nz-button-group> <br />
-
-                    <nz-input-group *ngIf="gameboy.isRomLoaded() && isDebugging()" class="gb-control"
-                        nzPrefix="Skip steps" [nzSuffix]="stepTemplate">
-                        <nz-input-number [(ngModel)]="skipStepCnt" [nzDisabled]="!gameboy.isPaused()" [nzMin]="1"
-                            [nzStep]="1">
-                        </nz-input-number>
-                        <ng-template #stepTemplate>
-                            <button nz-button [disabled]="!gameboy.isPaused()" (click)="gameboy.step(skipStepCnt)">
-                                <i nz-icon nzType="step-forward" nzTheme="outline"></i>
-                            </button>
-                        </ng-template>
-                    </nz-input-group> <br />
-
-                    <nz-input-group *ngIf="gameboy.isRomLoaded() && isDebugging()" class="gb-control"
-                        nzPrefix="Skip frames" [nzSuffix]="stepTemplate">
-                        <nz-input-number [(ngModel)]="skipFrameCnt" [nzDisabled]="!gameboy.isPaused()" [nzMin]="1"
-                            [nzStep]="1">
-                        </nz-input-number>
-                        <ng-template #stepTemplate>
-                            <button nz-button [disabled]="!gameboy.isPaused()" (click)="gameboy.frame(skipFrameCnt)">
-                                <i nz-icon nzType="fast-forward" nzTheme="outline"></i>
-                            </button>
-                        </ng-template>
-                    </nz-input-group>
-                </div>
-
-                <div *ngIf="isDebugging()" nz-col [nzSpan]="24" [nzLg]="12">
-                    <h2>{{ currentDebugWidget.title }}</h2>
-                    <span *ngIf="!gameboy.isRomLoaded()">
-                        Please load a ROM first
-                    </span>
-                    <div *ngIf="gameboy.isRomLoaded()">
-                        <app-cpu-state *ngIf="currentDebugWidget.id === CPU_STATE_WIDGET" [gameboy]="gameboy">
-                        </app-cpu-state>
-                        <app-disassembler *ngIf="currentDebugWidget.id === DISASSEMBLER_WIDGET" [gameboy]="gameboy">
-                        </app-disassembler>
-                        <app-memory-sampler *ngIf="currentDebugWidget.id === MEMORY_STATE_WIDGET" [gameboy]="gameboy">
-                        </app-memory-sampler>
-                        <app-gpu-state *ngIf="currentDebugWidget.id === GPU_STATE_WIDGET" [gameboy]="gameboy">
-                        </app-gpu-state>
-                        <app-bg-map-viewer *ngIf="currentDebugWidget.id === BG_MAP_WIDGET" [gameboy]="gameboy">
-                        </app-bg-map-viewer>
-                        <app-window-map-viewer *ngIf="currentDebugWidget.id === WINDOW_MAP_WIDGET" [gameboy]="gameboy">
-                        </app-window-map-viewer>
-                        <app-tile-data-viewer *ngIf="currentDebugWidget.id === TILE_DATA_WIDGET" [gameboy]="gameboy">
-                        </app-tile-data-viewer>
-                        <app-oam-viewer *ngIf="currentDebugWidget.id === OAM_VIEWER_WIDGET" [gameboy]="gameboy">
-                        </app-oam-viewer>
-                        <app-interrupts-state *ngIf="currentDebugWidget.id === INTERRUPTS_STATE_WIDGET"
-                            [gameboy]="gameboy">
-                        </app-interrupts-state>
-                        <app-timer *ngIf="currentDebugWidget.id === TIMER_STATE_WIDGET" [gameboy]="gameboy">
-                        </app-timer>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </nz-content>
-
-    <nz-footer>
-        AngularGB
-    </nz-footer>
-</nz-layout>
+    <div *ngIf="gameboy.isRomLoaded()">
+        <button [disabled]="!gameboy.isPaused()" (click)="gameboy.resume()">
+            Resume
+        </button>
+        <button [disabled]="!gameboy.isPlaying()" (click)="gameboy.pause()">
+            Pause
+        </button>
+    </div>
+</div>
