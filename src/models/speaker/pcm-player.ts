@@ -4,7 +4,7 @@ export class PcmPlayerOptions {
     constructor(
         public readonly channels = 1,
         public readonly sampleRate = 48000,
-        public readonly flushingTime = 100
+        public readonly flushingTime = 1000.0 / 60
     ) { }
 }
 
@@ -69,15 +69,14 @@ export class PcmPlayer {
         // Copy audio buffer
         const audioBuffer = this.audioBuffers.shift();
         // Play the new buffer
-        if (this.startTime < this.audioContext.currentTime) {
-            this.startTime = this.audioContext.currentTime;
-        }
+        const currentTime = this.audioContext.currentTime;
+        const offset = Math.max(currentTime - this.startTime, 0);
         if (!this.isMuted) {
             const bufferSource = this.audioContext.createBufferSource();
             bufferSource.buffer = audioBuffer;
             bufferSource.connect(this.audioContext.destination);
-            bufferSource.start(this.startTime);
+            bufferSource.start(this.startTime, offset);
         }
-        this.startTime += audioBuffer.duration;
+        this.startTime = currentTime + audioBuffer.duration;
     }
 }
