@@ -33,41 +33,46 @@ class HighPassFilter {
 }
 
 export class GbSpeaker implements Speaker<GbSpeakerInput> {
+    public readonly sampleRate: number;
     private readonly leftHpf: HighPassFilter;
     private readonly rightHpf: HighPassFilter;
-    private readonly cyclePerSample: number;
+    // Kept as a float — Math.floor() here loses ~0.1 cycles per sample, which
+    // is enough drift (~1-5ms/sec) to grow audible SFX latency over time.
+    private readonly cyclesPerSample: number;
     private readonly player: PcmPlayer;
 
     private isMute = false;
-    private totalCycleCount = 0;
+    private cycleAccumulator = 0;
 
-    constructor(
-        readonly sampleRate: number,
-    ) {
-        this.leftHpf = new HighPassFilter(sampleRate);
-        this.rightHpf = new HighPassFilter(sampleRate);
-        this.cyclePerSample = Math.floor(CYCLE_PER_SECOND / sampleRate);
-        this.player = new PcmPlayer(new PcmPlayerOptions(
-            2, sampleRate
-        ));
+    constructor() {
+        // Construct the player first so its AudioContext determines the actual
+        // device sample rate; everything downstream uses that.
+        this.player = new PcmPlayer(new PcmPlayerOptions(2));
+        this.sampleRate = this.player.sampleRate;
+        this.leftHpf = new HighPassFilter(this.sampleRate);
+        this.rightHpf = new HighPassFilter(this.sampleRate);
+        this.cyclesPerSample = CYCLE_PER_SECOND / this.sampleRate;
     }
 
     step(deltaCycleCount: number, input: GbSpeakerInput): void {
-        this.totalCycleCount += deltaCycleCount;
-        if (this.totalCycleCount < this.cyclePerSample) {
-            return;
+        this.cycleAccumulator += deltaCycleCount;
+        while (this.cycleAccumulator >= this.cyclesPerSample) {
+            this.cycleAccumulator -= this.cyclesPerSample;
+            const samples = [
+                this.leftHpf.filter(input.left),
+                this.rightHpf.filter(input.right)
+            ];
+            this.player.feed(samples);
         }
-        this.totalCycleCount -= this.cyclePerSample;
-        const samples = [
-            this.leftHpf.filter(input.left),
-            this.rightHpf.filter(input.right)
-        ];
-        this.player.feed(samples);
     }
 
     public toggleAudio(): void {
         this.isMute = !this.isMute;
         this.player.toggleAudio(this.isMute);
+    }
+
+    public resume(): Promise<void> {
+        return this.player.resume();
     }
 
     public release(): void {

@@ -62,7 +62,6 @@ ng test
 - No DMA Transfer glitch or Wave RAM glitch.
 - Memory timing is not accurate for instructions that do both read and write (would be impossible since this condition requires the emulator to run cycle-by-cycle, not instruction-by-instruction).
 - ROM-only MBC, MBC1 and MBC2 are supported. This allows the emulator to run a large number of games, but leaves out games with other MBC cartridge types, notably Pokemon Red/Blue which use MBC3.
-- **Audio is not implemented correctly.** It works fine with some games (Link's Awakening and Tetris) but breaks uncontrollably with other (Super Mario Land, Dr. Mario). Audio also lags behind graphic noticeably after a while. For now, it's best to disable audio for the best frame rate and experience.
 
 ### Tests
 

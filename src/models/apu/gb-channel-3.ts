@@ -55,10 +55,12 @@ export class GbChannel3 {
 
     public setNr32(value: number): void {
         this.nr32 = value & 0x60;
+        // NR32 bits 6-5 set the output-level shift. "Mute" (00) only silences
+        // the output via a 4-bit shift; per Pan Docs it does NOT disable the
+        // channel — the channel keeps running until length expiry or DAC-off.
         switch (this.nr32 >> 5) {
             case 0:
                 this.outputLevelShift = 4;
-                this.isChannelDisabled = true;
                 break;
             case 1:
                 this.outputLevelShift = 0;

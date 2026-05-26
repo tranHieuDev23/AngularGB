@@ -1,4 +1,7 @@
-const CYCLE_PER_FS_STEP = 2048;
+// Frame sequencer runs at 512 Hz on real hardware. The codebase meters time at
+// 4,194,304 cycle units per wall-clock second, so 4194304 / 512 = 8192 cycle
+// units per step. See https://gbdev.io/pandocs/Audio_details.html#div-apu.
+const CYCLE_PER_FS_STEP = 8192;
 
 export class GbFrameSequencer {
     private totalCycleCount = 0;

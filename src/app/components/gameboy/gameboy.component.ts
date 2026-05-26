@@ -52,7 +52,10 @@ export class GameboyComponent implements OnInit {
     }
     this.rom = rom;
     const mbc = getMbc(rom);
-    this.speaker = new GbSpeaker(48000);
+    this.speaker = new GbSpeaker();
+    // ROM load is driven by a user gesture (file picker), so this is the right
+    // moment to resume the AudioContext past the browser's autoplay policy.
+    this.speaker.resume();
     this.gameboy = new Gameboy(mbc, this.lcd, this.speaker);
     this.resume();
   }
